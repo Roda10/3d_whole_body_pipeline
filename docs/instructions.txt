@@ -7,12 +7,13 @@ python smplestx_adapter.py \
     --output_dir ./my_multi_person_results \
     --multi_person
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 python smplestx_adapter.py     --cfg_path ../external/SMPLest-X/configs/config_smplest_x_h.py     --input_image ../data/full_images/test8.jpg     --output_dir ../data/outputs/smplest_x
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # For wilor adapter [running from adapter/]
 
-python  wilor_adapt.pyer --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor/
+python  wilor_adapter.py --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor/
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # For Emoca adapter
@@ -26,5 +27,49 @@ python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../d
 
 To run the three models all in once
 python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+python parameter_fusion.py --results_dir pipeline_results/run_20250603_052032
+python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250603_100109
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# 1. Run the unified pipeline (all three models)
+python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+
+# 2. Run coordinate analysis (calculates transformations between models)
+python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
+
+# 3. Run basic fusion demo (coordinate-level combination)
+python basic_fusion_demo.py --results_dir pipeline_results/run_TIMESTAMP
+
+# 4. Run mesh blending fusion (geometric attachment points)
+python mesh_blending_fusion.py --results_dir pipeline_results/run_TIMESTAMP
+
+# 5. Run fixed mesh visualizer (using real SMPL-X mesh)
+python fixed_mesh_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
+
+# 6. Run parameter fusion (direct parameter replacement)
+python parameter_fusion.py --results_dir pipeline_results/run_TIMESTAMP
+
+# 7. Run fused mesh renderer (regenerate mesh with fused parameters)
+python fused_mesh_renderer.py --results_dir pipeline_results/run_TIMESTAMP
+
+# Discovery tool (explore what files are actually produced)
+python file_discovery.py --results_dir pipeline_results/run_TIMESTAMP
+
+# Mesh rendering visualizer (proper 3D visualization)
+python mesh_rendering_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Original coordinate analyzer (had issues with file formats)
+python coordinate_analysis.py --results_dir pipeline_results/run_TIMESTAMP
+
+# Targeted coordinate analyzer (fixed for your specific file formats)
+python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250602_202828
+python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250602_205551
+python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250603_052032
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

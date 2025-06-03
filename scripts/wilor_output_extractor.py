@@ -1,107 +1,3 @@
-# import numpy as np
-# import json
-# from typing import Dict, List, Any, Optional
-# import torch
-
-# class WiLoRParameterExtractor:
-#     """Simple extractor for MANO parameters and basic summary statistics"""
-    
-#     def __init__(self, model_cfg):
-#         self.model_cfg = model_cfg
-        
-#     def extract_parameters(self, batch: Dict, out: Dict, pred_cam_t_full: np.ndarray, 
-#                           img_path: str, scaled_focal_length: float) -> Dict[str, Any]:
-#         """Extract MANO parameters with shape information"""
-        
-#         batch_size = batch['img'].shape[0]
-#         results = {
-#             "metadata": {
-#                 "image_path": str(img_path),
-#                 "batch_size": batch_size,
-#                 "detection_count": batch_size
-#             },
-#             "hands": []
-#         }
-        
-#         for n in range(batch_size):
-#             hand_data = self._extract_single_hand(batch, out, pred_cam_t_full, n)
-#             results["hands"].append(hand_data)
-            
-#         return results
-    
-#     def _extract_single_hand(self, batch: Dict, out: Dict, pred_cam_t_full: np.ndarray, idx: int) -> Dict[str, Any]:
-#         """Extract parameters for a single hand detection"""
-        
-#         # Basic hand info
-#         is_right = bool(batch['right'][idx].cpu().numpy())
-        
-#         # 3D vertices and joints shapes
-#         verts_shape = list(out['pred_vertices'][idx].shape)
-#         joints_shape = list(out['pred_keypoints_3d'][idx].shape)
-        
-#         # Camera parameters
-#         pred_cam = out['pred_cam'][idx].detach().cpu().numpy()
-#         cam_t = pred_cam_t_full[idx]
-        
-#         hand_data = {
-#             "hand_id": idx,
-#             "hand_type": "right" if is_right else "left",
-#             "shapes": {
-#                 "vertices_3d": verts_shape,
-#                 "keypoints_3d": joints_shape,
-#                 "camera_prediction": list(pred_cam.shape),
-#                 "camera_translation": list(cam_t.shape)
-#             }
-#         }
-        
-#         # MANO parameters (if available in output)
-#         if 'pred_mano_params' in out:
-#             mano_raw = out['pred_mano_params'][idx].detach().cpu().numpy()
-#             hand_data["mano_parameters"] = {
-#                 "total_shape": list(mano_raw.shape),
-#                 "shape_coefficients": {
-#                     "values": mano_raw[:10].tolist() if len(mano_raw) >= 10 else mano_raw.tolist(),
-#                     "shape": [min(10, len(mano_raw))]
-#                 },
-#                 "pose_coefficients": {
-#                     "values": mano_raw[10:].tolist() if len(mano_raw) > 10 else [],
-#                     "shape": [max(0, len(mano_raw) - 10)]
-#                 }
-#             }
-#         elif 'pred_shape' in out and 'pred_pose' in out:
-#             # Separate shape and pose parameters
-#             shape_params = out['pred_shape'][idx].detach().cpu().numpy()
-#             pose_params = out['pred_pose'][idx].detach().cpu().numpy()
-#             hand_data["mano_parameters"] = {
-#                 "shape_coefficients": {
-#                     "values": shape_params.tolist(),
-#                     "shape": list(shape_params.shape)
-#                 },
-#                 "pose_coefficients": {
-#                     "values": pose_params.tolist(),
-#                     "shape": list(pose_params.shape)
-#                 }
-#             }
-#         else:
-#             hand_data["mano_parameters"] = {
-#                 "note": "MANO parameters not found in model output"
-#             }
-            
-#         return hand_data
-
-# def save_wilor_parameters_json(extractor: WiLoRParameterExtractor, 
-#                               batch: Dict, out: Dict, pred_cam_t_full: np.ndarray,
-#                               img_path: str, scaled_focal_length: float,
-#                               output_path: str) -> None:
-#     """Save extracted parameters to a simple JSON file"""
-    
-#     parameters = extractor.extract_parameters(batch, out, pred_cam_t_full, 
-#                                             img_path, scaled_focal_length)
-    
-#     with open(output_path, 'w') as f:
-#         json.dump(parameters, f, indent=2, ensure_ascii=False)
-
-
 import numpy as np
 import json
 from typing import Dict, List, Any, Optional
@@ -115,7 +11,7 @@ class WiLoRParameterExtractor:
         
     def extract_parameters(self, batch: Dict, out: Dict, pred_cam_t_full: np.ndarray, 
                           img_path: str, scaled_focal_length: float) -> Dict[str, Any]:
-        """Extract MANO parameters with actual coordinate data"""
+        """Extract MANO parameters with shape information"""
         
         batch_size = batch['img'].shape[0]
         results = {
@@ -136,16 +32,16 @@ class WiLoRParameterExtractor:
     
     def _extract_single_hand(self, batch: Dict, out: Dict, pred_cam_t_full: np.ndarray, 
                            idx: int, scaled_focal_length: float) -> Dict[str, Any]:
-        """Extract parameters for a single hand detection with actual 3D data"""
+        """Extract parameters for a single hand detection"""
         
         # Basic hand info
         is_right = bool(batch['right'][idx].cpu().numpy())
         
-        # Extract actual 3D coordinates (this is the key fix!)
+        # Extract actual 3D coordinates
         vertices_3d = out['pred_vertices'][idx].detach().cpu().numpy()
         keypoints_3d = out['pred_keypoints_3d'][idx].detach().cpu().numpy()
         
-        # Apply hand orientation correction (from original adapter)
+        # Apply hand orientation correction
         vertices_3d[:, 0] = (2 * is_right - 1) * vertices_3d[:, 0]
         keypoints_3d[:, 0] = (2 * is_right - 1) * keypoints_3d[:, 0]
         
@@ -163,7 +59,7 @@ class WiLoRParameterExtractor:
             "hand_type": "right" if is_right else "left",
             "is_right": is_right,
             
-            # ACTUAL 3D COORDINATE DATA (the key addition!)
+            # 3D coordinate data
             "vertices_3d": vertices_3d.tolist(),
             "keypoints_3d": keypoints_3d.tolist(),
             
@@ -210,57 +106,57 @@ class WiLoRParameterExtractor:
     def _extract_mano_parameters(self, out: Dict, idx: int) -> Dict[str, Any]:
         """Extract MANO parameters from model output"""
         
-        # Try different ways to extract MANO parameters from WiLoR output
-        if 'pred_mano_params' in out:
-            mano_raw = out['pred_mano_params'][idx].detach().cpu().numpy()
-            return {
+        # Check if pred_mano_params exists in output
+        if 'pred_mano_params' in out and out['pred_mano_params']:
+            mano_params = out['pred_mano_params']
+            extracted_params = {
                 "source": "pred_mano_params",
-                "total_params": mano_raw.tolist(),
-                "total_shape": list(mano_raw.shape),
-                "shape_coefficients": {
-                    "values": mano_raw[:10].tolist() if len(mano_raw) >= 10 else mano_raw.tolist(),
-                    "dimensions": min(10, len(mano_raw))
-                },
-                "pose_coefficients": {
-                    "values": mano_raw[10:].tolist() if len(mano_raw) > 10 else [],
-                    "dimensions": max(0, len(mano_raw) - 10)
-                }
+                "parameters": {}
             }
-        elif 'pred_shape' in out and 'pred_pose' in out:
-            # Separate shape and pose parameters
-            shape_params = out['pred_shape'][idx].detach().cpu().numpy()
-            pose_params = out['pred_pose'][idx].detach().cpu().numpy()
-            return {
-                "source": "separate_shape_pose",
-                "shape_coefficients": {
-                    "values": shape_params.tolist(),
-                    "dimensions": list(shape_params.shape)
-                },
-                "pose_coefficients": {
-                    "values": pose_params.tolist(),
-                    "dimensions": list(pose_params.shape)
+            
+            # Extract each parameter type
+            if 'global_orient' in mano_params:
+                global_orient = mano_params['global_orient'][idx].detach().cpu().numpy()
+                extracted_params['parameters']['global_orient'] = {
+                    "values": global_orient.tolist(),
+                    "shape": list(global_orient.shape),
+                    "type": "rotation_matrix"
                 }
-            }
-        elif 'pred_hand_pose' in out:
-            # Hand pose only
-            hand_pose = out['pred_hand_pose'][idx].detach().cpu().numpy()
-            return {
-                "source": "pred_hand_pose",
-                "pose_coefficients": {
+            
+            if 'hand_pose' in mano_params:
+                hand_pose = mano_params['hand_pose'][idx].detach().cpu().numpy()
+                extracted_params['parameters']['hand_pose'] = {
                     "values": hand_pose.tolist(),
-                    "dimensions": list(hand_pose.shape)
-                },
-                "shape_coefficients": {
-                    "note": "Shape parameters not found"
+                    "shape": list(hand_pose.shape),
+                    "type": "rotation_matrix"
                 }
-            }
+            
+            if 'betas' in mano_params:
+                betas = mano_params['betas'][idx].detach().cpu().numpy()
+                extracted_params['parameters']['betas'] = {
+                    "values": betas.tolist(),
+                    "shape": list(betas.shape),
+                    "type": "shape_parameters"
+                }
+            
+            # Add any other parameters that might be present
+            for key in mano_params.keys():
+                if key not in ['global_orient', 'hand_pose', 'betas']:
+                    param = mano_params[key][idx].detach().cpu().numpy()
+                    extracted_params['parameters'][key] = {
+                        "values": param.tolist(),
+                        "shape": list(param.shape),
+                        "type": "unknown"
+                    }
+            
+            return extracted_params
+        
         else:
-            # Check what keys are actually available
-            available_keys = [k for k in out.keys() if 'pred' in k.lower()]
+            # If no MANO parameters found, return a note
             return {
                 "note": "MANO parameters not found in model output",
-                "available_output_keys": available_keys,
-                "suggestion": "Check WiLoR model output keys for parameter extraction"
+                "available_output_keys": list(out.keys()),
+                "suggestion": "Check WiLoR model configuration"
             }
 
 def save_wilor_parameters_json(extractor: WiLoRParameterExtractor, 
@@ -274,16 +170,17 @@ def save_wilor_parameters_json(extractor: WiLoRParameterExtractor,
     
     # Add some metadata about the extraction
     parameters["extraction_info"] = {
-        "extractor_version": "fixed_v1.0",
+        "extractor_version": "fixed_v2.0",
         "includes_3d_coordinates": True,
+        "includes_mano_parameters": True,
         "coordinate_system": "WiLoR_hand_centric",
-        "notes": "Fixed version that saves actual 3D coordinates instead of just shapes"
+        "notes": "Fixed version that extracts MANO parameters from pred_mano_params"
     }
     
     with open(output_path, 'w') as f:
         json.dump(parameters, f, indent=2, ensure_ascii=False)
     
-    print(f"✅ Saved WiLoR parameters with 3D coordinates to: {output_path}")
+    print(f"✅ Saved WiLoR parameters to: {output_path}")
     
     # Print summary for verification
     hand_count = len(parameters["hands"])
@@ -294,9 +191,11 @@ def save_wilor_parameters_json(extractor: WiLoRParameterExtractor,
         hand_type = hand["hand_type"]
         print(f"   🖐️  Hand {i+1} ({hand_type}): {vertices_count} vertices, {keypoints_count} keypoints")
         
-        # Show coordinate ranges for quick validation
-        stats = hand["coordinate_stats"]
-        v_range = stats["vertices_range"]
-        print(f"      Vertex range: X[{v_range['x'][0]:.3f}, {v_range['x'][1]:.3f}], "
-              f"Y[{v_range['y'][0]:.3f}, {v_range['y'][1]:.3f}], "
-              f"Z[{v_range['z'][0]:.3f}, {v_range['z'][1]:.3f}]")
+        # Show if MANO parameters were extracted
+        if "mano_parameters" in hand:
+            mano_info = hand["mano_parameters"]
+            if "parameters" in mano_info:
+                param_names = list(mano_info["parameters"].keys())
+                print(f"      📦 MANO parameters: {', '.join(param_names)}")
+            else:
+                print(f"      ⚠️  {mano_info.get('note', 'No MANO parameters')}")

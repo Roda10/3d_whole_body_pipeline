@@ -1,0 +1,24 @@
+{
+  "verification": {
+    "extraction_successful": false,
+    "issues_found": [
+      "left: Missing parameters: ['global_orient_axis_angle', 'hand_pose_axis_angle', 'betas']",
+      "right: Missing parameters: ['global_orient_axis_angle', 'hand_pose_axis_angle', 'betas']"
+    ],
+    "parameter_summary": {},
+    "validation_tests": {}
+  },
+  "compatibility": {
+    "smplx_ready": false,
+    "format_issues": [
+      "left: Missing ['global_orient_axis_angle', 'hand_pose_axis_angle', 'betas']",
+      "right: Missing ['global_orient_axis_angle', 'hand_pose_axis_angle', 'betas']"
+    ],
+    "conversion_needed": []
+  },
+  "summary": {
+    "extraction_successful": false,
+    "smplx_ready": false,
+    "total_issues": 4
+  }
+}
