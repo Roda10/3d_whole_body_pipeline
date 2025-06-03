@@ -1,0 +1,30 @@
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For smplest_adapter [running from adapter/]
+
+python smplestx_adapter.py \
+    --cfg_path ../external/SMPLest-X/configs/config_smplest_x_h.py \
+    --input_image ../data/full_images/test8.jpg \
+    --output_dir ./my_multi_person_results \
+    --multi_person
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+python smplestx_adapter.py     --cfg_path ../external/SMPLest-X/configs/config_smplest_x_h.py     --input_image ../data/full_images/test8.jpg     --output_dir ../data/outputs/smplest_x
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For wilor adapter [running from adapter/]
+
+python  wilor_adapt.pyer --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor/
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For Emoca adapter
+
+python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA
+python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA_v2_mp
+python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA_v2_lr_cos_1.5
+python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA_v2_lr_mse_20
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+To run the three models all in once
+python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

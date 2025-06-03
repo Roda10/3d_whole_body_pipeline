@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "image_path": "../data/full_images/test8.jpg",
+    "batch_size": 2,
+    "detection_count": 2
+  },
+  "hands": [
+    {
+      "hand_id": 0,
+      "hand_type": "right",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 1,
+      "hand_type": "left",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    }
+  ]
+}

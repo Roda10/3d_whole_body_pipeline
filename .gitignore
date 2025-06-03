@@ -1,0 +1,31 @@
+# Ignore checkpoint/model files everywhere
+*.pkl
+*.npy
+*.npz
+*.tar
+*.pt
+
+# Ignore Python cache
+__pycache__/
+*.py[cod]
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore log files
+*.log
+
+# Ignore virtual environments
+venv/
+env/
+.unified_pose_env/
+*.env
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore external git repos if you want (submodules)
+external/SMPLest-X/
+external/WiLoR/
+external/emoca/

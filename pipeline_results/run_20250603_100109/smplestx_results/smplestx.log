@@ -1,0 +1,37 @@
+Command: /opt/conda/envs/unified_pose_env/bin/python adapters/smplestx_adapter.py --cfg_path pretrained_models/smplest_x/config_base.py --input_image data/full_images/test2.jpg --output_dir pipeline_results/run_20250603_100109/smplestx_results
+Return code: 0
+STDOUT:
+Total #parameters: 687223152 (0.69B)
+
+STDERR:
+[92m06-03 10:01:19[0m Using 1 GPU(s).
+[92m06-03 10:01:19[0m Inference on single image [data/full_images/test2.jpg] with [/home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar].
+[92m06-03 10:01:19[0m Load checkpoint from /home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar
+[92m06-03 10:01:19[0m Creating graph...
+/home/rodeo_aims_ac_za/3d_whole_body_pipeline/adapters/../external/SMPLest-X/main/base.py:212: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  ckpt = torch.load(self.cfg.model.pretrained_model_path, map_location=torch.device('cpu'))
+[92m06-03 10:01:29[0m [93mWRN: Attention: Strict=False is set for checkpoint loading. Please check manually.[0m
+/opt/conda/envs/unified_pose_env/lib/python3.10/site-packages/ultralytics/nn/tasks.py:716: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  ckpt = torch.load(file, map_location="cpu")
+/home/rodeo_aims_ac_za/3d_whole_body_pipeline/adapters/../external/SMPLest-X/utils/transforms.py:234: UserWarning: Using torch.cross without specifying the dim arg is deprecated.
+Please either pass the dim explicitly or simply use torch.linalg.cross.
+The default value of dim will change to agree with that of linalg.cross in a future release. (Triggered internally at ../aten/src/ATen/native/Cross.cpp:62.)
+  b3 = torch.cross(b1, b2)
+[92m06-03 10:01:34[0m Saving outputs to: pipeline_results/run_20250603_100109/smplestx_results/inference_output_20250603_100134_test2
+[92m06-03 10:01:34[0m 
+=== SMPL-X Parameter Shapes for Person 0 ===
+[92m06-03 10:01:34[0m joints_3d: shape=[137, 3], size=411
+[92m06-03 10:01:34[0m joints_2d: shape=[137, 2], size=274
+[92m06-03 10:01:34[0m root_pose: shape=[3], size=3
+[92m06-03 10:01:34[0m body_pose: shape=[63], size=63
+[92m06-03 10:01:34[0m left_hand_pose: shape=[45], size=45
+[92m06-03 10:01:34[0m right_hand_pose: shape=[45], size=45
+[92m06-03 10:01:34[0m jaw_pose: shape=[3], size=3
+[92m06-03 10:01:34[0m betas: shape=[10], size=10
+[92m06-03 10:01:34[0m expression: shape=[10], size=10
+[92m06-03 10:01:34[0m translation: shape=[3], size=3
+[92m06-03 10:01:34[0m mesh: shape=[10475, 3], size=31425
+[92m06-03 10:01:34[0m Saved SMPL-X parameters for person 0 to: pipeline_results/run_20250603_100109/smplestx_results/inference_output_20250603_100134_test2/person_0/smplx_params_person_0.json
+[92m06-03 10:01:34[0m Saved parameter shapes summary to: pipeline_results/run_20250603_100109/smplestx_results/inference_output_20250603_100134_test2/person_0/smplx_shapes_person_0.json
+[92m06-03 10:01:35[0m Processed image saved to: pipeline_results/run_20250603_100109/smplestx_results/inference_output_20250603_100114/rendered_test2.jpg
+

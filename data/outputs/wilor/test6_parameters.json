@@ -1,0 +1,216 @@
+{
+  "metadata": {
+    "image_path": "../data/full_images/test6.jpg",
+    "batch_size": 9,
+    "detection_count": 9
+  },
+  "hands": [
+    {
+      "hand_id": 0,
+      "hand_type": "right",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 1,
+      "hand_type": "left",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 2,
+      "hand_type": "left",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 3,
+      "hand_type": "right",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 4,
+      "hand_type": "left",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 5,
+      "hand_type": "right",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 6,
+      "hand_type": "left",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 7,
+      "hand_type": "right",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    },
+    {
+      "hand_id": 8,
+      "hand_type": "left",
+      "shapes": {
+        "vertices_3d": [
+          778,
+          3
+        ],
+        "keypoints_3d": [
+          21,
+          3
+        ],
+        "camera_prediction": [
+          3
+        ],
+        "camera_translation": [
+          3
+        ]
+      },
+      "mano_parameters": {
+        "note": "MANO parameters not found in model output"
+      }
+    }
+  ]
+}
