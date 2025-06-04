@@ -74,8 +74,8 @@ class UnifiedPipeline:
         return [
             '--cfg_path', config_path,
             '--input_image', input_path,
-            '--output_dir', str(adapter_output_dir)
-            #'--multi_person'  # Enable multi-person detection
+            '--output_dir', str(adapter_output_dir),
+            '--multi_person'  # Enable multi-person detection
         ]
     
     def _get_wilor_args(self, adapter_output_dir: Path) -> List[str]:

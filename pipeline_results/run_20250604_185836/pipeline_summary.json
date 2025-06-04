@@ -1,0 +1,28 @@
+{
+  "timestamp": "20250604_185836",
+  "input_image": "data/full_images",
+  "output_directory": "pipeline_results/run_20250604_185836",
+  "results": {
+    "wilor": {
+      "success": false,
+      "message": "Executor exception: [Errno 21] Is a directory: 'data/full_images'",
+      "output_dir": "pipeline_results/run_20250604_185836/wilor_results"
+    },
+    "emoca": {
+      "success": false,
+      "message": "Executor exception: [Errno 21] Is a directory: 'data/full_images'",
+      "output_dir": "pipeline_results/run_20250604_185836/emoca_results"
+    },
+    "smplestx": {
+      "success": false,
+      "message": "Failed with return code 1. Check pipeline_results/run_20250604_185836/smplestx_results/smplestx.log",
+      "output_dir": "pipeline_results/run_20250604_185836/smplestx_results"
+    }
+  },
+  "summary": {
+    "total_adapters": 3,
+    "successful": 0,
+    "failed": 3,
+    "success_rate": 0.0
+  }
+}

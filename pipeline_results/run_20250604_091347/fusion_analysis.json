@@ -1,0 +1,139 @@
+{
+  "analysis": {
+    "smplestx": {
+      "coordinate_ranges": {
+        "x": [
+          -0.500593900680542,
+          0.5253150463104248
+        ],
+        "y": [
+          -0.6556799411773682,
+          0.925201416015625
+        ],
+        "z": [
+          -0.3270111083984375,
+          0.11588096618652344
+        ]
+      },
+      "coordinate_center": [
+        -0.03234915733065483,
+        -0.355418788038031,
+        -0.1679122813426665
+      ],
+      "scale_estimate": 0.3041375069761768,
+      "translation_range": {
+        "x": [
+          -0.0073030851781368256,
+          -0.0073030851781368256
+        ],
+        "y": [
+          0.6208892464637756,
+          0.6208892464637756
+        ],
+        "z": [
+          31.49359130859375,
+          31.49359130859375
+        ]
+      },
+      "joint_count": 137,
+      "person_count": 1
+    },
+    "wilor": {
+      "coordinate_ranges": {
+        "x": [
+          -0.11936193704605103,
+          0.11990128457546234
+        ],
+        "y": [
+          -0.09570575505495071,
+          0.04100998863577843
+        ],
+        "z": [
+          -0.10272254049777985,
+          0.038151271641254425
+        ]
+      },
+      "coordinate_center": [
+        -0.002500756327180308,
+        -0.014841545335923778,
+        -0.04490970784815024
+      ],
+      "scale_estimate": 0.03872190728520254,
+      "point_count": 1556,
+      "hand_count": 2
+    },
+    "emoca": {
+      "parameter_ranges": {
+        "shape": [
+          -0.5720160603523254,
+          0.4346723258495331
+        ],
+        "expression": [
+          -2.222045660018921,
+          4.037477016448975
+        ],
+        "pose": [
+          -0.5381731390953064,
+          0.1323324292898178
+        ]
+      },
+      "parameter_dims": {
+        "shape": 100,
+        "expression": 50,
+        "pose": 6
+      },
+      "parameter_stats": {
+        "shape_mean": -0.0015774950943887233,
+        "expression_mean": 0.37051981072872875,
+        "pose_mean": -0.08407236697773139,
+        "shape_std": 0.1549019384567186,
+        "expression_std": 1.157918265803531,
+        "pose_std": 0.2113656743845731
+      },
+      "sample_count": 1
+    }
+  },
+  "fusion_strategy": {
+    "coordinate_system_choice": "smplestx",
+    "reason": "SMPL-X provides full-body coordinate system with proper scale",
+    "transformations_needed": {
+      "wilor_to_smplx": {
+        "translation": [
+          -0.029848401003474526,
+          -0.3405772427021072,
+          -0.12300257349451627
+        ],
+        "scale": 7.854404090585745,
+        "notes": "Transform WiLoR hand coordinates to SMPL-X body coordinate system"
+      }
+    },
+    "parameter_mappings": {
+      "body_shape": {
+        "primary": "smplestx.betas",
+        "source": "Use SMPL-X body shape as foundation"
+      },
+      "hand_pose": {
+        "primary": "wilor.hand_poses",
+        "fallback": "smplestx.left_hand_pose, smplestx.right_hand_pose",
+        "source": "WiLoR provides more detailed hand articulation"
+      },
+      "facial_expression": {
+        "primary": "emoca.expcode",
+        "target": "smplestx.expression",
+        "source": "Map EMOCA rich expression space to SMPL-X"
+      },
+      "head_pose": {
+        "primary": "smplestx.root_pose",
+        "refinement": "emoca.posecode",
+        "source": "SMPL-X for global, EMOCA for facial pose details"
+      }
+    },
+    "implementation_steps": [
+      "1. Load SMPL-X parameters as foundation",
+      "2. Transform WiLoR hand coordinates to SMPL-X space",
+      "3. Map EMOCA expression codes to SMPL-X expression parameters",
+      "4. Optimize joint positions for consistency",
+      "5. Validate with anatomical constraints"
+    ]
+  }
+}
