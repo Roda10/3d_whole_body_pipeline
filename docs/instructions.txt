@@ -39,37 +39,33 @@ python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_202506
 python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
 
 # 2. Run coordinate analysis (calculates transformations between models)
-python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/targeted_coordinate_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
 
 # 3. Run basic fusion demo (coordinate-level combination)
-python basic_fusion_demo.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/basic_fusion_demo.py --results_dir pipeline_results/run_TIMESTAMP
 
 # 4. Run mesh blending fusion (geometric attachment points)
-python mesh_blending_fusion.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/mesh_blend_fusion.py --results_dir pipeline_results/run_TIMESTAMP
 
 # 5. Run fixed mesh visualizer (using real SMPL-X mesh)
-python fixed_mesh_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/fixed_mesh_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
 
 # 6. Run parameter fusion (direct parameter replacement)
-python parameter_fusion.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/parameter_fusion.py --results_dir pipeline_results/run_TIMESTAMP
 
 # 7. Run fused mesh renderer (regenerate mesh with fused parameters)
-python fused_mesh_renderer.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/fused_mesh_renderer.py --results_dir pipeline_results/run_TIMESTAMP
 
 # Discovery tool (explore what files are actually produced)
-python file_discovery.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/file_discovery.py --results_dir pipeline_results/run_TIMESTAMP
 
 # Mesh rendering visualizer (proper 3D visualization)
-python mesh_rendering_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/mesh_rendering_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Original coordinate analyzer (had issues with file formats)
-python coordinate_analysis.py --results_dir pipeline_results/run_TIMESTAMP
+# parameter analyzer 
+python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Targeted coordinate analyzer (fixed for your specific file formats)
-python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250602_202828
-python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250602_205551
-python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250603_052032
-
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+And if there is anything, you need apart from all the github files I have already uploaded in the project knowledge, let me know, don't just assume any crucial thing. I am not after results, but I need to know plainly what is going on at each stage. Clarity is the key for me. I need to know What I am doing, Why I am doing what I am doing, and how I am doing it. If it's fine for you, you can proceed  

@@ -14,12 +14,12 @@ from typing import Dict, List, Tuple, Optional
 import torch
 
 # Add SMPL-X paths
-sys.path.append(os.path.join(os.path.dirname(__file__), 'external', 'SMPLest-X'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'SMPLest-X'))
 sys.path.append(os.path.join(os.path.dirname(__file__), 'human_models'))
 
 # Import visualization utils
 try:
-    from visualization_utils import render_mesh, save_obj
+    from utils.visualization_utils import render_mesh, save_obj
 except ImportError:
     print("❌ Could not import visualization_utils")
     

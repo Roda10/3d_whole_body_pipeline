@@ -1,38 +1,72 @@
-Perfect! Now I can see the exact MANO parameter structure:
+================================================================================
+PARAMETER STRUCTURE ANALYSIS
+================================================================================
+Analyzing pipeline outputs in: pipeline_results/run_20250604_091347
 
-```
-pred_mano_params keys: ['global_orient', 'hand_pose', 'betas']
-  global_orient: torch.Size([2, 1, 3, 3])
-  hand_pose: torch.Size([2, 15, 3, 3])  
-  betas: torch.Size([2, 10])
-```
+🔍 Analyzing SMPLest-X outputs...
+🔍 Analyzing WiLoR outputs...
+🔍 Analyzing EMOCA outputs...
+📝 Creating human-readable summary...
 
-**This is exactly what we need for proper parameter fusion!** WiLoR outputs:
-- `global_orient`: Hand root orientation (1 joint, 3x3 rotation matrix)
-- `hand_pose`: Hand joint poses (15 joints, 3x3 rotation matrices)
-- `betas`: Hand shape parameters (10 dimensions)
+📊 SUMMARY:
+--------------------------------------------------
 
-## The Problem with Current Fusion
+SMPLest-X:
+  Full-body 3D human pose and shape estimation
+  Parameters found: 11
+    • joints_3d: Multi-dimensional array: 137 × 3
+    • joints_2d: Multi-dimensional array: 137 × 2
+    • root_pose: List of 3 numbers
+    • body_pose: List of 63 numbers
+    • left_hand_pose: List of 45 numbers
+    • right_hand_pose: List of 45 numbers
+    • jaw_pose: List of 3 numbers
+    • betas: List of 10 numbers
+    • expression: List of 10 numbers
+    • translation: List of 3 numbers
+    • mesh: Multi-dimensional array: 10475 × 3
 
-Looking at your current `wilor_output_extractor.py`, it's not extracting these actual MANO parameters. Instead, it's looking for `'pred_mano_params'` in the output but not accessing the dictionary contents.
+WiLoR:
+  Hand pose estimation with MANO parameters
+  Parameters found: 27
+    • image_path: Single str value
+    • batch_size: Single int value
+    • detection_count: Single int value
+    • scaled_focal_length: Single float value
+    • hand_id: Single int value
+    • hand_type: Single str value
+    • is_right: Single bool value
+    • vertices_3d: Multi-dimensional array: 778 × 3
+    • keypoints_3d: Multi-dimensional array: 21 × 3
+    • camera_prediction: List of 3 numbers
+    • camera_translation: List of 3 numbers
+    • box_center: List of 2 numbers
+    • box_size: Single float value
+    • img_size: List of 2 numbers
+    • source: Single str value
+    • values: Multi-dimensional array: 1 × 3 × 3
+    • shape: List of 3 numbers
+    • type: Single str value
+    • x: List of 2 numbers
+    • y: List of 2 numbers
+    • z: List of 2 numbers
+    • vertices_center: List of 3 numbers
+    • extractor_version: Single str value
+    • includes_3d_coordinates: Single bool value
+    • includes_mano_parameters: Single bool value
+    • coordinate_system: Single str value
+    • notes: Single str value
 
-## Solution Required
+EMOCA:
+  Facial expression and identity modeling
+  Parameters found: 5
+    • shapecode: List of 100 numbers
+    • expcode: List of 50 numbers
+    • texcode: List of 50 numbers
+    • posecode: List of 6 numbers
+    • detailcode: List of 128 numbers
 
-**Before implementing the fix, I need your approval for this approach:**
-
-1. **Fix WiLoR parameter extraction** to properly extract the `global_orient`, `hand_pose`, and `betas` from the `pred_mano_params` dictionary
-
-2. **Convert rotation matrices to axis-angle** format (SMPL-X expects axis-angle, but WiLoR outputs rotation matrices)
-
-3. **Update parameter fusion** to use these actual MANO parameters instead of trying to derive them from mesh vertices
-
-4. **Test with a single hand first** to verify the conversion works
-
-**Should I proceed with:**
-- Implementing the proper MANO parameter extraction in `wilor_output_extractor.py`?
-- Creating a conversion function from rotation matrices to axis-angle format?
-- Testing this with your existing pipeline?
-
-Or would you prefer a different approach?
-
-Also, can you quickly check if you have any EMOCA debug output to verify what FLAME parameters are being saved?
+💾 Analysis saved to:
+   📄 Detailed: pipeline_results/run_20250604_091347/parameter_structure_analysis.json
+   📄 Summary: pipeline_results/run_20250604_091347/pipeline_output_summary.json
+================================================================================

@@ -240,41 +240,6 @@ def main():
         person_output_folder = run_output_folder / f'person_{bbox_id}'
         os.makedirs(person_output_folder, exist_ok=True)
 
-        # # Convert numpy arrays to serializable format for JSON
-        # serializable_params = numpy_to_serializable(smplx_params)
-        
-        # # Print parameters
-        # demoer.logger.info(f"\n=== SMPL-X Parameters for Person {bbox_id} ===")
-        # for param_name, param_value in serializable_params.items():
-        #     if isinstance(param_value, list):
-        #         # For arrays, print shape info and first few values
-        #         param_array = np.array(param_value)
-        #         demoer.logger.info(f"{param_name}: shape={param_array.shape}, "
-        #                          f"first_values={param_array.flatten()[:5].tolist()}")
-        #     else:
-        #         demoer.logger.info(f"{param_name}: {param_value}")
-        
-        # # Save parameters as .json
-        # params_filename = person_output_folder / f'smplx_params_person_{bbox_id}.json'
-        # with open(params_filename, 'w') as f:
-        #     json.dump(serializable_params, f, indent=2)
-        # demoer.logger.info(f"Saved SMPL-X parameters for person {bbox_id} to: {params_filename}")
-
-        # # Optional: Also save a summary with key statistics
-        # summary_filename = person_output_folder / f'smplx_summary_person_{bbox_id}.json'
-        # summary = {
-        #     'bbox_id': bbox_id,
-        #     'joints_3d_count': len(serializable_params['joints_3d']),
-        #     'body_pose_dims': len(serializable_params['body_pose']),
-        #     'shape_params_dims': len(serializable_params['betas']),
-        #     'translation': serializable_params['translation'],
-        #     'bbox_xyxy': [float(x1), float(y1), float(x2), float(y2)]
-        # }
-        # with open(summary_filename, 'w') as f:
-        #     json.dump(summary, f, indent=2)
-        # demoer.logger.info(f"Saved parameter summary to: {summary_filename}")
-
-
         # Create parameter shape summary
         param_shapes = {}
         for param_name, param_value in smplx_params.items():
