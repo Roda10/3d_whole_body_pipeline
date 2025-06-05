@@ -677,10 +677,10 @@ class ComprehensiveCoordinateAnalyzer:
         plt.colorbar(im, ax=ax6)
         
         plt.tight_layout()
-        plt.savefig(self.results_dir / 'coordinate_system_analysis.png', dpi=300, bbox_inches='tight')
+        plt.savefig(self.results_dir / 'coordinate_system_analysis.pdf', dpi=300, bbox_inches='tight')
         plt.close()
         
-        print("   ✅ Visualizations saved to coordinate_system_analysis.png")
+        print("   ✅ Visualizations saved to coordinate_system_analysis.pdf")
     
     def save_analysis_reports(self, smplestx_analysis: Dict, wilor_analysis: Dict, 
                             emoca_analysis: Dict, transformation: Dict, fusion_math: Dict):
@@ -993,7 +993,7 @@ def fuse_models(smplx_params, wilor_params, emoca_params):
         print("✅ ANALYSIS COMPLETE!")
         print("="*60)
         print("\n📊 Generated Files:")
-        print("   - coordinate_system_analysis.png (visualizations)")
+        print("   - coordinate_system_analysis.pdf (visualizations)")
         print("   - scale_difference_analysis.txt (scale report)")
         print("   - transformation_alignment.txt (alignment details)")
         print("   - fusion_mathematics.md (mathematical framework)")

@@ -1,0 +1,11 @@
+Enhanced Mesh Information
+========================
+
+Vertices: 10475
+Dimensions: 3
+Bounding box:
+  X: [-0.4868, 0.4933]
+  Y: [-0.4855, 1.2034]
+  Z: [31.1581, 31.6730]
+
+Centroid: [-0.0253, -0.0337, 31.4065]

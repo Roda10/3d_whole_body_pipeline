@@ -1,0 +1,710 @@
+{
+  "pipeline_overview": {
+    "description": "3D Whole Body Human Analysis Pipeline",
+    "models_used": 3,
+    "what_it_does": "Takes a single image and extracts detailed 3D human body, hand, and facial parameters"
+  },
+  "model_outputs": {
+    "smplestx": {
+      "model_name": "SMPLest-X",
+      "description": "Full-body 3D human pose and shape estimation",
+      "files_analyzed": 1,
+      "parameters": {
+        "joints_3d": {
+          "what_it_is": "Body joints in 3D space (x,y,z coordinates)",
+          "data_structure": "Multi-dimensional array: 137 \u00d7 3",
+          "technical_details": {
+            "type": "multidimensional_array",
+            "shape": [
+              137,
+              3
+            ],
+            "sample_values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0615348257124424,
+              0.09458935260772705,
+              0.011739730834960938
+            ],
+            "value_range": [
+              -0.6556799411773682,
+              0.925201416015625
+            ]
+          }
+        },
+        "joints_2d": {
+          "what_it_is": "2D projections of body joints on image (pixel coordinates)",
+          "data_structure": "Multi-dimensional array: 137 \u00d7 2",
+          "technical_details": {
+            "type": "multidimensional_array",
+            "shape": [
+              137,
+              2
+            ],
+            "sample_values": [
+              5.959366798400879,
+              10.65880012512207,
+              6.569494247436523,
+              11.59565544128418,
+              5.3454389572143555,
+              11.71825122833252
+            ],
+            "value_range": [
+              0.9437899589538574,
+              19.866737365722656
+            ]
+          }
+        },
+        "root_pose": {
+          "what_it_is": "Global body orientation (3 axis-angle rotations)",
+          "data_structure": "List of 3 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              3
+            ],
+            "sample_values": [
+              3.0343732833862305,
+              -0.017282068729400635,
+              -0.10121084749698639
+            ],
+            "value_range": [
+              -0.10121084749698639,
+              3.0343732833862305
+            ]
+          }
+        },
+        "body_pose": {
+          "what_it_is": "Body joint rotations (21 joints \u00d7 3 axis-angle each = 63 values)",
+          "data_structure": "List of 63 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              63
+            ],
+            "sample_values": [
+              -0.19710810482501984,
+              0.0019806113559752703,
+              0.07266683131456375
+            ],
+            "value_range": [
+              -1.2245585918426514,
+              1.3148117065429688
+            ]
+          }
+        },
+        "left_hand_pose": {
+          "what_it_is": "Left hand joint rotations (15 finger joints \u00d7 3 axis-angle each = 45 values)",
+          "data_structure": "List of 45 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              45
+            ],
+            "sample_values": [
+              0.06031018868088722,
+              0.20271463692188263,
+              0.5993701219558716
+            ],
+            "value_range": [
+              -0.18259598314762115,
+              0.7167990803718567
+            ]
+          }
+        },
+        "right_hand_pose": {
+          "what_it_is": "Right hand joint rotations (15 finger joints \u00d7 3 axis-angle each = 45 values)",
+          "data_structure": "List of 45 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              45
+            ],
+            "sample_values": [
+              0.0402245819568634,
+              -0.19681742787361145,
+              -0.3342961370944977
+            ],
+            "value_range": [
+              -0.4517824649810791,
+              0.17306530475616455
+            ]
+          }
+        },
+        "jaw_pose": {
+          "what_it_is": "Jaw rotation (3 axis-angle rotations)",
+          "data_structure": "List of 3 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              3
+            ],
+            "sample_values": [
+              0.03529548645019531,
+              -0.009425216354429722,
+              0.004716695751994848
+            ],
+            "value_range": [
+              -0.009425216354429722,
+              0.03529548645019531
+            ]
+          }
+        },
+        "betas": {
+          "what_it_is": "Body shape parameters (10 values controlling height, weight, build)",
+          "data_structure": "List of 10 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              10
+            ],
+            "sample_values": [
+              -0.0125105706974864,
+              0.1909208744764328,
+              0.10922905057668686
+            ],
+            "value_range": [
+              -0.13586291670799255,
+              0.1909208744764328
+            ]
+          }
+        },
+        "expression": {
+          "what_it_is": "Facial expression parameters (10 values controlling facial expressions)",
+          "data_structure": "List of 10 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              10
+            ],
+            "sample_values": [
+              0.4103983938694,
+              0.2640983462333679,
+              -2.4426774978637695
+            ],
+            "value_range": [
+              -2.4426774978637695,
+              0.5284613370895386
+            ]
+          }
+        },
+        "translation": {
+          "what_it_is": "Global position in 3D space (x,y,z offset)",
+          "data_structure": "List of 3 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              3
+            ],
+            "sample_values": [
+              -0.0073030851781368256,
+              0.6208892464637756,
+              31.49359130859375
+            ],
+            "value_range": [
+              -0.0073030851781368256,
+              31.49359130859375
+            ]
+          }
+        },
+        "mesh": {
+          "what_it_is": "Full body mesh vertices (10475 vertices \u00d7 3D coordinates)",
+          "data_structure": "Multi-dimensional array: 10475 \u00d7 3",
+          "technical_details": {
+            "type": "multidimensional_array",
+            "shape": [
+              10475,
+              3
+            ],
+            "sample_values": [
+              0.025634456425905228,
+              -0.3441757559776306,
+              31.41012954711914,
+              0.02896803617477417,
+              -0.3431921601295471,
+              31.407522201538086
+            ],
+            "value_range": [
+              -0.5076713562011719,
+              31.672977447509766
+            ]
+          }
+        }
+      }
+    },
+    "wilor": {
+      "model_name": "WiLoR",
+      "description": "Hand pose estimation with MANO parameters",
+      "files_analyzed": 1,
+      "parameters": {
+        "image_path": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single str value",
+          "technical_details": {
+            "type": "str",
+            "value": "../pipeline_results/run_20250605_174751/wilor_results/temp_input/test2.jpg"
+          }
+        },
+        "batch_size": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single int value",
+          "technical_details": {
+            "type": "int",
+            "value": 2
+          }
+        },
+        "detection_count": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single int value",
+          "technical_details": {
+            "type": "int",
+            "value": 2
+          }
+        },
+        "scaled_focal_length": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single float value",
+          "technical_details": {
+            "type": "float",
+            "value": 18886.71875
+          }
+        },
+        "hand_id": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single int value",
+          "technical_details": {
+            "type": "int",
+            "value": 0
+          }
+        },
+        "hand_type": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single str value",
+          "technical_details": {
+            "type": "str",
+            "value": "left"
+          }
+        },
+        "is_right": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single bool value",
+          "technical_details": {
+            "type": "bool",
+            "value": false
+          }
+        },
+        "vertices_3d": {
+          "what_it_is": "Hand mesh vertices in 3D space (778 vertices per hand \u00d7 x,y,z)",
+          "data_structure": "Multi-dimensional array: 778 \u00d7 3",
+          "technical_details": {
+            "type": "multidimensional_array",
+            "shape": [
+              778,
+              3
+            ],
+            "sample_values": [
+              -0.05610664188861847,
+              -0.02596847154200077,
+              -0.013509639538824558,
+              -0.06590048223733902,
+              -0.024557678028941154,
+              -0.010857383720576763
+            ],
+            "value_range": [
+              -0.11936193704605103,
+              0.05080089718103409
+            ]
+          }
+        },
+        "keypoints_3d": {
+          "what_it_is": "Hand keypoints in 3D space (21 keypoints per hand \u00d7 x,y,z)",
+          "data_structure": "Multi-dimensional array: 21 \u00d7 3",
+          "technical_details": {
+            "type": "multidimensional_array",
+            "shape": [
+              21,
+              3
+            ],
+            "sample_values": [
+              -0.09580645710229874,
+              0.006393471732735634,
+              0.006201569922268391,
+              -0.07721096277236938,
+              -0.027340857312083244,
+              0.0037410417571663857
+            ],
+            "value_range": [
+              -0.10044322162866592,
+              0.05080089718103409
+            ]
+          }
+        },
+        "camera_prediction": {
+          "what_it_is": "Raw camera parameters from model",
+          "data_structure": "List of 3 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              3
+            ],
+            "sample_values": [
+              3.9345521926879883,
+              0.029292769730091095,
+              0.027269776910543442
+            ],
+            "value_range": [
+              0.027269776910543442,
+              3.9345521926879883
+            ]
+          }
+        },
+        "camera_translation": {
+          "what_it_is": "Camera position relative to hand (x,y,z)",
+          "data_structure": "List of 3 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              3
+            ],
+            "sample_values": [
+              0.41370752453804016,
+              0.07238291203975677,
+              24.001102447509766
+            ],
+            "value_range": [
+              0.07238291203975677,
+              24.001102447509766
+            ]
+          }
+        },
+        "box_center": {
+          "what_it_is": "Center of bounding box around hand in image",
+          "data_structure": "List of 2 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              2
+            ],
+            "sample_values": [
+              786.0,
+              449.5
+            ],
+            "value_range": [
+              449.5,
+              786.0
+            ]
+          }
+        },
+        "box_size": {
+          "what_it_is": "Size of bounding box around hand",
+          "data_structure": "Single float value",
+          "technical_details": {
+            "type": "float",
+            "value": 400.0
+          }
+        },
+        "img_size": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "List of 2 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              2
+            ],
+            "sample_values": [
+              967.0,
+              828.0
+            ],
+            "value_range": [
+              828.0,
+              967.0
+            ]
+          }
+        },
+        "source": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single str value",
+          "technical_details": {
+            "type": "str",
+            "value": "pred_mano_params"
+          }
+        },
+        "values": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Multi-dimensional array: 1 \u00d7 3 \u00d7 3",
+          "technical_details": {
+            "type": "multidimensional_array",
+            "shape": [
+              1,
+              3,
+              3
+            ],
+            "sample_values": [
+              0.8917266726493835,
+              -0.42855915427207947,
+              -0.14546655118465424,
+              0.19322475790977478,
+              0.6511698365211487,
+              -0.7339223027229309
+            ],
+            "value_range": [
+              -0.7339223027229309,
+              0.8917266726493835
+            ]
+          }
+        },
+        "shape": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "List of 3 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              3
+            ],
+            "sample_values": [
+              1,
+              3,
+              3
+            ],
+            "value_range": [
+              1,
+              3
+            ]
+          }
+        },
+        "type": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single str value",
+          "technical_details": {
+            "type": "str",
+            "value": "rotation_matrix"
+          }
+        },
+        "x": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "List of 2 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              2
+            ],
+            "sample_values": [
+              -0.11936193704605103,
+              0.05080089718103409
+            ],
+            "value_range": [
+              -0.11936193704605103,
+              0.05080089718103409
+            ]
+          }
+        },
+        "y": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "List of 2 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              2
+            ],
+            "sample_values": [
+              -0.09570575505495071,
+              0.04100998863577843
+            ],
+            "value_range": [
+              -0.09570575505495071,
+              0.04100998863577843
+            ]
+          }
+        },
+        "z": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "List of 2 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              2
+            ],
+            "sample_values": [
+              -0.10272254049777985,
+              0.037239450961351395
+            ],
+            "value_range": [
+              -0.10272254049777985,
+              0.037239450961351395
+            ]
+          }
+        },
+        "vertices_center": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "List of 3 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              3
+            ],
+            "sample_values": [
+              -0.018161173909902573,
+              -0.0209882240742445,
+              -0.04687323421239853
+            ],
+            "value_range": [
+              -0.04687323421239853,
+              -0.018161173909902573
+            ]
+          }
+        },
+        "extractor_version": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single str value",
+          "technical_details": {
+            "type": "str",
+            "value": "fixed_v2.0"
+          }
+        },
+        "includes_3d_coordinates": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single bool value",
+          "technical_details": {
+            "type": "bool",
+            "value": true
+          }
+        },
+        "includes_mano_parameters": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single bool value",
+          "technical_details": {
+            "type": "bool",
+            "value": true
+          }
+        },
+        "coordinate_system": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single str value",
+          "technical_details": {
+            "type": "str",
+            "value": "WiLoR_hand_centric"
+          }
+        },
+        "notes": {
+          "what_it_is": "Unknown parameter",
+          "data_structure": "Single str value",
+          "technical_details": {
+            "type": "str",
+            "value": "Fixed version that extracts MANO parameters from pred_mano_params"
+          }
+        }
+      }
+    },
+    "emoca": {
+      "model_name": "EMOCA",
+      "description": "Facial expression and identity modeling",
+      "files_analyzed": 1,
+      "parameters": {
+        "shapecode": {
+          "what_it_is": "Facial shape parameters (100D latent space controlling face geometry)",
+          "data_structure": "List of 100 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              100
+            ],
+            "sample_values": [
+              0.07473990321159363,
+              -0.2729088068008423,
+              -0.22631581127643585
+            ],
+            "value_range": [
+              -0.5720159411430359,
+              0.43467235565185547
+            ]
+          }
+        },
+        "expcode": {
+          "what_it_is": "Facial expression parameters (50D latent space controlling expressions)",
+          "data_structure": "List of 50 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              50
+            ],
+            "sample_values": [
+              -0.2240084707736969,
+              -0.1850954294204712,
+              1.0976051092147827
+            ],
+            "value_range": [
+              -2.222046136856079,
+              4.037477016448975
+            ]
+          }
+        },
+        "texcode": {
+          "what_it_is": "Facial texture parameters (50D latent space controlling skin appearance)",
+          "data_structure": "List of 50 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              50
+            ],
+            "sample_values": [
+              0.12431711703538895,
+              0.3990017771720886,
+              0.13972735404968262
+            ],
+            "value_range": [
+              -0.2074265480041504,
+              0.3990017771720886
+            ]
+          }
+        },
+        "posecode": {
+          "what_it_is": "Head pose parameters (6D controlling head rotation and position)",
+          "data_structure": "List of 6 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              6
+            ],
+            "sample_values": [
+              -0.010983547195792198,
+              -0.5381731390953064,
+              -0.0456530824303627
+            ],
+            "value_range": [
+              -0.5381731390953064,
+              0.1323324292898178
+            ]
+          }
+        },
+        "detailcode": {
+          "what_it_is": "Facial detail parameters (128D latent space controlling fine details like wrinkles)",
+          "data_structure": "List of 128 numbers",
+          "technical_details": {
+            "type": "numeric_array",
+            "shape": [
+              128
+            ],
+            "sample_values": [
+              0.7679451107978821,
+              0.16447855532169342,
+              0.09122778475284576
+            ],
+            "value_range": [
+              -1.6559276580810547,
+              2.1090781688690186
+            ]
+          }
+        }
+      }
+    }
+  },
+  "fusion_possibilities": {
+    "coordinate_systems": "Different models use different 3D coordinate systems",
+    "overlapping_parts": {
+      "hands": "SMPLest-X provides basic hand pose, WiLoR provides detailed hand mesh",
+      "face": "SMPLest-X provides basic expression, EMOCA provides detailed facial parameters"
+    },
+    "fusion_strategy": "Use SMPLest-X as body foundation, enhance with WiLoR hands and EMOCA face"
+  }
+}

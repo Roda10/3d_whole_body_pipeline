@@ -1,0 +1,21 @@
+Parameter Changes Summary
+========================
+
+left_hand_pose:
+  Original norm: 1.9145
+  Fused norm: 1.6293
+  Difference: 1.8940
+  Change: 98.9%
+
+right_hand_pose:
+  Original norm: 1.1071
+  Fused norm: 1.4993
+  Difference: 1.8394
+  Change: 166.1%
+
+expression:
+  Original norm: 2.8090
+  Fused norm: 1.2651
+  Difference: 3.2389
+  Change: 115.3%
+
