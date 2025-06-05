@@ -1,5 +1,0 @@
-[92m06-04 18:58:45[0m Using 1 GPU(s).
-[92m06-04 18:58:45[0m Inference on single image [data/full_images] with [/home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar].
-[92m06-04 18:58:45[0m Load checkpoint from /home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar
-[92m06-04 18:58:45[0m Creating graph...
-[92m06-04 18:58:55[0m [93mWRN: Attention: Strict=False is set for checkpoint loading. Please check manually.[0m

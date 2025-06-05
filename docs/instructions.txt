@@ -65,6 +65,7 @@ python analysis_tools/mesh_rendering_visualizer.py --results_dir pipeline_result
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # parameter analyzer 
+python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
 python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
 python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_TIMESTAMP
 
