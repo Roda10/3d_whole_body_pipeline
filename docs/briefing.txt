@@ -1,0 +1,281 @@
+(unified_pose_env) rodeo_aims_ac_za@rodeo-vm:~/3d_whole_body_pipeline$ python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+2025-06-05 11:02:45,894 - UnifiedPipeline - INFO - Starting unified pipeline for image: data/full_images/test2.jpg
+2025-06-05 11:02:45,894 - UnifiedPipeline - INFO - Output directory: pipeline_results/run_20250605_110245
+2025-06-05 11:02:45,895 - UnifiedPipeline - INFO - Starting smplestx with command: /opt/conda/envs/unified_pose_env/bin/python adapters/smplestx_adapter.py --cfg_path pretrained_models/smplest_x/config_base.py --input_image data/full_images/test2.jpg --output_dir pipeline_results/run_20250605_110245/smplestx_results --multi_person
+2025-06-05 11:02:45,896 - UnifiedPipeline - INFO - Working directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline
+2025-06-05 11:02:45,898 - UnifiedPipeline - INFO - Starting wilor with command: /opt/conda/envs/unified_pose_env/bin/python wilor_adapter.py --img_folder ../pipeline_results/run_20250605_110245/wilor_results/temp_input --out_folder ../pipeline_results/run_20250605_110245/wilor_results --rescale_factor 2.0
+2025-06-05 11:02:45,898 - UnifiedPipeline - INFO - Working directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline/adapters
+2025-06-05 11:02:45,898 - UnifiedPipeline - INFO - Starting emoca with command: /opt/conda/envs/unified_pose_env/bin/python adapters/emoca_adapter.py --input_folder pipeline_results/run_20250605_110245/emoca_results/temp_input --output_folder pipeline_results/run_20250605_110245/emoca_results --save_images True --save_codes True --mode detail
+2025-06-05 11:02:45,899 - UnifiedPipeline - INFO - Working directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline
+2025-06-05 11:03:03,926 - UnifiedPipeline - INFO - ✓ wilor completed successfully
+2025-06-05 11:03:10,851 - UnifiedPipeline - INFO - ✓ emoca completed successfully
+2025-06-05 11:03:13,660 - UnifiedPipeline - INFO - ✓ smplestx completed successfully
+2025-06-05 11:03:13,661 - UnifiedPipeline - INFO - 
+============================================================
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - PIPELINE SUMMARY
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - ============================================================
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - Input: data/full_images/test2.jpg
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - Output: pipeline_results/run_20250605_110245
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - Success rate: 100.0%
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - ✓ Successful: wilor, emoca, smplestx
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - Summary saved to: pipeline_results/run_20250605_110245/pipeline_summary.json
+2025-06-05 11:03:13,662 - UnifiedPipeline - INFO - ============================================================
+(unified_pose_env) rodeo_aims_ac_za@rodeo-vm:~/3d_whole_body_pipeline$ python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_20250605_110245/
+================================================================================
+PARAMETER STRUCTURE ANALYSIS
+================================================================================
+Analyzing pipeline outputs in: pipeline_results/run_20250605_110245
+
+🔍 Analyzing SMPLest-X outputs...
+🔍 Analyzing WiLoR outputs...
+🔍 Analyzing EMOCA outputs...
+📝 Creating human-readable summary...
+
+📊 SUMMARY:
+--------------------------------------------------
+
+SMPLest-X:
+  Full-body 3D human pose and shape estimation
+  Parameters found: 11
+    • joints_3d: Multi-dimensional array: 137 × 3
+    • joints_2d: Multi-dimensional array: 137 × 2
+    • root_pose: List of 3 numbers
+    • body_pose: List of 63 numbers
+    • left_hand_pose: List of 45 numbers
+    • right_hand_pose: List of 45 numbers
+    • jaw_pose: List of 3 numbers
+    • betas: List of 10 numbers
+    • expression: List of 10 numbers
+    • translation: List of 3 numbers
+    • mesh: Multi-dimensional array: 10475 × 3
+
+WiLoR:
+  Hand pose estimation with MANO parameters
+  Parameters found: 27
+    • image_path: Single str value
+    • batch_size: Single int value
+    • detection_count: Single int value
+    • scaled_focal_length: Single float value
+    • hand_id: Single int value
+    • hand_type: Single str value
+    • is_right: Single bool value
+    • vertices_3d: Multi-dimensional array: 778 × 3
+    • keypoints_3d: Multi-dimensional array: 21 × 3
+    • camera_prediction: List of 3 numbers
+    • camera_translation: List of 3 numbers
+    • box_center: List of 2 numbers
+    • box_size: Single float value
+    • img_size: List of 2 numbers
+    • source: Single str value
+    • values: Multi-dimensional array: 1 × 3 × 3
+    • shape: List of 3 numbers
+    • type: Single str value
+    • x: List of 2 numbers
+    • y: List of 2 numbers
+    • z: List of 2 numbers
+    • vertices_center: List of 3 numbers
+    • extractor_version: Single str value
+    • includes_3d_coordinates: Single bool value
+    • includes_mano_parameters: Single bool value
+    • coordinate_system: Single str value
+    • notes: Single str value
+
+EMOCA:
+  Facial expression and identity modeling
+  Parameters found: 5
+    • shapecode: List of 100 numbers
+    • expcode: List of 50 numbers
+    • texcode: List of 50 numbers
+    • posecode: List of 6 numbers
+    • detailcode: List of 128 numbers
+
+💾 Analysis saved to:
+   📄 Detailed: pipeline_results/run_20250605_110245/parameter_structure_analysis.json
+   📄 Summary: pipeline_results/run_20250605_110245/pipeline_output_summary.json
+================================================================================
+(unified_pose_env) rodeo_aims_ac_za@rodeo-vm:~/3d_whole_body_pipeline$ python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_20250605_110245/
+
+============================================================
+🚀 COMPREHENSIVE COORDINATE SYSTEM ANALYSIS
+============================================================
+
+📥 Loading SMPLest-X data...
+   ✅ Loaded person_0: 137 joints, 10475 mesh vertices
+📥 Loading WiLoR data...
+   ✅ Loaded test2: 2 hands, 2 hand meshes
+      🖐️  left hand: 778 vertices, 21 keypoints
+      🖐️  right hand: 778 vertices, 21 keypoints
+📥 Loading EMOCA data...
+   ✅ Loaded test200: 5 parameter sets
+   ✅ Loaded test200: 5 parameter sets
+
+----------------------------------------
+🔍 Analyzing SMPLest-X coordinate system...
+   📊 Analyzed 137 joints and 10,475 mesh vertices
+   📏 Estimated body height: 1.581m
+   📐 Overall scale (std): 0.3041
+
+----------------------------------------
+🔍 Analyzing WiLoR coordinate system...
+   📊 Analyzed 2 hands with 1,556 vertices total
+   🖐️  Hand span estimate: 0.239m
+   📐 Overall scale (std): 0.0387
+
+----------------------------------------
+🔍 Analyzing EMOCA parameter space...
+   📊 Parameter dimensions: Shape(100D), Expression(50D), Pose(6D)
+   🎭 Expression: 0 active dimensions
+   🔄 Fusion needs: 50D → 10D mapping
+
+----------------------------------------
+🧮 Calculating transformation parameters...
+   📐 Scale factor: 7.8544 (SMPLest-X / WiLoR)
+   📍 Translation: [-0.0298, -0.3406, -0.1230]
+   ✅ Transformation complexity: low
+
+----------------------------------------
+📐 Generating fusion mathematics...
+   🔢 Coordinate transform: Scale=7.8544, Translate=[-0.029848401003474526, -0.3405772427021072, -0.12300257349451627]
+   🎭 Expression mapping: 50D → 10D
+   ✅ Mathematical framework complete
+
+----------------------------------------
+📊 Creating visualizations...
+wilor_center type: <class 'list'>
+scale type: <class 'float'>
+trans type: <class 'list'>
+   ✅ Visualizations saved to coordinate_system_analysis.png
+
+----------------------------------------
+💾 Saving analysis reports...
+   📄 Saved: scale_difference_analysis.txt
+   📄 Saved: transformation_alignment.txt
+   📄 Saved: fusion_mathematics.md
+   📄 Saved: coordinate_analysis_summary.json
+
+============================================================
+✅ ANALYSIS COMPLETE!
+============================================================
+
+📊 Generated Files:
+   - coordinate_system_analysis.png (visualizations)
+   - scale_difference_analysis.txt (scale report)
+   - transformation_alignment.txt (alignment details)
+   - fusion_mathematics.md (mathematical framework)
+   - coordinate_analysis_summary.json (parameters)
+
+🎯 Key Findings:
+   - Scale factor: 7.8544
+   - Translation: [-0.029848401003474526, -0.3405772427021072, -0.12300257349451627]
+   - Expression mapping: 50D → 10D
+
+
+(unified_pose_env) rodeo_aims_ac_za@rodeo-vm:~/3d_whole_body_pipeline$ python analysis_tools/direct_parameter_fusion.py --results_dir pipeline_results/run_20250605_110245/
+📥 Loading coordinate analysis results...
+   ✅ Loaded transformation: scale=7.8544
+   ✅ Translation: [-0.0298484  -0.34057724 -0.12300257]
+🤖 Setting up SMPL-X model...
+   ✅ SMPL-X model loaded from: human_models/human_model_files/
+🎨 Setting up rendering configuration...
+   ✅ Config loaded from: pretrained_models/smplest_x/config_base.py
+
+============================================================
+🚀 DIRECT PARAMETER FUSION SYSTEM
+============================================================
+
+📥 Loading model parameters...
+⚠️  EMOCA parameters not found, proceeding without facial enhancement
+   ✅ Loaded SMPLest-X: 11 parameter types
+   ✅ Loaded WiLoR: 2 hands
+   ✅ Loaded EMOCA: 0 parameter types
+🔧 Creating fused parameters...
+   ✅ Foundation parameters from SMPLest-X
+🔄 Transforming WiLoR coordinates to SMPLest-X space...
+   🖐️  Transformed left hand vertices: scale=7.8544
+      📏 Original range: [-0.1194, 0.0508]
+      📏 Transformed range: [-1.0923, 0.3692]
+   🖐️  Transformed right hand vertices: scale=7.8544
+      📏 Original range: [-0.0947, 0.1199]
+      📏 Transformed range: [-0.8671, 0.9119]
+🖐️  Extracting hand pose parameters...
+   ✅ Left hand pose extracted: 135 → 45 params
+   ✅ Right hand pose extracted: 135 → 45 params
+   ✅ Hand poses replaced with WiLoR parameters
+⚠️  No EMOCA expression data, using zero expression
+   ✅ Expression replaced with EMOCA parameters
+📊 Parameter comparison:
+   Left Hand:
+     Original norm: 1.9145
+     Fused norm: 3.8730
+     Difference: 4.0687
+     Change: 102.3%
+   Right Hand:
+     Original norm: 1.1071
+     Fused norm: 3.8730
+     Difference: 3.9396
+     Change: 249.8%
+   Expression:
+     Original norm: 2.8090
+     Fused norm: 0.0000
+     Difference: 2.8090
+     Change: -100.0%
+🎯 Generating enhanced mesh with fused parameters...
+   🔧 Parameter shapes:
+      betas: torch.Size([1, 10])
+      body_pose: torch.Size([1, 63])
+      global_orient: torch.Size([1, 3])
+      left_hand_pose: torch.Size([1, 45])
+      right_hand_pose: torch.Size([1, 45])
+      expression: torch.Size([1, 10])
+      jaw_pose: torch.Size([1, 3])
+      transl: torch.Size([1, 3])
+      leye_pose: torch.Size([1, 3])
+      reye_pose: torch.Size([1, 3])
+   ✅ Enhanced mesh generated: 10475 vertices
+💾 Saving fusion results to: pipeline_results/run_20250605_110245/fusion_results
+   ✅ Fused parameters saved
+   ✅ Enhanced mesh saved
+   ✅ Comparison report saved
+
+============================================================
+✅ FUSION COMPLETE!
+============================================================
+
+🎯 Results:
+   - Fused parameters with WiLoR hands + EMOCA expression
+   - Coordinate transformation applied
+   - Enhanced mesh generated (if SMPL-X model available)
+   - Comparison metrics computed
+
+📁 Output directory: pipeline_results/run_20250605_110245/fusion_results
+(unified_pose_env) rodeo_aims_ac_za@rodeo-vm:~/3d_whole_body_pipeline$ python analysis_tools/fusion_visualizer.py --results_dir pipeline_results/run_20250605_110245/
+
+============================================================
+📊 FUSION RESULTS VISUALIZATION
+============================================================
+
+📥 Loading fusion data for visualization...
+   ✅ Original parameters: 11 types
+   ✅ Fused parameters: 9 types
+   ✅ Original mesh: (10475, 3)
+   ✅ Enhanced mesh: None
+📊 Creating parameter comparison plots...
+   ✅ Parameter comparison plot saved
+⚠️  Cannot create mesh comparison - missing mesh data
+🔄 Creating coordinate transformation visualization...
+   ✅ Coordinate transformation visualization saved
+📄 Creating fusion summary report...
+   ✅ Summary report saved to: pipeline_results/run_20250605_110245/fusion_results/fusion_summary_report.txt
+
+============================================================
+✅ VISUALIZATION COMPLETE!
+============================================================
+
+📊 Generated visualizations:
+   - parameter_comparison.png (parameter changes)
+   - mesh_comparison_3d.png (3D mesh analysis)
+   - coordinate_transformation.png (transformation visualization)
+   - fusion_summary_report.txt (comprehensive report)
+
+📁 Visualization directory: pipeline_results/run_20250605_110245/fusion_results
+(unified_pose_env) rodeo_aims_ac_za@rodeo-vm:~/3d_whole_body_pipeline$ 

@@ -1,0 +1,6 @@
+Enhanced Mesh Information
+=========================
+Vertices: 10475
+Coordinates: 3D
+Vertex range: [-0.5056, 31.6730]
+Centroid: [-2.5409119e-02 -3.2907143e-02  3.1408054e+01]

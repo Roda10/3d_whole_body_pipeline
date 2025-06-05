@@ -66,8 +66,10 @@ python analysis_tools/mesh_rendering_visualizer.py --results_dir pipeline_result
 
 # parameter analyzer 
 python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
-python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
-python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_TIMESTAMP
+python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_20250605_
+python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_20250605_
+python analysis_tools/direct_parameter_fusion.py --results_dir pipeline_results/run_20250605_
+python analysis_tools/fusion_visualizer.py --results_dir pipeline_results/run_20250605_
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -76,4 +78,5 @@ And if there is anything, you need apart from all the github files I have alread
 This thing that you printed, can you save it in .txt file?
 I really like the summary you print on top of what I asked you for the .son file.
 
+'human_models/human_model_files/'
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
