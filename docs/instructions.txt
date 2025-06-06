@@ -65,12 +65,16 @@ python analysis_tools/mesh_rendering_visualizer.py --results_dir pipeline_result
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # parameter analyzer 
-python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
-python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_20250605_
-python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_20250605_
-python fusion/direct_parameter_fusion.py --results_dir pipeline_results/run_20250605_
-python fusion/fusion_visualizer.py --results_dir pipeline_results/run_20250605_
 
+python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_20250606_
+python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_20250606_
+python fusion/direct_parameter_fusion.py --results_dir pipeline_results/run_20250606_
+python fusion/fusion_visualizer.py --results_dir pipeline_results/run_20250606_
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+python fusion/faithful_dpf.py --results_dir pipeline_results/run_20250606_
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 And if there is anything, you need apart from all the github files I have already uploaded in the project knowledge, let me know, don't just assume any crucial thing. I am not after results, but I need to know plainly what is going on at each stage. Clarity is the key for me. I need to know What I am doing, Why I am doing what I am doing, and how I am doing it. If it's fine for you, you can proceed  

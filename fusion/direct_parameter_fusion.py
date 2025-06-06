@@ -122,12 +122,27 @@ class EnhancedParameterFusion:
         
         return smplx_params, wilor_params, emoca_params
     
+    # --- REPLACE your existing _load_smplestx_params method with THIS ONE ---
+
     def _load_smplestx_params(self) -> Dict:
-        """Load SMPLest-X parameters"""
+        """Load SMPLest-X parameters AND camera metadata."""
         for param_file in self.results_dir.glob('smplestx_results/*/person_*/smplx_params_*.json'):
+            # Load the main parameters
             with open(param_file, 'r') as f:
                 params = json.load(f)
-            print(f"   ✅ SMPLest-X: {len(params)} parameters loaded")
+            print(f"   ✅ SMPLest-X: {len(params)} parameters loaded from {param_file.relative_to(self.results_dir)}")
+
+            # --- THIS IS THE CRUCIAL ADDITION ---
+            # Find and load the corresponding camera metadata file
+            meta_file = param_file.parent / 'camera_metadata.json'
+            if meta_file.exists():
+                with open(meta_file, 'r') as f:
+                    self.camera_metadata = json.load(f)
+                print(f"   ✅ Camera metadata loaded from {meta_file.name}")
+            else:
+                raise FileNotFoundError(f"CRITICAL: SMPLest-X camera_metadata.json not found in {param_file.parent}!")
+            # --- END OF ADDITION ---
+
             return params
         
         raise FileNotFoundError("SMPLest-X parameters not found")
@@ -207,20 +222,7 @@ class EnhancedParameterFusion:
                             print(f"   ✅ Right hand: converted {len(rot_matrices)} values to 45 axis-angles")
         
         return left_hand_pose, right_hand_pose
-    
-    def align_hand_coordinate_frame(self, hand_pose: np.ndarray, hand_type: str) -> np.ndarray:
-        """Align hand pose to body coordinate frame"""
-        # WiLoR uses a different coordinate convention than SMPL-X
-        # We need to apply a coordinate transformation to the root joint
-        
-        # For now, apply empirical corrections based on observation
-        aligned_pose = hand_pose.copy()
-        
-        # Scale down extreme rotations
-        max_rotation = np.pi / 2  # 90 degrees max
-        aligned_pose = np.clip(aligned_pose, -max_rotation, max_rotation)
-        
-        return aligned_pose
+
     
     def map_emoca_expression(self, emoca_params: Dict) -> np.ndarray:
         """Map EMOCA expression to SMPL-X with proper scaling"""
@@ -248,16 +250,12 @@ class EnhancedParameterFusion:
         
         return mapped_exp
     
-    def blend_hand_poses(self, smplx_pose: np.ndarray, wilor_pose: np.ndarray, 
-                        blend_weight: float = 0.8) -> np.ndarray:
-        """Blend SMPLest-X and WiLoR hand poses for smooth transition"""
-        # Use weighted average for smooth transition at wrist
-        return smplx_pose * (1 - blend_weight) + wilor_pose * blend_weight
-    
+    # --- REPLACE your existing create_fused_parameters method with this ---
+
     def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, 
-                               emoca_params: Dict) -> Dict:
-        """Create properly fused parameters"""
-        print("\n🔧 Creating fused parameters...")
+                            emoca_params: Dict) -> Dict:
+        """Create properly fused parameters using hierarchical composition."""
+        print("\n🔧 Creating fused parameters using Hierarchical Composition...")
         
         # Start with SMPLest-X foundation
         fused = {
@@ -268,31 +266,26 @@ class EnhancedParameterFusion:
             'jaw_pose': np.array(smplx_params['jaw_pose'])
         }
         
-        # Extract and convert WiLoR hand poses
+        # --- HAND FUSION ---
         left_hand_wilor, right_hand_wilor = self.extract_wilor_hand_poses(wilor_params)
+        smplx_left_wrist_pose = np.array(smplx_params['left_hand_pose'])[:3]
+        smplx_right_wrist_pose = np.array(smplx_params['right_hand_pose'])[:3]
+        wilor_left_finger_pose = left_hand_wilor[3:]
+        wilor_right_finger_pose = right_hand_wilor[3:]
         
-        # Align hand coordinate frames
-        left_hand_aligned = self.align_hand_coordinate_frame(left_hand_wilor, 'left')
-        right_hand_aligned = self.align_hand_coordinate_frame(right_hand_wilor, 'right')
+        final_left_hand = np.concatenate([smplx_left_wrist_pose, wilor_left_finger_pose])
+        final_right_hand = np.concatenate([smplx_right_wrist_pose, wilor_right_finger_pose])
+
+        fused['left_hand_pose'] = final_left_hand
+        fused['right_hand_pose'] = final_right_hand
+        print("   ✅ Hands composed: SMPLest-X wrist + WiLoR fingers.")
         
-        # Blend with original SMPLest-X hand poses
-        smplx_left = np.array(smplx_params['left_hand_pose'])
-        smplx_right = np.array(smplx_params['right_hand_pose'])
-        
-        fused['left_hand_pose'] = self.blend_hand_poses(smplx_left, left_hand_aligned, 
-                                                        self.hand_blend_weight)
-        fused['right_hand_pose'] = self.blend_hand_poses(smplx_right, right_hand_aligned,
-                                                         self.hand_blend_weight)
-        
-        # Map EMOCA expression
+        # --- EXPRESSION AND METADATA ---
         fused['expression'] = self.map_emoca_expression(emoca_params)
-        
-        # Add metadata
         fused['fusion_metadata'] = {
             'body_source': 'SMPLest-X',
-            'hand_source': 'WiLoR (converted & aligned)',
+            'hand_source': 'Hierarchical Composition (SMPLest-X Wrist + WiLoR Fingers)',
             'expression_source': 'EMOCA (mapped & scaled)',
-            'hand_blend_weight': self.hand_blend_weight,
             'expression_scale': self.expression_scale
         }
         
@@ -359,68 +352,8 @@ class EnhancedParameterFusion:
         print(f"   ✅ Mesh generated: {mesh.shape[0]} vertices")
         return mesh
     
-    def render_comparison(self, original_params: Dict, fused_params: Dict, 
-                         original_mesh: np.ndarray, enhanced_mesh: np.ndarray):
-        """Render comparison images"""
-        print("\n🎨 Rendering comparison...")
-        
-        # Load original image
-        img_path = None
-        for temp_dir in [self.results_dir / 'wilor_results' / 'temp_input',
-                        self.results_dir / 'emoca_results' / 'temp_input']:
-            if temp_dir.exists():
-                for img_file in temp_dir.glob('*'):
-                    img_path = img_file
-                    break
-                if img_path:
-                    break
-        
-        if not img_path:
-            print("   ⚠️  No input image found for rendering")
-            return
-        
-        # Load image
-        img = cv2.imread(str(img_path))
-        h, w = img.shape[:2]
-        
-        # Create simple bbox (center crop)
-        bbox_size = min(h, w) * 0.8
-        bbox = np.array([
-            (w - bbox_size) / 2,
-            (h - bbox_size) / 2,
-            bbox_size,
-            bbox_size
-        ])
-        
-        # Camera parameters
-        focal = [self.config.model.focal[0] / self.config.model.input_body_shape[1] * bbox[2],
-                self.config.model.focal[1] / self.config.model.input_body_shape[0] * bbox[3]]
-        princpt = [self.config.model.princpt[0] / self.config.model.input_body_shape[1] * bbox[2] + bbox[0],
-                  self.config.model.princpt[1] / self.config.model.input_body_shape[0] * bbox[3] + bbox[1]]
-        
-        cam_params = {'focal': focal, 'princpt': princpt}
-        
-        # Render both meshes
-        img_orig = img.copy()
-        img_enhanced = img.copy()
-        
-        img_orig = render_mesh(img_orig, original_mesh, self.smplx_model.face, 
-                             cam_params, mesh_as_vertices=False)
-        img_enhanced = render_mesh(img_enhanced, enhanced_mesh, self.smplx_model.face,
-                                 cam_params, mesh_as_vertices=False)
-        
-        # Create side-by-side comparison
-        comparison = np.hstack([img_orig, img_enhanced])
-        
-        # Add labels
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(comparison, 'Original', (10, 30), font, 1, (255, 255, 255), 2)
-        cv2.putText(comparison, 'Enhanced', (w + 10, 30), font, 1, (255, 255, 255), 2)
-        
-        # Save
-        cv2.imwrite(str(self.fusion_dir / 'mesh_comparison.pdf'), comparison)
-        print(f"   ✅ Comparison saved to {self.fusion_dir / 'mesh_comparison.pdf'}")
-    
+
+
     def save_results(self, original_params: Dict, fused_params: Dict, 
                     original_mesh: np.ndarray, enhanced_mesh: np.ndarray):
         """Save all results properly"""
@@ -472,7 +405,56 @@ class EnhancedParameterFusion:
                 f.write(f"  Change: {percent_change:.1f}%\n\n")
         
         print(f"   ✅ All results saved to {self.fusion_dir}")
-    
+
+    # --- REPLACE the ENTIRE render_comparison method with this FINAL version ---
+
+    def render_comparison(self, original_params: Dict, fused_params: Dict, 
+                        original_mesh: np.ndarray, enhanced_mesh: np.ndarray):
+        """Render comparison images using ACCURATE camera parameters."""
+        print("\n🎨 Rendering comparison with accurate camera...")
+        
+        # Find the input image to render on
+        img_path = None
+        for temp_dir in [self.results_dir / 'wilor_results' / 'temp_input',
+                        self.results_dir / 'emoca_results' / 'temp_input']:
+            if temp_dir.exists():
+                for img_file in temp_dir.glob('*'):
+                    img_path = img_file; break
+                if img_path: break
+        
+        if not img_path:
+            print("   ⚠️  No input image found for rendering"); return
+
+        img = cv2.imread(str(img_path))
+        h, w = img.shape[:2]
+        
+        # Use the accurate camera intrinsics loaded from the metadata file
+        if not hasattr(self, 'camera_metadata'):
+            print("   ⚠️  Camera metadata not loaded. Cannot render accurately.")
+            return
+
+        cam_params = {
+            'focal': np.array(self.camera_metadata['focal_length']), 
+            'princpt': np.array(self.camera_metadata['principal_point'])
+        }
+
+        # The vertices from both original_mesh and enhanced_mesh are already translated.
+        # We can pass them directly to the render_mesh function.
+        img_orig = render_mesh(img, original_mesh, self.smplx_model.face, cam_params)
+        img_enhanced = render_mesh(img.copy(), enhanced_mesh, self.smplx_model.face, cam_params)
+        
+        # Create side-by-side comparison
+        comparison = np.hstack([img_orig, img_enhanced])
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.putText(comparison, 'Original (SMPLest-X)', (10, 30), font, 1, (255, 255, 255), 2)
+        cv2.putText(comparison, 'Enhanced Fusion', (w + 10, 30), font, 1, (0, 255, 0), 2)
+        
+        output_path = str(self.fusion_dir / 'mesh_comparison.png') # Save as PNG for better quality
+        cv2.imwrite(output_path, comparison)
+        print(f"   ✅ Comparison saved to {output_path}")
+
+
+
     def run_fusion(self):
         """Execute the enhanced fusion pipeline"""
         print("\n" + "="*60)
@@ -505,7 +487,7 @@ class EnhancedParameterFusion:
             print(f"\n📊 Results in: {self.fusion_dir}")
             print("   - fused_parameters.json (enhanced parameters)")
             print("   - enhanced_mesh.npy (3D mesh data)")
-            print("   - mesh_comparison.pdf (visual comparison)")
+            print("   - mesh_comparison.jpg (visual comparison)")
             print("   - parameter_changes.txt (detailed changes)")
             
             if not is_valid:

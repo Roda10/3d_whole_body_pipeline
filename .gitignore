@@ -4,6 +4,8 @@
 *.npz
 *.tar
 *.pt
+*.mp4
+*.zip
 
 # Ignore Python cache
 __pycache__/
@@ -29,3 +31,6 @@ Thumbs.db
 external/SMPLest-X/
 external/WiLoR/
 external/emoca/
+
+data/UBody/
+pipeline_results/

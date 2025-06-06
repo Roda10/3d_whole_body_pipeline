@@ -188,26 +188,6 @@ def main():
         with torch.no_grad():
             out = demoer.model(inputs, targets, meta_info, 'test')
 
-    #     smplx_params = {
-    #     # Joints
-    #     'joints_3d': out['smplx_joint_cam'].detach().cpu().numpy()[0] ,  # 3D joints (camera coordinates)
-    #     'joints_2d': out['smplx_joint_proj'].detach().cpu().numpy()[0],    # 2D projected joints
-
-    #     # Pose parameters (axis-angle format)
-    #     'root_pose': out['smplx_root_pose'].detach().cpu().numpy()[0],     # Global orientation
-    #     'body_pose': out['smplx_body_pose'].detach().cpu().numpy()[0],     # Body pose (21 joints)
-    #     'left_hand_pose': out['smplx_lhand_pose'].detach().cpu().numpy()[0],  # Left hand pose (15 joints)
-    #     'right_hand_pose': out['smplx_rhand_pose'].detach().cpu().numpy()[0], # Right hand pose (15 joints)
-    #     'jaw_pose': out['smplx_jaw_pose'].detach().cpu().numpy()[0],       # Jaw rotation
-
-    #     # Shape and expression
-    #     'betas': out['smplx_shape'].detach().cpu().numpy()[0],             # Body shape parameters (10-dim)
-    #     'expression': out['smplx_expr'].detach().cpu().numpy()[0],         # Facial expression (10-dim)
-
-    #     # Camera
-    #     'translation': out['cam_trans'].detach().cpu().numpy()[0],         # Mesh translation (x,y,z)
-    # }
-
         smplx_params = {
             # Joints
             'joints_3d': out['smplx_joint_cam'].detach().cpu().numpy()[0],  # 3D joints (camera coordinates)
@@ -285,6 +265,21 @@ def main():
         princpt = [cfg.model.princpt[0] / cfg.model.input_body_shape[1] * bbox[2] + bbox[0], 
                 cfg.model.princpt[1] / cfg.model.input_body_shape[0] * bbox[3] + bbox[1]]
         
+        # --- SAVE CAMERA AND DETECTION METADATA ---
+        camera_meta = {
+            'focal_length': focal,
+            'principal_point': princpt,
+            'camera_translation': out['cam_trans'].detach().cpu().numpy()[0].tolist(),
+            'detection_bbox': [float(x1), float(y1), float(x2), float(y2)]
+        }
+
+        # Save to a file inside the specific person's output folder
+        meta_path = person_output_folder / "camera_metadata.json"
+        with open(meta_path, 'w') as f:
+            json.dump(camera_meta, f, indent=2)
+        demoer.logger.info(f"✓ Camera metadata saved to {meta_path}")
+        # --- END OF NEW CODE BLOCK ---
+
         # draw the bbox on img
         # Use the original xyxy for drawing the rectangle
         vis_img = cv2.rectangle(vis_img, (int(x1), int(y1)), 
