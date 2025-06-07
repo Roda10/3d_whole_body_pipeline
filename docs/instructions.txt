@@ -81,3 +81,4 @@ And if there is anything, you need apart from all the github files I have alread
 
 'human_models/human_model_files/'
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+bash run_all_pipeline.sh data/full_images/test2.jpg
