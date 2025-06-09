@@ -11,6 +11,7 @@ import numpy as np
 import torch
 import cv2
 import trimesh
+import time as pytime
 import subprocess
 import glob
 from pathlib import Path
@@ -588,21 +589,50 @@ class EHFFusionEvaluator:
         
         print("\n" + table_content)
 
+
 def main():
-    parser = argparse.ArgumentParser(description='EHF Fusion Evaluation')
+    parser = argparse.ArgumentParser(description='EHF Fusion Evaluation (Sequential)')
     parser.add_argument('--ehf_path', type=str, default='data/EHF',
                        help='Path to EHF dataset')
     parser.add_argument('--config', type=str, default='pretrained_models/smplest_x/config_base.py',
                        help='Path to SMPLest-X config')
     parser.add_argument('--max_frames', type=int, default=10,
-                       help='Maximum number of frames to evaluate (default: 10 for testing)')
+                       help='Maximum number of frames to evaluate (0 for all)')
     
     args = parser.parse_args()
     
-    # Run evaluation
-    evaluator = EHFFusionEvaluator(args.ehf_path, args.config)
-    results = evaluator.run_full_evaluation(args.max_frames)
+    # Use max_frames=None if the user enters 0
+    max_frames = args.max_frames if args.max_frames > 0 else None
     
+    # --- Start Timing ---
+    print("--- Initializing Evaluator ---")
+    init_start_time = pytime.time()
+    evaluator = EHFFusionEvaluator(args.ehf_path, args.config)
+    init_end_time = pytime.time()
+    print(f"--- Initialization complete in {init_end_time - init_start_time:.2f} seconds ---\n")
+
+    
+    print("--- Starting Full SEQUENTIAL Evaluation ---")
+    eval_start_time = pytime.time()
+    # Call the original evaluation function
+    results = evaluator.run_full_evaluation(max_frames)
+    eval_end_time = pytime.time()
+    # --- End Timing ---
+    
+    # --- Report Results ---
+    total_eval_time = eval_end_time - eval_start_time
+    evaluated_frames = results.get('total_frames', 0)
+
+    print(f"\n--- Sequential Evaluation Timing Summary ---")
+    print(f"Total evaluation wall-clock time: {total_eval_time:.2f} seconds")
+    
+    minutes, seconds = divmod(total_eval_time, 60)
+    print(f"Equivalent to: {int(minutes)} minutes and {seconds:.2f} seconds")
+
+    if evaluated_frames > 0:
+        avg_time_per_frame = total_eval_time / evaluated_frames
+        print(f"Average time per frame: {avg_time_per_frame:.2f} seconds")
+
     print(f"\n✅ Evaluation complete! Results saved to: {evaluator.output_dir}")
 
 if __name__ == '__main__':

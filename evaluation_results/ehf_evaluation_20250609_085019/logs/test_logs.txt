@@ -1,3 +1,0 @@
-[92m06-09 08:50:27[0m Load checkpoint from pretrained_models/smplest_x/smplest_x_h.pth.tar
-[92m06-09 08:50:27[0m Creating graph...
-[92m06-09 08:52:02[0m [93mWRN: Attention: Strict=False is set for checkpoint loading. Please check manually.[0m
