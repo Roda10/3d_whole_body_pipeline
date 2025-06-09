@@ -1,0 +1,17 @@
+EHF EVALUATION RESULTS
+==================================================
+
+Total Frames Evaluated: 10
+Fusion Success Rate: 0/10
+
+METRIC COMPARISON
+------------------------------
+Metric               Baseline     Fusion       Improvement 
+--------------------------------------------------------
+PVE                  34264.32     34264.32     0.00        %
+PA-PVE               85.24        85.24        0.00        %
+
+NOTE: Lower values are better for all metrics (errors in mm)
+Positive improvement % means fusion is better than baseline
+
+⚠️  Some frames used baseline fallback due to fusion issues

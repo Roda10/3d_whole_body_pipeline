@@ -1,0 +1,8 @@
+# Basic test run (10 frames)
+python evaluation/ehf_fusion_evaluator.py
+
+# Custom EHF path and frame limit
+python evaluation/ehf_fusion_evaluator.py --ehf_path data/EHF --max_frames 5
+
+# Full evaluation (all 100 frames)
+python evaluation/ehf_fusion_evaluator.py --max_frames 100

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Final Corrected Direct Parameter Fusion System
-(Implements Y/Z axis flip and full hand replacement)
+Enhanced Direct Parameter Fusion System
+(Using your proposed list comprehension for conversion)
 """
 
 import numpy as np
@@ -15,6 +15,7 @@ import cv2
 from scipy.spatial.transform import Rotation as R
 import argparse
 import trimesh
+import traceback
 
 # Add paths for SMPL-X model access
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'SMPLest-X'))
@@ -37,7 +38,8 @@ class EnhancedParameterFusion:
         with open(coord_file, 'r') as f: self.coord_analysis = json.load(f)
         self.scale_factor = self.coord_analysis['transformation_parameters']['scale_factor']
         self.translation = np.array(self.coord_analysis['transformation_parameters']['translation_vector'])
-        print(f"   ✅ Scale factor: {self.scale_factor:.4f}, Translation: {self.translation}")
+        print(f"   ✅ Scale factor: {self.scale_factor:.4f}")
+        print(f"   ✅ Translation: {self.translation}")
     
     def setup_smplx_model(self):
         print("🤖 Setting up SMPL-X model..."); model_paths = ['human_models/human_model_files/', '/home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplx', './pretrained_models/smplx', '../pretrained_models/smplx']
@@ -64,7 +66,7 @@ class EnhancedParameterFusion:
             if meta_file.exists():
                 with open(meta_file, 'r') as f: self.camera_metadata = json.load(f)
                 print(f"   ✅ Camera metadata loaded from {meta_file.name}")
-            else: raise FileNotFoundError(f"CRITICAL: camera_metadata.json not found!")
+            else: raise FileNotFoundError(f"CRITICAL: SMPLest-X camera_metadata.json not found!")
             return params
         raise FileNotFoundError("SMPLest-X parameters not found")
     
@@ -82,57 +84,61 @@ class EnhancedParameterFusion:
                 print(f"   ✅ EMOCA: Loaded from {codes_file.relative_to(self.results_dir)}"); return params
         print("   ⚠️  EMOCA parameters not found"); return {}
     
+    # --- THIS IS YOUR PROPOSED FUNCTION ---
     def convert_rotation_matrix_to_axis_angle(self, rot_matrices: np.ndarray) -> np.ndarray:
-        n_joints = rot_matrices.shape[0] // 9; rot_matrices = rot_matrices.reshape(n_joints, 3, 3)
-        return R.from_matrix(rot_matrices).as_rotvec().flatten()
-    
-    # --- MODIFIED FUNCTION ---
+        """Convert rotation matrices to axis-angle representation using a list comprehension."""
+        # Reshape to (N, 3, 3)
+        n_joints = rot_matrices.shape[0] // 9
+        rot_mats = rot_matrices.reshape(n_joints, 3, 3)
+        
+        # Use a list comprehension for conversion
+        axis_angles = [R.from_matrix(rot_mats[i]).as_rotvec() for i in range(n_joints)]
+        
+        # Concatenate the list of arrays into a single flat array
+        return np.concatenate(axis_angles)
+
     def extract_wilor_hand_poses(self, wilor_params: Dict) -> Tuple[np.ndarray, np.ndarray]:
+        """Extract and convert WiLoR hand poses to SMPL-X format"""
         print("\n🖐️  Extracting WiLoR hand poses...")
         left_hand_pose = np.zeros(45); right_hand_pose = np.zeros(45)
         for hand in wilor_params.get('hands', []):
-            if 'mano_parameters' in hand and 'parameters' in hand['mano_parameters'] and 'hand_pose' in hand['mano_parameters']['parameters']:
-                rot_matrices = np.array(hand['mano_parameters']['parameters']['hand_pose']['values']).flatten()
-                axis_angles = self.convert_rotation_matrix_to_axis_angle(rot_matrices)
-                if len(axis_angles) >= 45:
-                    if hand.get('hand_type') == 'left':
-                        print("   - Applying Y & Z axis flip to LEFT hand pose for SMPL-X compatibility.")
-                        pose_to_flip = axis_angles[:45].copy()
-                        pose_to_flip[1::3] *= -1; pose_to_flip[2::3] *= -1
-                        left_hand_pose = pose_to_flip
-                    elif hand.get('hand_type') == 'right':
-                        right_hand_pose = axis_angles[:45]
-        print("   ✅ Hand poses converted and corrected for left hand.")
+            if 'mano_parameters' in hand and 'parameters' in hand['mano_parameters']:
+                mano_params = hand['mano_parameters']['parameters']
+                if 'hand_pose' in mano_params:
+                    rot_matrices = np.array(mano_params['hand_pose']['values']).flatten()
+                    axis_angles = self.convert_rotation_matrix_to_axis_angle(rot_matrices)
+                    if len(axis_angles) >= 45:
+                        if hand.get('hand_type') == 'left':
+                            left_hand_pose = axis_angles[:45]
+                            print(f"   ✅ Left hand: converted.")
+                        elif hand.get('hand_type') == 'right':
+                            right_hand_pose = axis_angles[:45]
+                            print(f"   ✅ Right hand: converted.")
         return left_hand_pose, right_hand_pose
 
     def map_emoca_expression(self, emoca_params: Dict) -> np.ndarray:
-        if not emoca_params or 'expcode' not in emoca_params: return np.zeros(10)
-        print("\n🎭 Mapping EMOCA expression..."); emoca_exp = np.array(emoca_params['expcode']); mapped_exp = np.zeros(10)
-        num_to_copy = min(len(emoca_exp), 10); mapped_exp[:num_to_copy] = emoca_exp[:num_to_copy] * self.expression_scale
-        return np.clip(mapped_exp, -2.0, 2.0)
+        if not emoca_params or 'expcode' not in emoca_params: print("   ⚠️  No EMOCA expression, using neutral"); return np.zeros(10)
+        print("\n🎭 Mapping EMOCA expression..."); emoca_exp = np.array(emoca_params['expcode'])
+        if len(emoca_exp) >= 10: mapped_exp = emoca_exp[:10] * self.expression_scale
+        else: mapped_exp = np.zeros(10); mapped_exp[:len(emoca_exp)] = emoca_exp * self.expression_scale
+        mapped_exp = np.clip(mapped_exp, -2.0, 2.0); return mapped_exp
     
-    # --- MODIFIED FUNCTION ---
     def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:
-        """Creates fused parameters using a corrected full replacement for hands."""
-        print("\n🔧 Creating fused parameters with Corrected Full Hand Replacement...")
-        fused = {k: np.array(v) for k, v in smplx_params.items() if k != 'mesh'}
+        """Create properly fused parameters using hierarchical composition."""
+        print("\n🔧 Creating fused parameters using Hierarchical Composition...")
+        fused = {'betas': np.array(smplx_params['betas']), 'body_pose': np.array(smplx_params['body_pose']), 'root_pose': np.array(smplx_params['root_pose']), 'translation': np.array(smplx_params['translation']), 'jaw_pose': np.array(smplx_params['jaw_pose'])}
         left_hand_wilor, right_hand_wilor = self.extract_wilor_hand_poses(wilor_params)
-        fused['left_hand_pose'] = left_hand_wilor
-        fused['right_hand_pose'] = right_hand_wilor
-        print("   ✅ Hands composed: Full pose replacement from WiLoR (with left-hand correction).")
+        smplx_left_wrist_pose = np.array(smplx_params['left_hand_pose'])[:3]
+        smplx_right_wrist_pose = np.array(smplx_params['right_hand_pose'])[:3]
+        wilor_left_finger_pose = left_hand_wilor[3:]
+        wilor_right_finger_pose = right_hand_wilor[3:]
+        final_left_hand = np.concatenate([smplx_left_wrist_pose, wilor_left_finger_pose])
+        final_right_hand = np.concatenate([smplx_right_wrist_pose, wilor_right_finger_pose])
+        fused['left_hand_pose'] = final_left_hand; fused['right_hand_pose'] = final_right_hand
+        print("   ✅ Hands composed: SMPLest-X wrist + WiLoR fingers.")
         fused['expression'] = self.map_emoca_expression(emoca_params)
-        fused['fusion_metadata'] = {'body_source': 'SMPLest-X', 'hand_source': 'Corrected Full Replacement (WiLoR)', 'expression_source': 'EMOCA'}
+        fused['fusion_metadata'] = {'body_source': 'SMPLest-X', 'hand_source': 'Hierarchical Composition', 'expression_source': 'EMOCA'}
         return fused
-    
-    # --- The rest of your code is FAITHFULLY restored ---
-    def validate_parameters(self, params: Dict) -> bool:
-        print("\n✅ Validating parameters..."); issues = []
-        for pose_name in ['body_pose', 'left_hand_pose', 'right_hand_pose']:
-            if np.abs(params[pose_name]).max() > np.pi * 1.5: issues.append(f"{pose_name} has extreme values.")
-        if np.abs(params['betas']).max() > 5: issues.append("Shape parameters extreme.")
-        if np.abs(params['expression']).max() > 3: issues.append("Expression extreme.")
-        if issues: print("   ⚠️  Validation issues:", *issues); return False
-        else: print("   ✅ All parameters within reasonable ranges"); return True
     
     def generate_mesh(self, params: Dict, use_translation: bool = True) -> np.ndarray:
         print("\n🎯 Generating mesh..."); device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -146,7 +152,18 @@ class EnhancedParameterFusion:
         }
         with torch.no_grad(): output = smplx_layer(**torch_params)
         mesh = output.vertices[0].detach().cpu().numpy(); print(f"   ✅ Mesh generated."); return mesh
-
+    
+    # --- The rest of your code is FAITHFULLY restored ---
+    def validate_parameters(self, params: Dict) -> bool:
+        print("\n✅ Validating parameters..."); issues = [];
+        for pose_name in ['body_pose', 'left_hand_pose', 'right_hand_pose']:
+            pose = params[pose_name]
+            if np.abs(pose).max() > np.pi * 1.5: issues.append(f"{pose_name} has extreme values.")
+        if np.abs(params['betas']).max() > 5: issues.append("Shape parameters extreme.")
+        if np.abs(params['expression']).max() > 3: issues.append("Expression extreme.")
+        if issues: print("   ⚠️  Validation issues:", *issues); return False
+        else: print("   ✅ All parameters within reasonable ranges"); return True
+        
     def save_results(self, original_params: Dict, fused_params: Dict, original_mesh: np.ndarray, enhanced_mesh: np.ndarray):
         print("\n💾 Saving results..."); serializable_fused = {k: v.tolist() if isinstance(v, np.ndarray) else v for k, v in fused_params.items()}
         with open(self.fusion_dir / 'fused_parameters.json', 'w') as f: json.dump(serializable_fused, f, indent=2)
@@ -169,9 +186,9 @@ class EnhancedParameterFusion:
         cv2.putText(comparison, 'Enhanced Fusion', (w + 10, 30), font, 1, (0, 255, 0), 2)
         output_path = str(self.fusion_dir / 'mesh_comparison.png')
         cv2.imwrite(output_path, comparison); print(f"   ✅ Comparison saved to {output_path}")
-
+    
     def run_fusion(self):
-        print("\n" + "="*60 + "\n🚀 FINAL FUSION PIPELINE\n" + "="*60)
+        print("\n" + "="*60 + "\n🚀 ENHANCED PARAMETER FUSION SYSTEM\n" + "="*60)
         try:
             smplx_params, wilor_params, emoca_params = self.load_all_parameters()
             fused_params = self.create_fused_parameters(smplx_params, wilor_params, emoca_params)
@@ -184,10 +201,10 @@ class EnhancedParameterFusion:
             print("\n💾 Saving OBJ files for Blender inspection...")
             original_centered_mesh = self.generate_mesh(smplx_params, use_translation=False)
             fused_centered_mesh = self.generate_mesh(fused_params, use_translation=False)
-            original_obj_path = self.fusion_dir / 'original_smplestx_final.obj'
+            original_obj_path = self.fusion_dir / 'original_final.obj'
             trimesh.Trimesh(vertices=original_centered_mesh, faces=self.smplx_model.face).export(str(original_obj_path))
             print(f"   - Saved original mesh to {original_obj_path}")
-            fused_obj_path = self.fusion_dir / 'fused_corrected_final.obj'
+            fused_obj_path = self.fusion_dir / 'fused_final.obj'
             trimesh.Trimesh(vertices=fused_centered_mesh, faces=self.smplx_model.face).export(str(fused_obj_path))
             print(f"   - Saved final corrected fused mesh to {fused_obj_path}")
             

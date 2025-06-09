@@ -82,3 +82,21 @@ And if there is anything, you need apart from all the github files I have alread
 'human_models/human_model_files/'
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 bash run_all_pipeline.sh data/full_images/test2.jpg
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+python debug/coordinate_system_analyzer.py --run_dir ./pipeline_results/run_20250607_204752
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# From adapters/ directory
+python adapters/wilor_adapter_v2.py --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor_enhanced/ --debug_extraction
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Basic test run (10 frames)
+python evaluation/ehf_fusion_evaluator.py
+
+# Custom EHF path and frame limit
+python evaluation/ehf_fusion_evaluator.py --ehf_path data/EHF --max_frames 5
+
+# Full evaluation (all 100 frames)
+python evaluation/ehf_fusion_evaluator.py --max_frames 100
