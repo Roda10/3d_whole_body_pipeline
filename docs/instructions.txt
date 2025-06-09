@@ -94,9 +94,22 @@ python adapters/wilor_adapter_v2.py --img_folder ../data/full_images/ --out_fold
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Basic test run (10 frames)
 python evaluation/ehf_fusion_evaluator.py
+python evaluation/fast_ehf_fusion_evaluator.py
 
 # Custom EHF path and frame limit
 python evaluation/ehf_fusion_evaluator.py --ehf_path data/EHF --max_frames 5
+python evaluation/fast_ehf_fusion_evaluator.py --max_frames 5 --workers 4
 
 # Full evaluation (all 100 frames)
 python evaluation/ehf_fusion_evaluator.py --max_frames 100
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+python split_frames.py 
+
+nohup ./run_gpu0.sh > gpu0_output.log 2>&1 &
+nohup ./run_gpu1.sh > gpu1_output.log 2>&1 &
+
+
+watch -n 1 nvidia-smi
+tail -f gpu0_output.log
+tail -f gpu1_output.log
