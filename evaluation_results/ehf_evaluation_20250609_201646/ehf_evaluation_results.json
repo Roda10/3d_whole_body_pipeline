@@ -1,0 +1,76 @@
+{
+  "baseline_average": {
+    "PVE": 32655.835376412713
+  },
+  "fusion_average": {
+    "PVE": 32655.883369514362
+  },
+  "improvements": {
+    "PVE_improvement_%": -0.00014696638777020665
+  },
+  "per_frame_results": [
+    {
+      "frame_id": "02",
+      "status": "success",
+      "baseline_metrics": {
+        "PVE": 29301.889194317257
+      },
+      "fusion_metrics": {
+        "PVE": 29301.906741831004
+      },
+      "fusion_status": "success"
+    },
+    {
+      "frame_id": "01",
+      "status": "success",
+      "baseline_metrics": {
+        "PVE": 39931.244808041956
+      },
+      "fusion_metrics": {
+        "PVE": 39930.92820761807
+      },
+      "fusion_status": "success"
+    },
+    {
+      "frame_id": "04",
+      "status": "success",
+      "baseline_metrics": {
+        "PVE": 29165.350644801445
+      },
+      "fusion_metrics": {
+        "PVE": 29164.681709449218
+      },
+      "fusion_status": "success"
+    },
+    {
+      "frame_id": "03",
+      "status": "success",
+      "baseline_metrics": {
+        "PVE": 31569.900008183708
+      },
+      "fusion_metrics": {
+        "PVE": 31570.37249374205
+      },
+      "fusion_status": "success"
+    },
+    {
+      "frame_id": "05",
+      "status": "success",
+      "baseline_metrics": {
+        "PVE": 33310.792226719204
+      },
+      "fusion_metrics": {
+        "PVE": 33311.527694931494
+      },
+      "fusion_status": "success"
+    }
+  ],
+  "total_frames_evaluated": 5,
+  "total_frames_submitted": 5,
+  "status_summary": {
+    "success": 5,
+    "failed_or_identical": 0,
+    "pipeline_error": 0,
+    "critical_error": 0
+  }
+}

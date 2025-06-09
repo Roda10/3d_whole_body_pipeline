@@ -15,7 +15,7 @@ export CUDA_VISIBLE_DEVICES=1
 
 echo "Running evaluator for frames in frames_gpu1.txt..."
 python evaluation/fast_ehf_fusion_evaluator.py \
-    --workers 3 \
+    --workers 2 \
     --frame_list frames_gpu1.txt
     
 echo "--- GPU 1 Evaluation Finished ---"

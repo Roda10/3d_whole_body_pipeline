@@ -1,0 +1,28 @@
+{
+  "timestamp": "20250609_201843",
+  "input_image": "data/EHF/100_img.jpg",
+  "output_directory": "evaluation_results/ehf_evaluation_20250609_201652/temp_pipeline/100/run_20250609_201843",
+  "results": {
+    "wilor": {
+      "success": true,
+      "message": "Success: outputs in evaluation_results/ehf_evaluation_20250609_201652/temp_pipeline/100/run_20250609_201843/wilor_results",
+      "output_dir": "evaluation_results/ehf_evaluation_20250609_201652/temp_pipeline/100/run_20250609_201843/wilor_results"
+    },
+    "smplestx": {
+      "success": true,
+      "message": "Success: outputs in evaluation_results/ehf_evaluation_20250609_201652/temp_pipeline/100/run_20250609_201843/smplestx_results",
+      "output_dir": "evaluation_results/ehf_evaluation_20250609_201652/temp_pipeline/100/run_20250609_201843/smplestx_results"
+    },
+    "emoca": {
+      "success": true,
+      "message": "Success: outputs in evaluation_results/ehf_evaluation_20250609_201652/temp_pipeline/100/run_20250609_201843/emoca_results",
+      "output_dir": "evaluation_results/ehf_evaluation_20250609_201652/temp_pipeline/100/run_20250609_201843/emoca_results"
+    }
+  },
+  "summary": {
+    "total_adapters": 3,
+    "successful": 3,
+    "failed": 0,
+    "success_rate": 100.0
+  }
+}

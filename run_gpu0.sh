@@ -15,7 +15,7 @@ cd "$(dirname "$0")"
 # Run the evaluation for GPU 0
 echo "Running evaluator for frames in frames_gpu0.txt..."
 python evaluation/fast_ehf_fusion_evaluator.py \
-    --workers 3 \
+    --workers 2 \
     --frame_list frames_gpu0.txt
     
 echo "--- GPU 0 Evaluation Finished ---"

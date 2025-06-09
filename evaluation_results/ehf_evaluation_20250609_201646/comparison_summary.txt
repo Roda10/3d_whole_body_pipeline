@@ -1,0 +1,10 @@
+EHF EVALUATION RESULTS - ehf_evaluation_20250609_201646
+==================================================
+
+Total Frames Evaluated: 5 / 5
+
+METRIC COMPARISON (PVE in mm, lower is better)
+--------------------------------------------------
+Metric          Baseline     Fusion       Improvement 
+--------------------------------------------------
+PVE             32655.84     32655.88     -0.00%      
