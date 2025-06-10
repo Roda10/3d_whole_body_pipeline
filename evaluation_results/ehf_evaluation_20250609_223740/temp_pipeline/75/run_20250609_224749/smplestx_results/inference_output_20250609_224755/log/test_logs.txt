@@ -1,0 +1,23 @@
+[92m06-09 22:47:59[0m Using 1 GPU(s).
+[92m06-09 22:47:59[0m Inference on single image [data/EHF/75_img.jpg] with [/home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar].
+[92m06-09 22:47:59[0m Load checkpoint from /home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar
+[92m06-09 22:47:59[0m Creating graph...
+[92m06-09 22:48:10[0m [93mWRN: Attention: Strict=False is set for checkpoint loading. Please check manually.[0m
+[92m06-09 22:48:19[0m Saving outputs to: evaluation_results/ehf_evaluation_20250609_223740/temp_pipeline/75/run_20250609_224749/smplestx_results/inference_output_20250609_224819_75_img
+[92m06-09 22:48:19[0m 
+=== SMPL-X Parameter Shapes for Person 0 ===
+[92m06-09 22:48:19[0m joints_3d: shape=[137, 3], size=411
+[92m06-09 22:48:19[0m joints_2d: shape=[137, 2], size=274
+[92m06-09 22:48:19[0m root_pose: shape=[3], size=3
+[92m06-09 22:48:19[0m body_pose: shape=[63], size=63
+[92m06-09 22:48:19[0m left_hand_pose: shape=[45], size=45
+[92m06-09 22:48:19[0m right_hand_pose: shape=[45], size=45
+[92m06-09 22:48:19[0m jaw_pose: shape=[3], size=3
+[92m06-09 22:48:19[0m betas: shape=[10], size=10
+[92m06-09 22:48:19[0m expression: shape=[10], size=10
+[92m06-09 22:48:19[0m translation: shape=[3], size=3
+[92m06-09 22:48:19[0m mesh: shape=[10475, 3], size=31425
+[92m06-09 22:48:19[0m Saved SMPL-X parameters for person 0 to: evaluation_results/ehf_evaluation_20250609_223740/temp_pipeline/75/run_20250609_224749/smplestx_results/inference_output_20250609_224819_75_img/person_0/smplx_params_person_0.json
+[92m06-09 22:48:19[0m Saved parameter shapes summary to: evaluation_results/ehf_evaluation_20250609_223740/temp_pipeline/75/run_20250609_224749/smplestx_results/inference_output_20250609_224819_75_img/person_0/smplx_shapes_person_0.json
+[92m06-09 22:48:19[0m ✓ Camera metadata saved to evaluation_results/ehf_evaluation_20250609_223740/temp_pipeline/75/run_20250609_224749/smplestx_results/inference_output_20250609_224819_75_img/person_0/camera_metadata.json
+[92m06-09 22:48:20[0m Processed image saved to: evaluation_results/ehf_evaluation_20250609_223740/temp_pipeline/75/run_20250609_224749/smplestx_results/inference_output_20250609_224755/rendered_75_img.jpg

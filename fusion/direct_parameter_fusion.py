@@ -97,23 +97,107 @@ class EnhancedParameterFusion:
         # Concatenate the list of arrays into a single flat array
         return np.concatenate(axis_angles)
 
+    # def extract_wilor_hand_poses(self, wilor_params: Dict) -> Tuple[np.ndarray, np.ndarray]:
+    #     """Extract and convert WiLoR hand poses to SMPL-X format"""
+    #     print("\n🖐️  Extracting WiLoR hand poses...")
+    #     left_hand_pose = np.zeros(45); right_hand_pose = np.zeros(45)
+    #     for hand in wilor_params.get('hands', []):
+    #         if 'mano_parameters' in hand and 'parameters' in hand['mano_parameters']:
+    #             mano_params = hand['mano_parameters']['parameters']
+    #             if 'hand_pose' in mano_params:
+    #                 rot_matrices = np.array(mano_params['hand_pose']['values']).flatten()
+    #                 axis_angles = self.convert_rotation_matrix_to_axis_angle(rot_matrices)
+    #                 if len(axis_angles) >= 45:
+    #                     if hand.get('hand_type') == 'left':
+    #                         left_hand_pose = axis_angles[:45]
+    #                         print(f"   ✅ Left hand: converted.")
+    #                     elif hand.get('hand_type') == 'right':
+    #                         right_hand_pose = axis_angles[:45]
+    #                         print(f"   ✅ Right hand: converted.")
+    #     return left_hand_pose, right_hand_pose
+
+
     def extract_wilor_hand_poses(self, wilor_params: Dict) -> Tuple[np.ndarray, np.ndarray]:
         """Extract and convert WiLoR hand poses to SMPL-X format"""
         print("\n🖐️  Extracting WiLoR hand poses...")
-        left_hand_pose = np.zeros(45); right_hand_pose = np.zeros(45)
+        
+        # CRITICAL FIX 1: Load MANO mean poses
+        # You need these files - check your MANO installation
+        mano_mean_path = 'pretrained_models/mano_mean_params.npz'
+        if os.path.exists(mano_mean_path):
+            mano_mean = np.load(mano_mean_path)
+            # Different files store this differently
+            if 'hands_mean' in mano_mean:
+                hands_mean_left = mano_mean['hands_mean'].flatten()[:45]
+                hands_mean_right = mano_mean['hands_mean'].flatten()[:45]
+            elif 'pose_mean' in mano_mean:
+                hands_mean_left = mano_mean['pose_mean'].flatten()[:45]
+                hands_mean_right = mano_mean['pose_mean'].flatten()[:45]
+            else:
+                # Try to extract from the file - print keys to debug
+                print(f"   ⚠️  MANO mean file keys: {list(mano_mean.keys())}")
+                hands_mean_left = np.zeros(45)
+                hands_mean_right = np.zeros(45)
+        else:
+            print(f"   ⚠️  MANO mean params not found at {mano_mean_path}")
+            # Alternative: extract from MANO pkl files if you have them
+            import pickle
+            try:
+                with open('pretrained_models/mano/MANO_RIGHT.pkl', 'rb') as f:
+                    mano_right = pickle.load(f, encoding='latin1')
+                    hands_mean_right = mano_right['hands_mean'].flatten()[:45]
+                with open('pretrained_models/mano/MANO_LEFT.pkl', 'rb') as f:
+                    mano_left = pickle.load(f, encoding='latin1')
+                    hands_mean_left = mano_left['hands_mean'].flatten()[:45]
+                print("   ✅ Loaded MANO means from pkl files")
+            except:
+                print("   ⚠️  Using zero mean poses - results may be incorrect!")
+                hands_mean_left = np.zeros(45)
+                hands_mean_right = np.zeros(45)
+        
+        left_hand_pose = np.zeros(45)
+        right_hand_pose = np.zeros(45)
+        
         for hand in wilor_params.get('hands', []):
             if 'mano_parameters' in hand and 'parameters' in hand['mano_parameters']:
                 mano_params = hand['mano_parameters']['parameters']
                 if 'hand_pose' in mano_params:
+                    # Your existing conversion (working fine)
                     rot_matrices = np.array(mano_params['hand_pose']['values']).flatten()
                     axis_angles = self.convert_rotation_matrix_to_axis_angle(rot_matrices)
+                    
                     if len(axis_angles) >= 45:
-                        if hand.get('hand_type') == 'left':
-                            left_hand_pose = axis_angles[:45]
-                            print(f"   ✅ Left hand: converted.")
-                        elif hand.get('hand_type') == 'right':
-                            right_hand_pose = axis_angles[:45]
-                            print(f"   ✅ Right hand: converted.")
+                        hand_type = hand.get('hand_type', '')
+                        
+                        if hand_type == 'left':
+                            # CRITICAL FIX 2: Apply coordinate transformation for left hand
+                            pose = axis_angles[:45].copy()
+                            
+                            # Flip Y and Z axes (this is what the GitHub user did)
+                            pose *= -1  # Flip all axes
+                            pose[::3] *= -1  # Flip X back (every 3rd element starting from 0)
+                            
+                            # CRITICAL FIX 3: Subtract mean pose
+                            pose -= hands_mean_left
+                            
+                            left_hand_pose = pose
+                            print(f"   ✅ Left hand: converted with coordinate flip + mean subtraction")
+                            
+                        elif hand_type == 'right':
+                            # For right hand, just subtract mean
+                            pose = axis_angles[:45].copy()
+                            
+                            # Subtract mean pose
+                            pose -= hands_mean_right
+                            
+                            right_hand_pose = pose
+                            print(f"   ✅ Right hand: converted with mean subtraction")
+        
+        # Debug output to verify transformations
+        print(f"\n   📊 Pose statistics after transformation:")
+        print(f"   Left hand - range: [{left_hand_pose.min():.3f}, {left_hand_pose.max():.3f}]")
+        print(f"   Right hand - range: [{right_hand_pose.min():.3f}, {right_hand_pose.max():.3f}]")
+        
         return left_hand_pose, right_hand_pose
 
     def map_emoca_expression(self, emoca_params: Dict) -> np.ndarray:

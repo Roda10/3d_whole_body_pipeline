@@ -1,0 +1,56 @@
+COORDINATE TRANSFORMATION ALIGNMENT REPORT
+Generated: 2025-06-09T22:43:39
+===========================================
+
+1. TRANSFORMATION OVERVIEW
+------------------------
+Source System: WiLoR (hand-centric coordinates)
+Target System: SMPLest-X (body-centric coordinates)
+Transformation Type: Similarity transform (translation + uniform scaling)
+
+2. TRANSFORMATION PARAMETERS
+---------------------------
+Translation Vector: [0.009760168846652924, -0.35793160521944634, -0.16907162194951308]
+Scale Factor: 3.340448
+Translation Magnitude: 0.3960m
+
+3. MATHEMATICAL TRANSFORMATION
+----------------------------
+Forward Transformation:
+P_smplx = 3.340448 * P_wilor + [0.009760168846652924, -0.35793160521944634, -0.16907162194951308]
+
+Homogeneous Matrix Form:
+[[ 3.34044825  0.          0.          0.00976017]
+ [ 0.          3.34044825  0.         -0.35793161]
+ [ 0.          0.          3.34044825 -0.16907162]
+ [ 0.          0.          0.          1.        ]]
+
+4. ALIGNMENT STRATEGY
+-------------------
+Step 1: Apply scale factor to all WiLoR coordinates
+Step 2: Apply translation to move scaled coordinates to SMPLest-X space
+Step 3: Verify alignment at wrist attachment points
+Step 4: Fine-tune if necessary based on anatomical constraints
+
+5. EXPECTED RESULTS
+-----------------
+- Alignment error: < 0.0396m
+- Scale consistency: needs_verification
+- Transformation complexity: low
+
+6. VALIDATION CHECKS
+------------------
+✓ Scale factor is within reasonable range (0.1 to 10.0)
+✓ Translation magnitude is within body dimensions
+✓ Coordinate systems have same handedness (right-handed)
+✓ Transformation preserves anatomical relationships
+
+7. IMPLEMENTATION CODE
+--------------------
+```python
+def transform_wilor_to_smplx(wilor_points):
+    """Transform WiLoR coordinates to SMPLest-X space"""
+    scale = 3.340448
+    translation = np.array([0.009760168846652924, -0.35793160521944634, -0.16907162194951308])
+    return wilor_points * scale + translation
+```

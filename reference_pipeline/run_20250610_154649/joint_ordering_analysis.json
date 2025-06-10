@@ -1,0 +1,61 @@
+{
+  "mano_joint_names": [
+    "thumb_base",
+    "thumb_mid",
+    "thumb_tip",
+    "index_base",
+    "index_mid",
+    "index_tip",
+    "middle_base",
+    "middle_mid",
+    "middle_tip",
+    "ring_base",
+    "ring_mid",
+    "ring_tip",
+    "pinky_base",
+    "pinky_mid",
+    "pinky_tip"
+  ],
+  "potential_smplx_order": [
+    "thumb_base",
+    "index_base",
+    "middle_base",
+    "ring_base",
+    "pinky_base",
+    "thumb_mid",
+    "index_mid",
+    "middle_mid",
+    "ring_mid",
+    "pinky_mid",
+    "thumb_tip",
+    "index_tip",
+    "middle_tip",
+    "ring_tip",
+    "pinky_tip"
+  ],
+  "reorder_indices": [
+    0,
+    3,
+    6,
+    9,
+    12,
+    1,
+    4,
+    7,
+    10,
+    13,
+    2,
+    5,
+    8,
+    11,
+    14
+  ],
+  "analysis": {
+    "thumb_norms": [
+      0.3340758614441767,
+      1.1513095789127104,
+      0.35627721865823253
+    ],
+    "may_need_reordering": false
+  }
+}

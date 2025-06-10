@@ -1,0 +1,51 @@
+SCALE DIFFERENCE ANALYSIS REPORT
+Generated: 2025-06-09T22:42:14
+========================================
+
+1. COORDINATE SYSTEM OVERVIEW
+---------------------------
+SMPLest-X (Body Model):
+- Scale (std): 0.283564
+- Body height estimate: 1.155m
+- Body width estimate: 0.845m
+- Typical bone length: 0.6238m
+- Coordinate center: [-0.33649055534688227, 0.07363029379044136, -0.17030131207765453]
+
+WiLoR (Hand Model):
+- Scale (std): 0.073594
+- Hand span estimate: 0.269m
+- Hand length estimate: 0.185m
+- Typical finger length: 0.0633m
+- Coordinate center: [-0.008891362464953223, 0.09046533493717754, 0.024281602153919068]
+
+2. SCALE DIFFERENCE ANALYSIS
+---------------------------
+Scale Ratio (SMPLest-X / WiLoR): 3.853081
+Interpretation: SMPLest-X is 3.9x larger scale than WiLoR
+
+This means:
+- WiLoR coordinates need to be multiplied by 3.853081 to match SMPLest-X scale
+- SMPLest-X operates at approximately 3.9x the scale of WiLoR
+- Both models appear to use metric units (meters)
+
+3. WHY THIS SCALE DIFFERENCE EXISTS
+---------------------------------
+The scale difference is expected and justified because:
+
+a) Model Design Focus:
+   - SMPLest-X: Full body model requiring larger coordinate space
+   - WiLoR: Hand-specific model with finer detail requirements
+
+b) Resolution Requirements:
+   - Body models need ~2m range for full human height
+   - Hand models need ~0.2m range for hand details
+
+c) Optimization Targets:
+   - SMPLest-X optimized for body pose and shape
+   - WiLoR optimized for finger articulation and fine details
+
+4. RECOMMENDATIONS
+----------------
+- Use the calculated scale factor 3.853081 for all WiLoR→SMPLest-X transformations
+- Verify scale consistency by checking that transformed hand size matches anatomical expectations
+- Consider scale-aware blending near wrist attachment points

@@ -112,3 +112,7 @@ nohup ./run_gpu1.sh > gpu1_output.log 2>&1 &
 watch -n 1 nvidia-smi
 tail -f gpu0_output.log
 tail -f gpu1_output.log
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+python analysis_tools/validate_hand_transformations.py --results_dir reference_pipeline/run_TIMESTAMP

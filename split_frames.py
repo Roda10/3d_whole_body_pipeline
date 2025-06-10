@@ -33,9 +33,9 @@ def create_frame_splits():
         print(f"Found {len(frames)} total EHF frames.")
 
         # Split the list into two halves
-        midpoint = 5 # len(frames) // 2
+        midpoint = len(frames) // 2
         frames_for_gpu0 = frames[:midpoint]
-        frames_for_gpu1 = frames[midpoint:10]
+        frames_for_gpu1 = frames[midpoint:]
 
         # Write the first file
         with open("frames_gpu0.txt", "w") as f:
