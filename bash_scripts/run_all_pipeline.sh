@@ -20,7 +20,7 @@ LATEST_RUN=$(ls -dt "$BASE_OUTPUT_DIR"/run_* | head -n 1)
 echo "📁 Detected latest run directory: $LATEST_RUN"
 echo ""
 
-# # === Step 3: Run parameter analysis ===
+# === Step 3: Run parameter analysis ===
 # echo "🔍 Running parameter analyzer ..."
 # python analysis_tools/parameter_analyzer.py --results_dir "$LATEST_RUN"
 # echo ""

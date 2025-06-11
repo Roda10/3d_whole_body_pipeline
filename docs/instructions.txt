@@ -114,5 +114,12 @@ tail -f gpu0_output.log
 tail -f gpu1_output.log
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+python debug/debug_hand_fusion_complete.py --results_dir reference_pipeline/run_20250610_154649
 
-python analysis_tools/validate_hand_transformations.py --results_dir reference_pipeline/run_TIMESTAMP
+python debug/check_joints_ordering.py --results_dir pipeline_results/run_20250610_154649
+
+python debug/visualize_hand_parameters.py --results_dir pipeline_results/run_20250610_154649
+
+python analysis_tools/validate_hand_transformations.py --results_dir reference_pipeline/run_20250610_154649
+
+python debug/test_fusion_approaches.py --results_dir reference_pipeline/run_20250610_154649/
