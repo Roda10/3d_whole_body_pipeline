@@ -1,0 +1,82 @@
+{
+  "bbox_id": 0,
+  "bbox_xyxy": [
+    536.434814453125,
+    76.13327026367188,
+    994.9095458984375,
+    1169.3553466796875
+  ],
+  "parameter_shapes": {
+    "joints_3d": {
+      "shape": [
+        137,
+        3
+      ],
+      "size": 411
+    },
+    "joints_2d": {
+      "shape": [
+        137,
+        2
+      ],
+      "size": 274
+    },
+    "root_pose": {
+      "shape": [
+        3
+      ],
+      "size": 3
+    },
+    "body_pose": {
+      "shape": [
+        63
+      ],
+      "size": 63
+    },
+    "left_hand_pose": {
+      "shape": [
+        45
+      ],
+      "size": 45
+    },
+    "right_hand_pose": {
+      "shape": [
+        45
+      ],
+      "size": 45
+    },
+    "jaw_pose": {
+      "shape": [
+        3
+      ],
+      "size": 3
+    },
+    "betas": {
+      "shape": [
+        10
+      ],
+      "size": 10
+    },
+    "expression": {
+      "shape": [
+        10
+      ],
+      "size": 10
+    },
+    "translation": {
+      "shape": [
+        3
+      ],
+      "size": 3
+    },
+    "mesh": {
+      "shape": [
+        10475,
+        3
+      ],
+      "size": 31425
+    }
+  },
+  "total_parameters": 32292,
+  "timestamp": "2025-06-11T11:24:32.443160"
+}

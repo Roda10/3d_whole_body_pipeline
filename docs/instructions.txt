@@ -123,3 +123,5 @@ python debug/visualize_hand_parameters.py --results_dir pipeline_results/run_202
 python analysis_tools/validate_hand_transformations.py --results_dir reference_pipeline/run_20250610_154649
 
 python debug/test_fusion_approaches.py --results_dir reference_pipeline/run_20250610_154649/
+
+python debug/hand_diagnostics.py --results_dir reference_pipeline/run_20250606_
