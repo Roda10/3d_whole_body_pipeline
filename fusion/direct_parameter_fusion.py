@@ -98,85 +98,101 @@ class EnhancedParameterFusion:
         # Concatenate the list of arrays into a single flat array
         return np.concatenate(axis_angles)
 
-    def load_mano_mean_poses(self):
-        """Load MANO mean poses - you already have these!"""
-        mano_mean_path = 'pretrained_models/mano_mean_params.npz'
-        if os.path.exists(mano_mean_path):
-            mano_mean = np.load(mano_mean_path)
-            return mano_mean['hands_mean_left'], mano_mean['hands_mean_right']
-        else:
-            # Fallback to SMPLX model
-            smplx_path = 'human_models/human_model_files/smplx/SMPLX_NEUTRAL.pkl'
-            with open(smplx_path, 'rb') as f:
-                smplx_model = pickle.load(f, encoding='latin1')
-            return smplx_model['hands_meanl'], smplx_model['hands_meanr']
+# ==============================================================================
+#  Replacing  old load_mano_mean_poses with this one
+# ==============================================================================
 
-    # In your EnhancedParameterFusion class
+    def load_mano_mean_poses(self):
+        """
+        CORRECTED: Loads MANO mean poses directly from the official MANO .pkl files
+        as specified by the WiloR author. This ensures we are using the exact
+        mean pose values that the fusion logic expects.
+        """
+        print("loading mano mean poses")
+        # Define common directories where MANO models might be stored
+        mano_model_dirs = [
+            '/home/rodeo_aims_ac_za/3d_whole_body_pipeline/external/WiLoR/mano_data',  # Common in some projects
+            'pretrained_models/mano',
+            'mano/models'
+        ]
+        
+        for directory in mano_model_dirs:
+            left_path = Path(directory) / 'MANO_LEFT.pkl'
+            right_path = Path(directory) / 'MANO_RIGHT.pkl'
+            
+            if left_path.exists() and right_path.exists():
+                print(f"   ✅ Found MANO models in: {directory}")
+                try:
+                    with open(left_path, 'rb') as f:
+                        mano_left_data = pickle.load(f, encoding='latin1')
+                    with open(right_path, 'rb') as f:
+                        mano_right_data = pickle.load(f, encoding='latin1')
+                    
+                    # The key is 'hands_mean' in BOTH files
+                    mean_left = mano_left_data['hands_mean']
+                    mean_right = mano_right_data['hands_mean']
+                    
+                    print("   ✅ Successfully loaded 'hands_mean' from both MANO_LEFT and MANO_RIGHT pkl files.")
+                    return mean_left, mean_right
+                except Exception as e:
+                    print(f"   ⚠️  Found files, but failed to load from {directory}: {e}")
+                    
+        # If the loop completes without finding the files
+        raise FileNotFoundError(
+            "Could not find MANO_LEFT.pkl and MANO_RIGHT.pkl. "
+            "Please download the MANO models from https://mano.is.tue.mpg.de/ "
+            "and place them in one of the searched directories (e.g., 'pretrained_models/mano/')."
+        )
+
+    # ==============================================================================
+    #  The "Supervisor-Approved" Final Function
+    # ==============================================================================
 
     def extract_wilor_hand_poses(self, wilor_params: Dict) -> Tuple[np.ndarray, np.ndarray]:
         """
-        CORRECTED 2.0: Extracts WiLoR hand poses with a TESTABLE coordinate system transformation.
+        Extracts WiLoR hand poses using the exact transformation logic provided
+        by the author of WiloR for left-hand compatibility with SMPL-X/MANO.
         """
-        print("\n🖐️  Extracting WiLoR hand poses (SYSTEMATIC DEBUG MODE)...")
+        print("\n🖐️  Extracting WiLoR hand poses (using SUPERVISOR'S a.k.a WiloR author's logic)...")
         
+        # IMPORTANT: Ensure this function loads the mean poses from the .pkl files
+        # as specified by your supervisor, not a different .npz file.
         hands_mean_left, hands_mean_right = self.load_mano_mean_poses()
+        
         left_hand_pose_param = np.zeros(45)
         right_hand_pose_param = np.zeros(45)
-
-        # ========================================================================
-        #  THE DEBUG ZONE: We will change ONLY this matrix until it works.
-        # ========================================================================
-        # Test 1: The Identity (No change) - This shows the BASELINE error.
-        R_coord_fix = np.identity(3) 
-
-        # Test 2: My previous guess (180 deg rot around X) - We know this failed.
-        # R_coord_fix = R.from_euler('x', 180, degrees=True).as_matrix()
-
-        # Test 3: 180 deg rot around Y
-        # R_coord_fix = R.from_euler('y', 180, degrees=True).as_matrix()
-
-        # Test 4: 180 deg rot around Z
-        # R_coord_fix = R.from_euler('z', 180, degrees=True).as_matrix()
-
-        # Test 5: A common OpenGL to OpenCV transform (Flip Y and Z axes)
-        # R_coord_fix = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]])
-
-        # Test 6: A 90 degree rotation
-        # R_coord_fix = R.from_euler('y', 90, degrees=True).as_matrix()
         
-        print(f"🔬 TESTING WITH TRANSFORMATION MATRIX:\n{R_coord_fix}")
-        # ========================================================================
-
         for hand in wilor_params.get('hands', []):
-            if hand.get('hand_type', '') != 'right': # <-- FOCUS ON RIGHT HAND ONLY FOR NOW
-                continue
-
             if 'mano_parameters' not in hand: continue
                 
             mano_params = hand['mano_parameters']['parameters']
             hand_type = hand.get('hand_type', '')
             
             if 'hand_pose' in mano_params:
-                rot_matrices_wilor = np.array(mano_params['hand_pose']['values']).reshape(15, 3, 3)
-                final_axis_angles = np.zeros((15, 3))
+                # 1. Convert WiloR's rotation matrices to a flat (45,) axis-angle vector
+                rot_matrices = np.array(mano_params['hand_pose']['values']).flatten()
+                pose_parameter = self.convert_rotation_matrix_to_axis_angle(rot_matrices)
 
-                for i in range(15):
-                    R_wilor = rot_matrices_wilor[i]
-                    # Apply the transformation matrix we are testing
-                    R_smplx = R_coord_fix @ R_wilor
-                    final_axis_angles[i] = R.from_matrix(R_smplx).as_rotvec()
+                if hand_type == 'left':
+                    print("   Applying supervisor's special transform for LEFT hand...")
+                    final_param = pose_parameter.copy()
+                    
+                    # 2. Apply the two-step transformation for the left hand
+                    # Step A: Invert the entire rotation vector
+                    final_param *= -1.0
+                    # Step B: Flip the X-component of each joint back
+                    final_param[::3] *= -1.0
+                    
+                    # 3. Subtract the mean pose at the end
+                    left_hand_pose_param = final_param - hands_mean_left
+                    print(f"   ✅ Processed LEFT hand with supervisor's logic.")
 
-                pose_parameter = final_axis_angles.flatten()
-                
-                if hand_type == 'right':
+                elif hand_type == 'right':
+                    # The right hand needs no special transformation, just mean subtraction.
                     right_hand_pose_param = pose_parameter - hands_mean_right
-                    print(f"   ✅ Processed RIGHT hand. Final param norm: {np.linalg.norm(right_hand_pose_param):.2f}")
+                    print(f"   ✅ Processed RIGHT hand.")
 
-        # For now, just return the original SMPLestX left hand to avoid its confusion
-        smplx_params, _, _ = self.load_all_parameters() # This is a bit inefficient but fine for debug
-        original_left_hand = np.array(smplx_params['left_hand_pose'])
-
-        return original_left_hand, right_hand_pose_param
+        return left_hand_pose_param, right_hand_pose_param
 
 
     def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:

@@ -111,89 +111,73 @@ class EnhancedParameterFusion:
                 smplx_model = pickle.load(f, encoding='latin1')
             return smplx_model['hands_meanl'], smplx_model['hands_meanr']
 
+    # In your EnhancedParameterFusion class
+
     def extract_wilor_hand_poses(self, wilor_params: Dict) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Alternative approach with joint reordering and scaling
+        CORRECTED 2.0: Extracts WiLoR hand poses with a TESTABLE coordinate system transformation.
         """
-        print("\n🖐️  Extracting WiLoR hand poses (with reordering check)...")
+        print("\n🖐️  Extracting WiLoR hand poses (SYSTEMATIC DEBUG MODE)...")
         
-        # Load mean poses
         hands_mean_left, hands_mean_right = self.load_mano_mean_poses()
+        left_hand_pose_param = np.zeros(45)
+        right_hand_pose_param = np.zeros(45)
+
+        # ========================================================================
+        #  THE DEBUG ZONE: We will change ONLY this matrix until it works.
+        # ========================================================================
+        # Test 1: The Identity (No change) - This shows the BASELINE error.
+        R_coord_fix = np.identity(3) 
+
+        # Test 2: My previous guess (180 deg rot around X) - We know this failed.
+        # R_coord_fix = R.from_euler('x', 180, degrees=True).as_matrix()
+
+        # Test 3: 180 deg rot around Y
+        # R_coord_fix = R.from_euler('y', 180, degrees=True).as_matrix()
+
+        # Test 4: 180 deg rot around Z
+        # R_coord_fix = R.from_euler('z', 180, degrees=True).as_matrix()
+
+        # Test 5: A common OpenGL to OpenCV transform (Flip Y and Z axes)
+        # R_coord_fix = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]])
+
+        # Test 6: A 90 degree rotation
+        # R_coord_fix = R.from_euler('y', 90, degrees=True).as_matrix()
         
-        left_hand_pose = np.zeros(45)
-        right_hand_pose = np.zeros(45)
-        
+        print(f"🔬 TESTING WITH TRANSFORMATION MATRIX:\n{R_coord_fix}")
+        # ========================================================================
+
         for hand in wilor_params.get('hands', []):
-            if 'mano_parameters' not in hand:
+            if hand.get('hand_type', '') != 'right': # <-- FOCUS ON RIGHT HAND ONLY FOR NOW
                 continue
+
+            if 'mano_parameters' not in hand: continue
                 
             mano_params = hand['mano_parameters']['parameters']
             hand_type = hand.get('hand_type', '')
             
             if 'hand_pose' in mano_params:
-                # Get hand pose
-                rot_matrices = np.array(mano_params['hand_pose']['values']).flatten()
-                axis_angles = self.convert_rotation_matrix_to_axis_angle(rot_matrices)
+                rot_matrices_wilor = np.array(mano_params['hand_pose']['values']).reshape(15, 3, 3)
+                final_axis_angles = np.zeros((15, 3))
+
+                for i in range(15):
+                    R_wilor = rot_matrices_wilor[i]
+                    # Apply the transformation matrix we are testing
+                    R_smplx = R_coord_fix @ R_wilor
+                    final_axis_angles[i] = R.from_matrix(R_smplx).as_rotvec()
+
+                pose_parameter = final_axis_angles.flatten()
                 
-                # Check if we need to reorder joints
-                # WiLoR might output in a different order than SMPLX expects
-                joints = axis_angles.reshape(15, 3)
-                
-                # Analyze joint magnitudes to detect ordering issues
-                joint_norms = np.linalg.norm(joints, axis=1)
-                print(f"\n   📊 {hand_type} hand joint norms (before reorder):")
-                for i in range(5):  # 5 fingers
-                    finger_joints = joint_norms[i*3:(i+1)*3]
-                    print(f"      Finger {i}: {finger_joints.round(2)}")
-                
-                # If pinky (finger 4) has unusually high values at base, might need reordering
-                if joint_norms[12] > joint_norms[0] * 1.5:  # Pinky base > thumb base * 1.5
-                    print("   ⚠️  Detected potential joint ordering issue!")
-                    # Try alternative ordering (by joint level instead of by finger)
-                    reordered = np.zeros_like(joints)
-                    for level in range(3):  # base, mid, tip
-                        for finger in range(5):  # 5 fingers
-                            src_idx = finger * 3 + level
-                            dst_idx = level * 5 + finger
-                            reordered[dst_idx] = joints[src_idx]
-                    joints = reordered
-                    print("   🔄 Applied joint reordering")
-                
-                # Flatten back
-                pose = joints.flatten()
-                
-                if hand_type == 'left':
-                    # Apply transforms
-                    pose_transformed = pose.copy()
-                    
-                    # Try simpler Y-Z flip only (not full GitHub approach)
-                    pose_transformed[1::3] *= -1  # Flip Y
-                    pose_transformed[2::3] *= -1  # Flip Z
-                    
-                    # Subtract mean
-                    pose_transformed -= hands_mean_left
-                    
-                    # Scale if needed
-                    if np.abs(pose_transformed).max() > 2.0:
-                        scale = 1.5 / np.abs(pose_transformed).max()
-                        pose_transformed *= scale
-                        print(f"   📏 Scaled left hand by {scale:.2f}")
-                    
-                    left_hand_pose = pose_transformed
-                    
-                elif hand_type == 'right':
-                    pose_transformed = pose.copy()
-                    pose_transformed -= hands_mean_right
-                    
-                    # Scale if needed
-                    if np.abs(pose_transformed).max() > 2.0:
-                        scale = 1.5 / np.abs(pose_transformed).max()
-                        pose_transformed *= scale
-                        print(f"   📏 Scaled right hand by {scale:.2f}")
-                    
-                    right_hand_pose = pose_transformed
-        
-        return left_hand_pose, right_hand_pose
+                if hand_type == 'right':
+                    right_hand_pose_param = pose_parameter - hands_mean_right
+                    print(f"   ✅ Processed RIGHT hand. Final param norm: {np.linalg.norm(right_hand_pose_param):.2f}")
+
+        # For now, just return the original SMPLestX left hand to avoid its confusion
+        smplx_params, _, _ = self.load_all_parameters() # This is a bit inefficient but fine for debug
+        original_left_hand = np.array(smplx_params['left_hand_pose'])
+
+        return original_left_hand, right_hand_pose_param
+
 
     def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:
         """
