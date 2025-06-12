@@ -1,0 +1,93 @@
+{
+  "baseline_average": {
+    "PVE": 32654.66535226723,
+    "PA-PVE": 100.62504880882716
+  },
+  "fusion_average": {
+    "PVE": 32654.809163903537,
+    "PA-PVE": 100.83317702202297
+  },
+  "improvements": {
+    "PVE_improvement_%": -0.0004404015008411945,
+    "PA-PVE_improvement_%": -0.20683539104782875
+  },
+  "per_frame_results": [
+    {
+      "frame_id": "01",
+      "baseline_metrics": {
+        "PVE": 39930.725949266875,
+        "PA-PVE": 97.41705017689442
+      },
+      "fusion_metrics": {
+        "PVE": 39931.46182302574,
+        "PA-PVE": 98.51741632120076
+      },
+      "fusion_status": "success",
+      "gallery_path": "evaluation_results/ehf_evaluation_20250612_045130/gallery/01",
+      "visualization_count": 6
+    },
+    {
+      "frame_id": "02",
+      "baseline_metrics": {
+        "PVE": 29300.157241811277,
+        "PA-PVE": 103.450376841555
+      },
+      "fusion_metrics": {
+        "PVE": 29300.194464203145,
+        "PA-PVE": 103.24989309848019
+      },
+      "fusion_status": "success",
+      "gallery_path": "evaluation_results/ehf_evaluation_20250612_045130/gallery/02",
+      "visualization_count": 6
+    },
+    {
+      "frame_id": "03",
+      "baseline_metrics": {
+        "PVE": 31569.981026823825,
+        "PA-PVE": 89.79723923160144
+      },
+      "fusion_metrics": {
+        "PVE": 31569.778933725203,
+        "PA-PVE": 89.30964953300833
+      },
+      "fusion_status": "success",
+      "gallery_path": "evaluation_results/ehf_evaluation_20250612_045130/gallery/03",
+      "visualization_count": 6
+    },
+    {
+      "frame_id": "04",
+      "baseline_metrics": {
+        "PVE": 29165.728423032746,
+        "PA-PVE": 93.28300627225312
+      },
+      "fusion_metrics": {
+        "PVE": 29165.72306603444,
+        "PA-PVE": 93.07564913522464
+      },
+      "fusion_status": "success",
+      "gallery_path": "evaluation_results/ehf_evaluation_20250612_045130/gallery/04",
+      "visualization_count": 6
+    },
+    {
+      "frame_id": "05",
+      "baseline_metrics": {
+        "PVE": 33306.73412040144,
+        "PA-PVE": 119.17757152183188
+      },
+      "fusion_metrics": {
+        "PVE": 33306.887532529145,
+        "PA-PVE": 120.01327702220094
+      },
+      "fusion_status": "success",
+      "gallery_path": "evaluation_results/ehf_evaluation_20250612_045130/gallery/05",
+      "visualization_count": 6
+    }
+  ],
+  "total_frames": 5,
+  "fusion_status_summary": {
+    "success": 5,
+    "failed_or_identical": 0,
+    "error": 0
+  },
+  "central_gallery_path": "evaluation_results/ehf_evaluation_20250612_045130/gallery"
+}

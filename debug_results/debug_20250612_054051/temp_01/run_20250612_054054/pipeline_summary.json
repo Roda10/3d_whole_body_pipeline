@@ -1,0 +1,10 @@
+{
+  "timestamp": "20250612_054054",
+  "input_image": "data/EHF/01_img.jpg",
+  "output_directory": "debug_results/debug_20250612_054051/temp_01/run_20250612_054054",
+  "results": {
+    "smplestx": false,
+    "wilor": true,
+    "emoca": true
+  }
+}

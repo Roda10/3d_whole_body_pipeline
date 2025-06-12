@@ -1,0 +1,69 @@
+{
+  "baseline_average": {
+    "PA-PVE": 100.4271788260219,
+    "PVE": 34617.91330568086
+  },
+  "fusion_average": {
+    "PA-PVE": 100.90276934274272,
+    "PVE": 34618.30112370645
+  },
+  "improvements": {
+    "PA-PVE_improvement_%": -0.4735675364780662,
+    "PVE_improvement_%": -0.0011202813473126989
+  },
+  "per_frame_results": [
+    {
+      "frame_id": "01",
+      "baseline_metrics": {
+        "PVE": 39931.9182442379,
+        "PA-PVE": 97.44527014553567
+      },
+      "fusion_metrics": {
+        "PVE": 39932.6554427192,
+        "PA-PVE": 98.54854787228712
+      },
+      "fusion_status": "success",
+      "gallery_path": "evaluation_results/ehf_compatible_opt_20250612_060925/gallery/01",
+      "visualization_count": 6
+    },
+    {
+      "frame_id": "02",
+      "baseline_metrics": {
+        "PVE": 29303.908367123808,
+        "PA-PVE": 103.40908750650813
+      },
+      "fusion_metrics": {
+        "PVE": 29303.9468046937,
+        "PA-PVE": 103.25699081319831
+      },
+      "fusion_status": "success",
+      "gallery_path": "evaluation_results/ehf_compatible_opt_20250612_060925/gallery/02",
+      "visualization_count": 6
+    }
+  ],
+  "total_frames": 2,
+  "fusion_status_summary": {
+    "success": 2,
+    "failed_or_identical": 0,
+    "error": 0
+  },
+  "central_gallery_path": "evaluation_results/ehf_compatible_opt_20250612_060925/gallery",
+  "timing_stats": {
+    "main_pipeline": {
+      "mean": 153.25911378860474,
+      "std": 2.1794302463531494
+    },
+    "coordinate_analysis": {
+      "mean": 11.427776098251343,
+      "std": 0.7938761711120605
+    },
+    "fusion": {
+      "mean": 26.82874619960785,
+      "std": 0.32688963413238525
+    },
+    "visualization": {
+      "mean": 0.02031576633453369,
+      "std": 0.00014770030975341797
+    }
+  }
+}

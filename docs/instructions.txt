@@ -30,98 +30,13 @@ python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_re
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-python parameter_fusion.py --results_dir pipeline_results/run_20250603_052032
-python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250603_100109
+# Test with 1 frame first
+python evaluation/optimized_ehf_evaluator.py --ehf_path data/EHF --max_frames 1
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For network stability, use screen/tmux:
 
-# 1. Run the unified pipeline (all three models)
-python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+screen -S ehf_eval
+python evaluation/optimized_ehf_evaluator.py --ehf_path data/EHF --max_frames 5
+# Ctrl+A, D to detach
 
-# 2. Run coordinate analysis (calculates transformations between models)
-python analysis_tools/targeted_coordinate_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
-
-# 3. Run basic fusion demo (coordinate-level combination)
-python analysis_tools/basic_fusion_demo.py --results_dir pipeline_results/run_TIMESTAMP
-
-# 4. Run mesh blending fusion (geometric attachment points)
-python analysis_tools/mesh_blend_fusion.py --results_dir pipeline_results/run_TIMESTAMP
-
-# 5. Run fixed mesh visualizer (using real SMPL-X mesh)
-python analysis_tools/fixed_mesh_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
-
-# 6. Run parameter fusion (direct parameter replacement)
-python analysis_tools/parameter_fusion.py --results_dir pipeline_results/run_TIMESTAMP
-
-# 7. Run fused mesh renderer (regenerate mesh with fused parameters)
-python analysis_tools/fused_mesh_renderer.py --results_dir pipeline_results/run_TIMESTAMP
-
-# Discovery tool (explore what files are actually produced)
-python analysis_tools/file_discovery.py --results_dir pipeline_results/run_TIMESTAMP
-
-# Mesh rendering visualizer (proper 3D visualization)
-python analysis_tools/mesh_rendering_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
-
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-# parameter analyzer 
-
-python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
-python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_20250606_
-python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_20250606_
-python fusion/direct_parameter_fusion.py --results_dir pipeline_results/run_20250606_
-python fusion/fusion_visualizer.py --results_dir pipeline_results/run_20250606_
-
-
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-python fusion/faithful_dpf.py --results_dir pipeline_results/run_20250606_
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-And if there is anything, you need apart from all the github files I have already uploaded in the project knowledge, let me know, don't just assume any crucial thing. I am not after results, but I need to know plainly what is going on at each stage. Clarity is the key for me. I need to know What I am doing, Why I am doing what I am doing, and how I am doing it. If it's fine for you, you can proceed  
-
-'human_models/human_model_files/'
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-bash run_all_pipeline.sh data/full_images/test2.jpg
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-python debug/coordinate_system_analyzer.py --run_dir ./pipeline_results/run_20250607_204752
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# From adapters/ directory
-python adapters/wilor_adapter_v2.py --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor_enhanced/ --debug_extraction
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Basic test run (10 frames)
-python evaluation/ehf_fusion_evaluator.py
-python evaluation/fast_ehf_fusion_evaluator.py
-
-# Custom EHF path and frame limit
-python evaluation/ehf_fusion_evaluator.py --ehf_path data/EHF --max_frames 5
-python evaluation/fast_ehf_fusion_evaluator.py --max_frames 5 --workers 4
-
-# Full evaluation (all 100 frames)
-python evaluation/ehf_fusion_evaluator.py --max_frames 100
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-python split_frames.py 
-
-nohup ./run_gpu0.sh > gpu0_output.log 2>&1 &
-nohup ./run_gpu1.sh > gpu1_output.log 2>&1 &
-
-watch -n 1 nvidia-smi
-tail -f gpu0_output.log
-tail -f gpu1_output.log
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-python debug/debug_hand_fusion_complete.py --results_dir reference_pipeline/run_20250610_154649
-
-python debug/check_joints_ordering.py --results_dir pipeline_results/run_20250610_154649
-
-python debug/visualize_hand_parameters.py --results_dir pipeline_results/run_20250610_154649
-
-python analysis_tools/validate_hand_transformations.py --results_dir reference_pipeline/run_20250610_154649
-
-python debug/test_fusion_approaches.py --results_dir reference_pipeline/run_20250610_154649/
-
-python debug/hand_diagnostics.py --results_dir reference_pipeline/run_20250606_
+python evaluation/optimized_ehf_evaluator.py --resume_from evaluation_results/ehf_evaluation_20250612_043126 --max_frames 5

@@ -1,0 +1,19 @@
+{
+  "baseline_average": {},
+  "fusion_average": {},
+  "improvements": {},
+  "per_frame_results": [],
+  "total_frames": 0,
+  "fusion_status_summary": {
+    "success": 0,
+    "failed_or_identical": 0,
+    "error": 3
+  },
+  "central_gallery_path": "evaluation_results/ehf_compatible_opt_20250612_053732/gallery",
+  "timing_stats": {
+    "main_pipeline": {
+      "mean": 1.9225528240203857,
+      "std": 0.007439817545815749
+    }
+  }
+}

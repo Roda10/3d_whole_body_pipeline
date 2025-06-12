@@ -1,0 +1,28 @@
+{
+  "timestamp": "20250612_054731",
+  "input_image": "data/EHF/01_img.jpg",
+  "output_directory": "debug_results/debug_20250612_054729/temp_01/run_20250612_054731",
+  "results": {
+    "wilor": {
+      "success": true,
+      "message": "Success: outputs in debug_results/debug_20250612_054729/temp_01/run_20250612_054731/wilor_results",
+      "output_dir": "debug_results/debug_20250612_054729/temp_01/run_20250612_054731/wilor_results"
+    },
+    "emoca": {
+      "success": true,
+      "message": "Success: outputs in debug_results/debug_20250612_054729/temp_01/run_20250612_054731/emoca_results",
+      "output_dir": "debug_results/debug_20250612_054729/temp_01/run_20250612_054731/emoca_results"
+    },
+    "smplestx": {
+      "success": true,
+      "message": "Success: outputs in debug_results/debug_20250612_054729/temp_01/run_20250612_054731/smplestx_results",
+      "output_dir": "debug_results/debug_20250612_054729/temp_01/run_20250612_054731/smplestx_results"
+    }
+  },
+  "summary": {
+    "total_adapters": 3,
+    "successful": 3,
+    "failed": 0,
+    "success_rate": 100.0
+  }
+}

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Unified 3D Whole Body Pipeline
+Unified 3D Whole Body Pipeline (Original Working Version)
 Orchestrates SMPLest-X, WiLoR, and EMOCA adapters concurrently
 """
 
 import os
 import sys
-import asyncio
 import logging
 import subprocess
 from pathlib import Path
@@ -95,7 +94,6 @@ class UnifiedPipeline:
         return [
             '--img_folder', temp_input_rel,
             '--out_folder', output_rel,
-            #'--save_mesh',
             '--rescale_factor', '2.0'
         ]
     
@@ -114,7 +112,6 @@ class UnifiedPipeline:
             '--output_folder', str(adapter_output_dir),
             '--save_images', 'True',
             '--save_codes', 'True', 
-            #'--save_mesh', 'True',
             '--mode', 'detail'
         ]
     

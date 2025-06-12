@@ -1,0 +1,10 @@
+{
+  "timestamp": "20250612_052839",
+  "input_image": "evaluation_results/ehf_batch_evaluation_20250612_052819/batch_temp/batch_04_to_05",
+  "output_directory": "evaluation_results/ehf_batch_evaluation_20250612_052819/batch_temp/output_04_to_05/run_20250612_052839",
+  "results": {
+    "smplestx": false,
+    "wilor": true,
+    "emoca": true
+  }
+}

@@ -1,0 +1,21 @@
+2025-06-12 05:47:31,221 - UnifiedPipeline - INFO - Starting unified pipeline for image: data/EHF/01_img.jpg
+2025-06-12 05:47:31,221 - UnifiedPipeline - INFO - Output directory: debug_results/debug_20250612_054729/temp_01/run_20250612_054731
+2025-06-12 05:47:31,222 - UnifiedPipeline - INFO - Starting smplestx with command: /opt/conda/envs/unified_pose_env/bin/python adapters/smplestx_adapter.py --cfg_path pretrained_models/smplest_x/config_base.py --input_image data/EHF/01_img.jpg --output_dir debug_results/debug_20250612_054729/temp_01/run_20250612_054731/smplestx_results --multi_person
+2025-06-12 05:47:31,223 - UnifiedPipeline - INFO - Working directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline
+2025-06-12 05:47:31,242 - UnifiedPipeline - INFO - Starting emoca with command: /opt/conda/envs/unified_pose_env/bin/python adapters/emoca_adapter.py --input_folder debug_results/debug_20250612_054729/temp_01/run_20250612_054731/emoca_results/temp_input --output_folder debug_results/debug_20250612_054729/temp_01/run_20250612_054731/emoca_results --save_images True --save_codes True --mode detail
+2025-06-12 05:47:31,242 - UnifiedPipeline - INFO - Working directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline
+2025-06-12 05:47:31,243 - UnifiedPipeline - INFO - Starting wilor with command: /opt/conda/envs/unified_pose_env/bin/python wilor_adapter.py --img_folder ../debug_results/debug_20250612_054729/temp_01/run_20250612_054731/wilor_results/temp_input --out_folder ../debug_results/debug_20250612_054729/temp_01/run_20250612_054731/wilor_results --rescale_factor 2.0
+2025-06-12 05:47:31,243 - UnifiedPipeline - INFO - Working directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline/adapters
+2025-06-12 05:48:50,992 - UnifiedPipeline - INFO - ✓ wilor completed successfully
+2025-06-12 05:48:59,905 - UnifiedPipeline - INFO - ✓ emoca completed successfully
+2025-06-12 05:50:06,133 - UnifiedPipeline - INFO - ✓ smplestx completed successfully
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - 
+============================================================
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - PIPELINE SUMMARY
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - ============================================================
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - Input: data/EHF/01_img.jpg
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - Output: debug_results/debug_20250612_054729/temp_01/run_20250612_054731
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - Success rate: 100.0%
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - ✓ Successful: wilor, emoca, smplestx
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - Summary saved to: debug_results/debug_20250612_054729/temp_01/run_20250612_054731/pipeline_summary.json
+2025-06-12 05:50:06,164 - UnifiedPipeline - INFO - ============================================================
