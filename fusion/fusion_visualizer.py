@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Enhanced Fusion Visualizer
+Enhanced Fusion Visualizer with Central Gallery Support
 Creates comprehensive visualizations of fusion results with proper mesh rendering
 """
 
@@ -15,13 +15,22 @@ from typing import Dict, Tuple, Optional
 import trimesh
 
 class EnhancedFusionVisualizer:
-    """Comprehensive visualization of fusion results"""
+    """Comprehensive visualization of fusion results with central gallery support"""
     
-    def __init__(self, results_dir: str):
+    def __init__(self, results_dir: str, gallery_dir: Optional[str] = None):
         self.results_dir = Path(results_dir)
         self.fusion_dir = self.results_dir / 'fusion_results'
-        self.viz_dir = self.fusion_dir / 'visualizations'
-        self.viz_dir.mkdir(exist_ok=True)
+        
+        # Use provided gallery directory or create local one as fallback
+        if gallery_dir:
+            self.viz_dir = Path(gallery_dir)
+            self.viz_dir.mkdir(exist_ok=True)
+            print(f"📁 Using external gallery: {self.viz_dir}")
+        else:
+            # Fallback for standalone usage
+            self.viz_dir = self.fusion_dir / 'visualizations'
+            self.viz_dir.mkdir(exist_ok=True)
+            print(f"📁 Using local visualizations: {self.viz_dir}")
         
     def load_data(self) -> Tuple[Dict, Dict, np.ndarray, np.ndarray]:
         """Load all fusion data"""
@@ -34,13 +43,25 @@ class EnhancedFusionVisualizer:
                 original_params = json.load(f)
             break
         
+        if original_params is None:
+            raise FileNotFoundError("Could not find SMPLest-X parameters")
+        
         # Load fused parameters
-        with open(self.fusion_dir / 'fused_parameters.json', 'r') as f:
+        fused_params_file = self.fusion_dir / 'fused_parameters.json'
+        if not fused_params_file.exists():
+            raise FileNotFoundError(f"Fused parameters not found: {fused_params_file}")
+        
+        with open(fused_params_file, 'r') as f:
             fused_params = json.load(f)
         
         # Load meshes
         original_mesh = np.array(original_params['mesh'])
-        enhanced_mesh = np.load(self.fusion_dir / 'enhanced_mesh.npy')
+        
+        enhanced_mesh_file = self.fusion_dir / 'enhanced_mesh.npy'
+        if not enhanced_mesh_file.exists():
+            raise FileNotFoundError(f"Enhanced mesh not found: {enhanced_mesh_file}")
+        
+        enhanced_mesh = np.load(enhanced_mesh_file)
         
         print(f"   ✅ Loaded all data successfully")
         return original_params, fused_params, original_mesh, enhanced_mesh
@@ -177,8 +198,12 @@ class EnhancedFusionVisualizer:
         stats_names = ['Volume\n(est.)', 'Surface\nArea (est.)', 'Centroid\nDist.']
         
         # Estimate volume using convex hull
-        orig_volume = trimesh.Trimesh(vertices=original_mesh).convex_hull.volume
-        enh_volume = trimesh.Trimesh(vertices=enhanced_mesh).convex_hull.volume
+        try:
+            orig_volume = trimesh.Trimesh(vertices=original_mesh).convex_hull.volume
+            enh_volume = trimesh.Trimesh(vertices=enhanced_mesh).convex_hull.volume
+        except:
+            orig_volume = 0
+            enh_volume = 0
         
         # Estimate surface area
         orig_surface = np.sum(np.linalg.norm(np.diff(original_mesh, axis=0), axis=1))
@@ -212,6 +237,8 @@ class EnhancedFusionVisualizer:
         face_region_diff = diff_magnitude[3000:5000].mean()
         body_region_diff = diff_magnitude[0:3000].mean()
         
+        volume_change = (enh_volume - orig_volume) / orig_volume * 100 if orig_volume > 0 else 0
+        
         metrics_text = f"""
 Total vertices: {enhanced_mesh.shape[0]}
 Mean difference: {diff_magnitude.mean():.4f} m
@@ -224,7 +251,7 @@ Region-specific changes:
 • Body: {body_region_diff:.4f} m (SMPLest-X base)
 
 Centroid shift: {centroid_dist:.4f} m
-Volume change: {(enh_volume - orig_volume) / orig_volume * 100:.1f}%
+Volume change: {volume_change:.1f}%
 """
         
         ax6.text(0.05, 0.85, metrics_text, transform=ax6.transAxes, 
@@ -234,7 +261,7 @@ Volume change: {(enh_volume - orig_volume) / orig_volume * 100:.1f}%
         plt.tight_layout()
         plt.savefig(self.viz_dir / 'mesh_analysis.pdf', dpi=300, bbox_inches='tight')
         plt.close()
-        print(f"   ✅ Saved to {self.viz_dir / 'mesh_analysis.png'}")
+        print(f"   ✅ Saved to {self.viz_dir / 'mesh_analysis.pdf'}")
     
     def create_3d_comparison(self, original_mesh: np.ndarray, enhanced_mesh: np.ndarray):
         """Create 3D mesh comparison views"""
@@ -311,7 +338,8 @@ Volume change: {(enh_volume - orig_volume) / orig_volume * 100:.1f}%
             f.write("• parameter_analysis.pdf - Detailed parameter comparison\n")
             f.write("• mesh_analysis.pdf - Mesh difference analysis\n")
             f.write("• 3d_comparison.pdf - Multiple view angles\n")
-            f.write("• mesh_comparison.pdf - Rendered comparison (if available)\n\n")
+            f.write("• 1_input.png, 2_emoca_overlay.png, etc. - Rendered overlays\n")
+            f.write("• comparison_stack.png - Side-by-side comparison\n\n")
             
             f.write("4. KEY FINDINGS\n")
             f.write("-" * 20 + "\n")
@@ -325,7 +353,9 @@ Volume change: {(enh_volume - orig_volume) / orig_volume * 100:.1f}%
             f.write("• Check mesh_analysis.pdf for region-specific changes\n")
             f.write("• Verify hand poses look natural in 3d_comparison.pdf\n")
             f.write("• Review parameter_analysis.pdf for any extreme values\n")
-            f.write("• Use enhanced_mesh.npy for downstream applications\n")
+            f.write("• Use enhanced_mesh.npy for downstream applications\n\n")
+            
+            f.write(f"Gallery location: {self.viz_dir}\n")
         
         print(f"   ✅ Report saved to {report_path}")
     
@@ -360,14 +390,15 @@ Volume change: {(enh_volume - orig_volume) / orig_volume * 100:.1f}%
             traceback.print_exc()
 
 def main():
-    parser = argparse.ArgumentParser(description='Enhanced Fusion Visualizer')
+    parser = argparse.ArgumentParser(description='Enhanced Fusion Visualizer with Central Gallery Support')
     parser.add_argument('--results_dir', type=str, required=True,
                        help='Directory containing fusion results')
+    parser.add_argument('--gallery_dir', type=str, help='External gallery directory (for central gallery system)')
     
     args = parser.parse_args()
     
     # Run visualization
-    visualizer = EnhancedFusionVisualizer(args.results_dir)
+    visualizer = EnhancedFusionVisualizer(args.results_dir, args.gallery_dir)
     visualizer.run_visualization()
 
 if __name__ == '__main__':

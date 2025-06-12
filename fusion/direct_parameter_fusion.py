@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Enhanced Direct Parameter Fusion System
+Enhanced Direct Parameter Fusion System with Central Gallery Support
 (Using your proposed list comprehension for conversion)
 """
 
@@ -26,12 +26,23 @@ from main.config import Config
 
 
 class EnhancedParameterFusion:
-    """Enhanced fusion system with proper parameter handling and mesh generation"""
+    """Enhanced fusion system with central gallery support (no local gallery creation)"""
 
-    def __init__(self, results_dir: str):
+    def __init__(self, results_dir: str, gallery_dir: Optional[str] = None):
         self.results_dir = Path(results_dir)
         self.fusion_dir = self.results_dir / 'fusion_results'
         self.fusion_dir.mkdir(exist_ok=True)
+        
+        # Use provided gallery directory or create local one as fallback
+        if gallery_dir:
+            self.gallery_dir = Path(gallery_dir)
+            self.gallery_dir.mkdir(exist_ok=True)
+            print(f"📁 Using external gallery: {self.gallery_dir}")
+        else:
+            # Fallback for standalone usage
+            self.gallery_dir = self.fusion_dir / 'render_gallery'
+            self.gallery_dir.mkdir(exist_ok=True)
+            print(f"📁 Using local gallery: {self.gallery_dir}")
 
         self.load_coordinate_analysis()
         self.setup_smplx_model()
@@ -224,6 +235,32 @@ class EnhancedParameterFusion:
         mapped_exp = emoca_exp[:10] * self.expression_scale
         return mapped_exp
 
+    def create_individual_parameter_sets(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict, fused_params: Dict) -> Dict:
+        """Create individual parameter sets for each model's contribution"""
+        print("\n🎯 Creating individual parameter sets for rendering...")
+        
+        # Base SMPLest-X parameters (unchanged)
+        smplestx_only = smplx_params.copy()
+        
+        # EMOCA contribution: SMPLest-X base + EMOCA expression
+        emoca_contribution = smplx_params.copy()
+        emoca_contribution['expression'] = self.map_emoca_expression(emoca_params)
+        
+        # WiLoR contribution: SMPLest-X base + WiLoR hands
+        wilor_contribution = smplx_params.copy()
+        left_hand, right_hand = self.extract_wilor_hand_poses(wilor_params)
+        wilor_contribution['left_hand_pose'] = left_hand
+        wilor_contribution['right_hand_pose'] = right_hand
+        
+        print("   ✅ Individual parameter sets created")
+        
+        return {
+            'smplestx': smplestx_only,
+            'emoca': emoca_contribution,
+            'wilor': wilor_contribution,
+            'fusion': fused_params
+        }
+
     def generate_mesh(self, params: Dict, use_translation: bool = True) -> np.ndarray:
         print("\n🎯 Generating mesh...")
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -247,6 +284,143 @@ class EnhancedParameterFusion:
         print(f"   ✅ Mesh generated.")
         return mesh
 
+    def render_mesh_on_image(self, img: np.ndarray, mesh: np.ndarray, cam_params: Dict, color: Tuple[int, int, int] = (0, 0, 255)) -> np.ndarray:
+        """Render mesh on image with specified color"""
+        return render_mesh(img.copy(), mesh, self.smplx_model.face, cam_params, mesh_as_vertices=False, color=color)
+
+    def render_standalone_mesh(self, mesh: np.ndarray, img_size: Tuple[int, int] = (512, 512), color: Tuple[int, int, int] = (0, 0, 255)) -> np.ndarray:
+        """Render standalone mesh without background image"""
+        # Create black background
+        img = np.zeros((img_size[0], img_size[1], 3), dtype=np.uint8)
+        
+        # Use default camera parameters for standalone rendering
+        cam_params = {
+            'focal': np.array([1000.0, 1000.0]),
+            'princpt': np.array([img_size[1]/2, img_size[0]/2])
+        }
+        
+        return render_mesh(img, mesh, self.smplx_model.face, cam_params, mesh_as_vertices=False, color=color)
+
+    def create_render_gallery(self, individual_params: Dict, original_mesh: np.ndarray, enhanced_mesh: np.ndarray):
+        """Create comprehensive render gallery in the specified gallery directory"""
+        print("\n🎨 Creating comprehensive render gallery...")
+        
+        # Find input image
+        img_path = None
+        for temp_dir in [self.results_dir / 'wilor_results' / 'temp_input', 
+                        self.results_dir / 'emoca_results' / 'temp_input',
+                        self.results_dir / 'smplestx_results' / 'temp_input']:
+            if temp_dir.exists():
+                for img_file in temp_dir.glob('*'):
+                    if img_file.suffix.lower() in ['.jpg', '.jpeg', '.png']:
+                        img_path = img_file
+                        break
+                if img_path:
+                    break
+        
+        if not img_path:
+            print("   ⚠️  No input image found for rendering")
+            return
+        
+        # Load input image
+        input_img = cv2.imread(str(img_path))
+        h, w = input_img.shape[:2]
+        
+        if not hasattr(self, 'camera_metadata'):
+            print("   ⚠️  Camera metadata not loaded.")
+            return
+        
+        cam_params = {
+            'focal': np.array(self.camera_metadata['focal_length']),
+            'princpt': np.array(self.camera_metadata['principal_point'])
+        }
+        
+        # Generate individual meshes
+        print("   🔧 Generating individual meshes...")
+        meshes = {}
+        for model_name, params in individual_params.items():
+            meshes[model_name] = self.generate_mesh(params)
+        
+        # Define colors for each model (BGR format for OpenCV)
+        colors = {
+            'smplestx': (255, 255, 255),    # White
+            'emoca': (255, 0, 255),         # Pink
+            'wilor': (255, 0, 0),           # Blue
+            'fusion': (0, 255, 255)         # Yellow
+        }
+        
+        # 1. Save input image
+        cv2.imwrite(str(self.gallery_dir / '1_input.png'), input_img)
+        print("   ✅ Saved: 1_input.png")
+        
+        # 2. EMOCA mesh overlay
+        emoca_overlay = self.render_mesh_on_image(input_img, meshes['emoca'], cam_params, colors['emoca'])
+        cv2.imwrite(str(self.gallery_dir / '2_emoca_overlay.png'), emoca_overlay)
+        print("   ✅ Saved: 2_emoca_overlay.png")
+        
+        # 3. SMPLest-X mesh overlay
+        smplestx_overlay = self.render_mesh_on_image(input_img, meshes['smplestx'], cam_params, colors['smplestx'])
+        cv2.imwrite(str(self.gallery_dir / '4_smplestx_overlay.png'), smplestx_overlay)
+        print("   ✅ Saved: 4_smplestx_overlay.png")
+        
+        # 4. Fusion mesh overlay
+        fusion_overlay = self.render_mesh_on_image(input_img, meshes['fusion'], cam_params, colors['fusion'])
+        cv2.imwrite(str(self.gallery_dir / '6_fusion_overlay.png'), fusion_overlay)
+        print("   ✅ Saved: 6_fusion_overlay.png")
+        
+        # Create 3-image comparison stack: Input | SMPLest-X mesh | Fusion mesh
+        print("   🔗 Creating comparison stack...")
+        
+        # Resize images to same height if needed
+        target_height = h
+        input_resized = cv2.resize(input_img, (w, target_height))
+        smplestx_resized = cv2.resize(smplestx_overlay, (w, target_height))
+        fusion_resized = cv2.resize(fusion_overlay, (w, target_height))
+        
+        # Stack horizontally
+        comparison_stack = np.hstack([input_resized, smplestx_resized, fusion_resized])
+        
+        # Add labels
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale = 1
+        thickness = 2
+        
+        cv2.putText(comparison_stack, 'Input', (10, 30), font, font_scale, (255, 255, 255), thickness)
+        cv2.putText(comparison_stack, 'SMPLest-X', (w + 10, 30), font, font_scale, (255, 255, 255), thickness)
+        cv2.putText(comparison_stack, 'Fusion', (2*w + 10, 30), font, font_scale, (255, 255, 255), thickness)
+        
+        cv2.imwrite(str(self.gallery_dir / 'comparison_stack.png'), comparison_stack)
+        print("   ✅ Saved: comparison_stack.png")
+        
+        # Create summary info file
+        info_content = f"""RENDER GALLERY SUMMARY
+========================
+
+Generated render images:
+1. 1_input.png - Original input image
+2. 2_emoca_overlay.png - EMOCA expression mesh overlaid
+4. 4_smplestx_overlay.png - SMPLest-X base mesh overlaid
+6. 6_fusion_overlay.png - Final fusion mesh overlaid
+
+Plus comparison:
+- comparison_stack.png - Input | SMPLest-X | Fusion side-by-side
+
+Colors used:
+- SMPLest-X: White
+- EMOCA: Pink  
+- WiLoR: Blue
+- Fusion: Yellow
+
+Input image: {img_path.name}
+Image dimensions: {w}x{h}
+Gallery location: {self.gallery_dir}
+"""
+        
+        with open(self.gallery_dir / 'gallery_info.txt', 'w') as f:
+            f.write(info_content)
+        
+        print(f"   ✅ Gallery complete! Saved to {self.gallery_dir}")
+
     def validate_parameters(self, params: Dict) -> bool:
         print("\n✅ Validating parameters...")
         issues = []
@@ -269,58 +443,29 @@ class EnhancedParameterFusion:
         with open(self.fusion_dir / 'fused_parameters.json', 'w') as f:
             json.dump(serializable_fused, f, indent=2)
         np.save(self.fusion_dir / 'enhanced_mesh.npy', enhanced_mesh)
-        print(f"   ✅ All results saved to {self.fusion_dir}")
-
-    def render_comparison(self, original_params: Dict, fused_params: Dict, original_mesh: np.ndarray, enhanced_mesh: np.ndarray):
-        print("\n🎨 Rendering comparison...")
-        img_path = None
-        for temp_dir in [self.results_dir / 'wilor_results' / 'temp_input', self.results_dir / 'emoca_results' / 'temp_input']:
-            if temp_dir.exists():
-                for img_file in temp_dir.glob('*'):
-                    img_path = img_file
-                    break
-                if img_path:
-                    break
-        if not img_path:
-            print("   ⚠️  No input image found for rendering")
-            return
-        img = cv2.imread(str(img_path))
-        h, w = img.shape[:2]
-        if not hasattr(self, 'camera_metadata'):
-            print("   ⚠️  Camera metadata not loaded.")
-            return
-        cam_params = {
-            'focal': np.array(self.camera_metadata['focal_length']),
-            'princpt': np.array(self.camera_metadata['principal_point'])
-        }
-        img_orig = render_mesh(img, original_mesh, self.smplx_model.face, cam_params)
-        img_enhanced = render_mesh(img.copy(), enhanced_mesh, self.smplx_model.face, cam_params)
-        comparison = np.hstack([img_orig, img_enhanced])
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(comparison, 'Original (SMPLest-X)', (10, 30), font, 1, (255, 255, 255), 2)
-        cv2.putText(comparison, 'Enhanced Fusion', (w + 10, 30), font, 1, (0, 255, 0), 2)
-        output_path = str(self.fusion_dir / 'mesh_comparison.png')
-        cv2.imwrite(output_path, comparison)
-        print(f"   ✅ Comparison saved to {output_path}")
+        print(f"   ✅ Results saved to {self.fusion_dir}")
 
     def run_fusion(self):
         print("\n" + "=" * 60 + "\n🚀 ENHANCED PARAMETER FUSION SYSTEM\n" + "=" * 60)
         try:
             smplx_params, wilor_params, emoca_params = self.load_all_parameters()
             fused_params = self.create_fused_parameters(smplx_params, wilor_params, emoca_params)
+            
+            # Create individual parameter sets for rendering
+            individual_params = self.create_individual_parameter_sets(smplx_params, wilor_params, emoca_params, fused_params)
+            
             is_valid = self.validate_parameters(fused_params)
             original_mesh = self.generate_mesh(smplx_params)
             enhanced_mesh = self.generate_mesh(fused_params)
-            self.render_comparison(smplx_params, fused_params, original_mesh, enhanced_mesh)
+            
+            # Create comprehensive render gallery
+            self.create_render_gallery(individual_params, original_mesh, enhanced_mesh)
+            
+            # Save results (no mesh comparison or .obj files)
             self.save_results(smplx_params, fused_params, original_mesh, enhanced_mesh)
-            print("\n💾 Saving OBJ files for Blender inspection...")
-            original_centered_mesh = self.generate_mesh(smplx_params, use_translation=False)
-            fused_centered_mesh = self.generate_mesh(fused_params, use_translation=False)
-            trimesh.Trimesh(vertices=original_centered_mesh, faces=self.smplx_model.face).export(str(self.fusion_dir / 'original_final.obj'))
-            print(f"   - Saved original mesh to {self.fusion_dir / 'original_final.obj'}")
-            trimesh.Trimesh(vertices=fused_centered_mesh, faces=self.smplx_model.face).export(str(self.fusion_dir / 'fused_final.obj'))
-            print(f"   - Saved final corrected fused mesh to {self.fusion_dir / 'fused_final.obj'}")
+            
             print("\n" + "=" * 60 + "\n✅ FUSION COMPLETE!\n" + "=" * 60)
+            print(f"🎨 Render gallery: {self.gallery_dir}")
             if not is_valid:
                 print("\n⚠️  Warning: Some parameters may be extreme.")
         except Exception as e:
@@ -329,10 +474,12 @@ class EnhancedParameterFusion:
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Enhanced Parameter Fusion System')
+    parser = argparse.ArgumentParser(description='Enhanced Parameter Fusion System with Central Gallery Support')
     parser.add_argument('--results_dir', type=str, required=True, help='Directory containing pipeline results')
+    parser.add_argument('--gallery_dir', type=str, help='External gallery directory (for central gallery system)')
     args = parser.parse_args()
-    fusion = EnhancedParameterFusion(args.results_dir)
+    
+    fusion = EnhancedParameterFusion(args.results_dir, args.gallery_dir)
     fusion.run_fusion()
 
 
