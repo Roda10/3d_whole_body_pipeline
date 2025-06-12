@@ -1,0 +1,11 @@
+{
+  "analysis_timestamp": "2025-06-12T08:45:53",
+  "transformation_parameters": {
+    "scale_factor": 7.85427527429404,
+    "translation_vector": [
+      -0.029845754909124837,
+      -0.340593398280259,
+      -0.12300278040871418
+    ]
+  }
+}

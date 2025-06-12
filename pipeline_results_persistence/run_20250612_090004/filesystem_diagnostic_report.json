@@ -1,0 +1,173 @@
+{
+  "basic_info": {
+    "current_user": "rodeo_aims_ac_za",
+    "current_uid": 474448273,
+    "current_gid": 474448273,
+    "working_directory": "/home/rodeo_aims_ac_za/3d_whole_body_pipeline",
+    "python_executable": "/opt/conda/envs/unified_pose_env/bin/python",
+    "python_version": "3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:19:12) [GCC 13.3.0]",
+    "platform": "linux"
+  },
+  "disk_space": {
+    "total_gb": 19685.985801696777,
+    "used_gb": 259.4417953491211,
+    "free_gb": 18626.454586029053,
+    "percent_used": 1.3179009573742517
+  },
+  "results_directory": {
+    "exists": true,
+    "permissions": {
+      "permissions": "drwxr-xr-x",
+      "owner": "rodeo_aims_ac_za",
+      "group": "rodeo_aims_ac_za",
+      "size_bytes": 4096,
+      "modified_time": "Thu Jun 12 10:20:38 2025",
+      "can_read": true,
+      "can_write": true,
+      "can_execute": true
+    },
+    "subdirectories": {
+      "smplestx_results": {
+        "exists": true,
+        "permissions": {
+          "permissions": "drwxr-xr-x",
+          "owner": "rodeo_aims_ac_za",
+          "group": "rodeo_aims_ac_za",
+          "size_bytes": 4096,
+          "modified_time": "Thu Jun 12 09:00:04 2025",
+          "can_read": true,
+          "can_write": true,
+          "can_execute": true
+        },
+        "file_count": 5
+      },
+      "wilor_results": {
+        "exists": true,
+        "permissions": {
+          "permissions": "drwxr-xr-x",
+          "owner": "rodeo_aims_ac_za",
+          "group": "rodeo_aims_ac_za",
+          "size_bytes": 4096,
+          "modified_time": "Thu Jun 12 09:00:05 2025",
+          "can_read": true,
+          "can_write": true,
+          "can_execute": true
+        },
+        "file_count": 2
+      },
+      "emoca_results": {
+        "exists": true,
+        "permissions": {
+          "permissions": "drwxr-xr-x",
+          "owner": "rodeo_aims_ac_za",
+          "group": "rodeo_aims_ac_za",
+          "size_bytes": 4096,
+          "modified_time": "Thu Jun 12 09:00:10 2025",
+          "can_read": true,
+          "can_write": true,
+          "can_execute": true
+        },
+        "file_count": 15
+      },
+      "fusion_results": {
+        "exists": true,
+        "permissions": {
+          "permissions": "drwxr-xr-x",
+          "owner": "rodeo_aims_ac_za",
+          "group": "rodeo_aims_ac_za",
+          "size_bytes": 4096,
+          "modified_time": "Thu Jun 12 10:20:38 2025",
+          "can_read": true,
+          "can_write": true,
+          "can_execute": true
+        },
+        "file_count": 1
+      }
+    }
+  },
+  "required_files": {
+    "smplestx_params": {
+      "found": true,
+      "count": 2,
+      "first_file": "smplestx_results/inference_output_20250612_090004/person_0/smplx_params_person_0.json",
+      "permissions": {
+        "permissions": "-rw-r--r--",
+        "owner": "rodeo_aims_ac_za",
+        "group": "rodeo_aims_ac_za",
+        "size_bytes": 993180,
+        "modified_time": "Thu Jun 12 09:00:05 2025",
+        "can_read": true,
+        "can_write": true,
+        "can_execute": false
+      }
+    },
+    "smplestx_camera": {
+      "found": true,
+      "count": 2,
+      "first_file": "smplestx_results/inference_output_20250612_090004/person_0/camera_metadata.json",
+      "permissions": {
+        "permissions": "-rw-r--r--",
+        "owner": "rodeo_aims_ac_za",
+        "group": "rodeo_aims_ac_za",
+        "size_bytes": 370,
+        "modified_time": "Thu Jun 12 09:00:05 2025",
+        "can_read": true,
+        "can_write": true,
+        "can_execute": false
+      }
+    },
+    "wilor_params": {
+      "found": true,
+      "count": 1,
+      "first_file": "wilor_results/test2_parameters.json",
+      "permissions": {
+        "permissions": "-rw-r--r--",
+        "owner": "rodeo_aims_ac_za",
+        "group": "rodeo_aims_ac_za",
+        "size_bytes": 207991,
+        "modified_time": "Thu Jun 12 09:00:04 2025",
+        "can_read": true,
+        "can_write": true,
+        "can_execute": false
+      }
+    },
+    "emoca_params": {
+      "found": true,
+      "count": 2,
+      "first_file": "emoca_results/test200/codes.json",
+      "permissions": {
+        "permissions": "-rw-r--r--",
+        "owner": "rodeo_aims_ac_za",
+        "group": "rodeo_aims_ac_za",
+        "size_bytes": 9485,
+        "modified_time": "Thu Jun 12 09:00:10 2025",
+        "can_read": true,
+        "can_write": true,
+        "can_execute": false
+      }
+    },
+    "coordinate_analysis": {
+      "found": false
+    }
+  },
+  "file_operations": {
+    "directory_creation": true,
+    "file_creation": true,
+    "numpy_operations": true,
+    "cleanup": true
+  },
+  "python_environment": {
+    "imports": {
+      "numpy": true,
+      "torch": true,
+      "json": true,
+      "pathlib": true,
+      "cv2": true,
+      "scipy": true,
+      "trimesh": true,
+      "pickle": true
+    },
+    "pythonpath": "",
+    "sys_path_length": 6
+  }
+}

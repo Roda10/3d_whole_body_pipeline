@@ -1,0 +1,3 @@
+[92m06-12 07:25:39[0m Load checkpoint from /home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar
+[92m06-12 07:25:39[0m Creating graph...
+[92m06-12 07:27:23[0m [93mWRN: Attention: Strict=False is set for checkpoint loading. Please check manually.[0m

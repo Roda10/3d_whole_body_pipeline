@@ -1,0 +1,28 @@
+{
+  "timestamp": "20250612_081826",
+  "input_image": "data/EHF/01_img.jpg",
+  "output_directory": "evaluation_results/ehf_persistence_20250612_081810/temp_results/run_20250612_081826",
+  "execution_mode": "persistence_services",
+  "successful_adapters": [
+    "wilor",
+    "smplestx",
+    "emoca"
+  ],
+  "failed_adapters": [],
+  "total_adapters": 3,
+  "success_rate": 1.0,
+  "detailed_results": {
+    "wilor": {
+      "success": true,
+      "message": "Success: Successfully processed 3 hand(s) (HTTP: 3.2s, Model: 3.2s) [service]"
+    },
+    "smplestx": {
+      "success": true,
+      "message": "Success: Successfully processed 1 person(s) (HTTP: 3.4s, Model: 3.4s) [service]"
+    },
+    "emoca": {
+      "success": true,
+      "message": "Success: Successfully processed 1 face(s) (HTTP: 37.6s, Model: 15.2s) [service]"
+    }
+  }
+}

@@ -1,0 +1,719 @@
+🔍 COMPREHENSIVE CODEBASE STRUCTURE ANALYSIS
+==============================================
+Time: Thu Jun 12 10:09:08 UTC 2025
+Directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline
+
+📁 TOP-LEVEL DIRECTORY STRUCTURE:
+==================================
+total 176
+drwxr-xr-x 21 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 10:09 .
+drwxr-xr-x 17 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 04:50 ..
+drwxr-xr-x  8 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 10:07 .git
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za   461 Jun  6 07:56 .gitignore
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za     0 May 29 17:24 README.md
+drwxr-xr-x  2 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 05:47 __pycache__
+drwxr-xr-x  4 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 10 15:33 adapters
+drwxr-xr-x  2 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 07:40 analysis_tools
+drwxr-xr-x  2 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun  9 09:49 bash_scripts
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za   258 Jun 12 10:09 codebase_structure.txt
+drwxr-xr-x  6 rodeo_aims_ac_za rodeo_aims_ac_za 20480 Jun  9 08:10 data
+drwxr-xr-x  2 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 11 10:13 debug
+drwxr-xr-x  5 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 05:52 debug_results
+drwxr-xr-x  2 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun  9 17:05 docs
+drwxr-xr-x  2 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 08:24 evaluation
+drwxr-xr-x 10 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 08:50 evaluation_results
+drwxr-xr-x  6 rodeo_aims_ac_za rodeo_aims_ac_za  4096 May 30 13:02 external
+drwxr-xr-x  3 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 03:37 fusion
+drwxr-xr-x  3 rodeo_aims_ac_za rodeo_aims_ac_za  4096 May 29 17:23 human_models
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za 11915 Jun 12 05:47 main.py
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za 18032 Jun 12 06:50 main_persistence.py
+drwxr-xr-x  9 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 09:00 pipeline_results_persistence
+drwxr-xr-x  5 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 10 15:38 pretrained_models
+-rwxr-xr-x  1 rodeo_aims_ac_za rodeo_aims_ac_za  6672 Jun 12 06:51 quick_start.sh
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za   759 Jun 12 08:57 quick_test.sh
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za     0 May 29 17:24 requirements.txt
+-rwxr-xr-x  1 rodeo_aims_ac_za rodeo_aims_ac_za  6268 Jun 12 10:07 scanner.sh
+drwxr-xr-x  3 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 04:48 scripts
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za 15518 Jun 12 07:13 service_manager.py
+drwxr-xr-x  3 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 07:24 services
+drwxr-xr-x  4 rodeo_aims_ac_za rodeo_aims_ac_za  4096 Jun 12 07:25 temp_service_logs
+
+📂 KEY DIRECTORIES:
+==================
+✅ data/ exists
+   Files: 6723
+   Size: 40G
+✅ external/ exists
+   Files: 3038
+   Size: 9.0G
+✅ pretrained_models/ exists
+   Files: 10
+   Size: 7.9G
+✅ human_models/ exists
+   Files: 34
+   Size: 1.6G
+✅ services/ exists
+   Files: 7
+   Size: 116K
+✅ evaluation/ exists
+   Files: 5
+   Size: 100K
+✅ fusion/ exists
+   Files: 4
+   Size: 88K
+✅ analysis_tools/ exists
+   Files: 7
+   Size: 144K
+✅ pipeline_results_persistence/ exists
+   Files: 156
+   Size: 15M
+✅ evaluation_results/ exists
+   Files: 247
+   Size: 104M
+
+🐍 PYTHON SCRIPTS:
+==================
+Main scripts:
+./main.py
+./main_persistence.py
+./service_manager.py
+
+Service scripts:
+services/emoca_service.py
+services/smplestx_service.py
+services/wilor_service.py
+
+Evaluation scripts:
+evaluation/batch_optimized_evaluator.py
+evaluation/debug_evaluator.py
+evaluation/fast_ehf_fusion_evaluator.py
+evaluation/fixed_persistence_ehf_evaluator.py
+evaluation/persistence_ehf_evaluator.py
+
+Fusion scripts:
+fusion/direct_parameter_fusion.py
+fusion/direct_parameter_fusion_SOTA.py
+fusion/fusion_visualizer.py
+
+Analysis scripts:
+analysis_tools/coordinate_analyzer_fixed.py
+analysis_tools/discovery_tools.py
+analysis_tools/outputs_clear_description.py
+analysis_tools/parameter_analyzer.py
+analysis_tools/persistence_coordinate_analyzer.py
+analysis_tools/validate_hand_transformations.py
+analysis_tools/wilor_deep_diagnostic.py
+
+⚙️  CONFIGURATION FILES:
+=======================
+./external/SMPLest-X/configs/config_smplest_x_h.py
+./external/SMPLest-X/main/config.py
+./external/WiLoR/pretrained_models/dataset_config.yaml
+./external/WiLoR/pretrained_models/model_config.yaml
+./external/WiLoR/wilor/configs/__init__.py
+./external/emoca/assets/EMOCA/models/DECA/cfg.yaml
+./external/emoca/assets/EMOCA/models/EMOCA/cfg.yaml
+./external/emoca/assets/EMOCA/models/EMOCA_v2_lr_cos_1.5/cfg.yaml
+./external/emoca/assets/EMOCA/models/EMOCA_v2_lr_mse_20/cfg.yaml
+./external/emoca/assets/EMOCA/models/EMOCA_v2_mp/cfg.yaml
+./external/emoca/conda-environment_py36_cu11_ubuntu.yml
+./external/emoca/conda-environment_py38_cu11_ubuntu.yml
+./external/emoca/external/SwinTransformer/config.py
+./external/emoca/external/SwinTransformer/configs/swin_base_patch4_window12_384.yaml
+./external/emoca/external/SwinTransformer/configs/swin_base_patch4_window7_224.yaml
+./external/emoca/external/SwinTransformer/configs/swin_large_patch4_window12_384.yaml
+./external/emoca/external/SwinTransformer/configs/swin_large_patch4_window7_224.yaml
+./external/emoca/external/SwinTransformer/configs/swin_small_patch4_window7_224.yaml
+./external/emoca/external/SwinTransformer/configs/swin_tiny_patch4_window7_224.yaml
+./external/emoca/external/spectre/config.py
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/av-finetune/base_noise_pt_noise_ft_30h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/av-finetune/base_noise_pt_noise_ft_433h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/av-finetune/large_noise_pt_noise_ft_30h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/av-finetune/large_noise_pt_noise_ft_433h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/base_lrs3_30h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/base_lrs3_433h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/base_vox_30h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/base_vox_433h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/large_lrs3_30h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/large_lrs3_433h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/large_vox_30h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/large_vox_433h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/self_large_vox_30h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/finetune/self_large_vox_433h.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_lrs3_iter1.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_lrs3_iter2.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_lrs3_iter3.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_lrs3_iter4.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_lrs3_iter5.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_vox_iter1.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_vox_iter2.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_vox_iter3.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_vox_iter4.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/base_vox_iter5.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/large_lrs3_iter5.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/large_vox_iter5.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/noise_base_vox_iter5.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/pretrain/noise_large_vox_iter5.yaml
+./external/emoca/external/spectre/external/av_hubert/avhubert/conf/s2s_decode.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/.github/stale.yml
+./external/emoca/external/spectre/external/av_hubert/fairseq/.github/workflows/build.yml
+./external/emoca/external/spectre/external/av_hubert/fairseq/.github/workflows/build_wheels.yml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/decode/ax_sweep/ngram.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/decode/ax_sweep/transformer.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/decode/infer_fsqlm.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/decode/infer_kenlm.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/decode/infer_viterbi.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/decode/run/submitit_slurm.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/decode/run/submitit_slurm_8gpu.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/finetune/base_10h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/finetune/ckpt/it1.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/finetune/lm/ls_4gram.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/finetune/run/submitit_reg.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/pretrain/data/iter1.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/pretrain/data/iter2.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/pretrain/hubert_base_librispeech.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/pretrain/hubert_large_librivox.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/pretrain/hubert_xlarge_librivox.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/hubert/config/pretrain/run/submitit_reg.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/quant_noise/transformer_quantization_config.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/speech_recognition/kaldi/config/kaldi_initializer.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/speech_recognition/new/conf/hydra/sweeper/ax.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/speech_recognition/new/conf/infer.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/base_100h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/base_10h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/base_10m.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/base_1h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/base_960h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/vox_100h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/vox_10h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/vox_10m.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/vox_1h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/finetuning/vox_960h.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/pretraining/wav2vec2_base_librispeech.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/pretraining/wav2vec2_large_librivox.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/pretraining/wav2vec2_large_librivox_tpu-pod.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/config/pretraining/wav2vec2_large_librivox_tpu.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/unsupervised/config/finetuning/w2v_finetune.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/unsupervised/config/gan/w2vu.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/examples/wav2vec/unsupervised/config/generate/viterbi.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/__init__.py
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/config.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_baevski_gbw.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_baevski_wiki103.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_big.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_gbw.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_gpt.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_gpt2_big.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_gpt2_medium.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_gpt2_small.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/transformer_lm/transformer_lm_wiki103.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/wav2vec/vq_wav2vec_gumbel.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/wav2vec2/wav2vec2_base.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/config/model/wav2vec2/wav2vec2_large.yaml
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/dataclass/configs.py
+./external/emoca/external/spectre/external/av_hubert/fairseq/fairseq/model_parallel/megatron/configure_data.py
+./external/emoca/external/spectre/external/av_hubert/fairseq/tests/gpu/transformer_quantization_config.yaml
+./external/emoca/external/spectre/external/face_detection/ibug/face_detection/retina_face/config.py
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/augmentations/default.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/augmentations/default_with_resize.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/augmentations/none.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/affectnet_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/affectnet_cluster_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/affectnet_cluster_emonet_cleaned.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/affectnet_desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/affectnet_desktop_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/affectnet_desktop_emonet_cleaned.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/coarse_data_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/coarse_data_cluster_different_scaling.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/coarse_data_desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/combo_decadetail_affectnet_cluster_emonet_cleaned.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/data_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/data_cluster_all.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/data_desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/data_desktop_all.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/detail_data_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/detail_data_cluster_different_scaling.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/detail_data_desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/emotionet_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/emotionet_desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/pretrain_coarse_data_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/data/datasets/pretrain_coarse_data_desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_coarse_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_coarse_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_coarse_emonet_all.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_detail.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_detail_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_detail_cluster_all.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_detail_cluster_test.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_finetune_detail_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_coarse_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_coarse_emonet_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_coarse_pretrain.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_coarse_pretrain_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_coarse_stargan.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_coarse_stargan_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_detail.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_detail_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_detail_emonet_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_detail_stargan.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/deca_train_detail_stargan_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/inout/cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/inout/desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/four_gpu_coarse_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/four_gpu_coarse_80gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/four_gpu_coarse_pretrain_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/four_gpu_coarse_pretrain_80gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/four_gpu_detail_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/four_gpu_detail_80gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/minimal_size_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/minimal_size_detail.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_coarse_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_coarse_pretrain.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_coarse_pretrain_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_detail.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_detail_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_expdeca_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_expdeca_coarse_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_expdeca_coarse_ring.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_expdeca_detail.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_expdeca_detail_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/single_gpu_expdeca_detail_ring.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_coarse_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_coarse_80gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_coarse_pretrain_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_coarse_pretrain_80gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_detail.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_detail_32gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/batching/two_gpu_detail_80gb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/callbacks/early_stopping.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/callbacks/none.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/logging/none.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/logging/wandb.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/optimizer/adam.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/optimizer/finetune_adam_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/learning/optimizer/finetune_adam_detail_lower_lr.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/additional/au_feature_loss.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/additional/au_loss.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/additional/au_loss_dual.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/additional/au_loss_trainable.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/additional/lipread_loss.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/additional/vgg_loss.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/additional/vgg_metric.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/flame_tex/bfm.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/flame_tex/bfm_desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/flame_tex/flame.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/neural_rendering/none.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/neural_rendering/stargan.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/neural_rendering/stargan_cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/paths/cluster.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/paths/desktop.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/3ddfa.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/3ddfa_resnet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/coarse_pretrain.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/coarse_train.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/coarse_train_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/coarse_train_expdeca.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/coarse_train_expdeca_emomlp.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/coarse_train_expdeca_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/deep3dface.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_coarse.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_coarse_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_coarse_expdeca.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_coarse_expdeca_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_detail.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_detail_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_detail_expdeca.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/default_detail_expdeca_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/detail_train.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/detail_train_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/detail_train_emonet_nr.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/detail_train_expdeca.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/detail_train_expdeca_emomlp.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/detail_train_expdeca_emonet.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/settings/detail_train_nr.yaml
+./external/emoca/gdl_apps/EMOCA/emoca_conf/model/sizes/default.yaml
+./external/emoca/gdl_apps/EMOCA/envs/conda-environment_py36_cu11_ubuntu.yml
+./external/emoca/gdl_apps/EMOCA/envs/deprecated/conda-environment_py36_cu10_cluster.yml
+./external/emoca/gdl_apps/EMOCA/envs/deprecated/conda-environment_py36_cu10_ubuntu.yml
+./external/emoca/gdl_apps/EMOCA/envs/deprecated/conda-environment_py36_cu11_cluster.yml
+./external/emoca/gdl_apps/EMOCA/envs/deprecated/conda-environment_py36_cu11_ubuntu_deprecated.yml
+./external/emoca/gdl_apps/EMOCA/training/emoca.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/backbone_on_emotionet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/augmentations/default.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/augmentations/default_with_resize.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/augmentations/default_without_jpeg.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/augmentations/none.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/afew_va.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_cluster_emonet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_cluster_emonet_cleaned.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_desktop.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_desktop_emonet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_desktop_emonet_cleaned.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_v1_cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/affectnet_v1_desktop.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/emotionet_0_cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/emotionet_0_desktop.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/emotionet_cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/data/datasets/emotionet_desktop.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/deep3dface.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emo3ddfa_v2.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emodeca_coarse.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emodeca_coarse_cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emodeca_emonet_coarse.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emoexpnet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emomgcnet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emonet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emonet_cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/emoswin.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/inout/cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/inout/desktop.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/batching/single_gpu_coarse.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/callbacks/early_stopping.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/callbacks/none.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/logging/none.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/logging/wandb.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/lr_scheduler/exponential.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/lr_scheduler/reduce_on_plateau.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/optimizer/adabound.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/optimizer/adam.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/training/default.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/learning/training/emotionet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/3ddfa_v2.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/3ddfa_v2_resnet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/coarse_emodeca.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/coarse_emodeca_emonet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/deep3dface.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/emonet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/emonet_trainable.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/emonet_trainable_weighted_va.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/emonet_trainable_weighted_va_mse.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/expnet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/mgcnet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/resnet50.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/resnet50_cluster.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/swin.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/vgg13.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/vgg13_bn.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/vgg16.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/vgg16_bn.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/vgg19.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/backbone/vgg19_bn.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/AU_emotionet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/AU_emotionet_bce.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/AU_emotionet_bce_weighted.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/vae_affectnet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/vae_emonet.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/vae_emonet_trainable.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/vae_weighted_va.yaml
+./external/emoca/gdl_apps/EmotionRecognition/emodeca_conf/model/settings/vae_weighted_va_mse.yaml
+./external/emoca/gdl_apps/EmotionRecognition/envs/conda-environment_py36_cu10_cluster.yml
+./external/emoca/gdl_apps/EmotionRecognition/envs/conda-environment_py36_cu10_ubuntu.yml
+./external/emoca/gdl_apps/EmotionRecognition/envs/conda-environment_py36_cu11_cluster.yml
+./external/emoca/gdl_apps/EmotionRecognition/envs/conda-environment_py36_cu11_ubuntu.yml
+./external/emoca/gdl_apps/EmotionRecognition/training/emoca_coarse.yaml
+./external/emoca/gdl_apps/EmotionRecognition/training/emoca_detail.yaml
+./external/emoca/gdl_apps/EmotionRecognition/training/resnet50.yaml
+./external/emoca/gdl_apps/EmotionRecognition/training/swin.yaml
+./pretrained_models/smplest_x/config_base.py
+
+📊 DATA DIRECTORY STRUCTURE:
+============================
+data
+data/outputs
+data/outputs/EMOCA_outputs
+data/outputs/EMOCA_outputs/EMOCA
+data/outputs/EMOCA_outputs/EMOCA/test700
+data/outputs/EMOCA_outputs/EMOCA/test800
+data/outputs/EMOCA_outputs/EMOCA/test600
+data/outputs/EMOCA_outputs/EMOCA/test200
+data/outputs/EMOCA_outputs/EMOCA_v2_lr_cos_1.5
+data/outputs/EMOCA_outputs/EMOCA_v2_lr_cos_1.5/test700
+data/outputs/EMOCA_outputs/EMOCA_v2_lr_cos_1.5/test800
+data/outputs/EMOCA_outputs/EMOCA_v2_lr_cos_1.5/test600
+data/outputs/EMOCA_outputs/EMOCA_v2_lr_cos_1.5/test200
+data/outputs/EMOCA_outputs/EMOCA_v2_mp
+data/outputs/EMOCA_outputs/EMOCA_v2_mp/test700
+data/outputs/EMOCA_outputs/EMOCA_v2_mp/test800
+data/outputs/EMOCA_outputs/EMOCA_v2_mp/test600
+data/outputs/EMOCA_outputs/EMOCA_v2_mp/test200
+data/outputs/EMOCA_outputs/EMOCA_v2_lr_mse_20
+data/outputs/EMOCA_outputs/EMOCA_v2_lr_mse_20/test700
+
+Data files (first 20):
+data/outputs/EMOCA_outputs/EMOCA/test700/inputs.png
+data/outputs/EMOCA_outputs/EMOCA/test700/geometry_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test700/geometry_detail.png
+data/outputs/EMOCA_outputs/EMOCA/test700/out_im_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test700/out_im_detail.png
+data/outputs/EMOCA_outputs/EMOCA/test800/inputs.png
+data/outputs/EMOCA_outputs/EMOCA/test800/geometry_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test800/geometry_detail.png
+data/outputs/EMOCA_outputs/EMOCA/test800/out_im_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test800/out_im_detail.png
+data/outputs/EMOCA_outputs/EMOCA/test600/inputs.png
+data/outputs/EMOCA_outputs/EMOCA/test600/geometry_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test600/geometry_detail.png
+data/outputs/EMOCA_outputs/EMOCA/test600/out_im_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test600/out_im_detail.png
+data/outputs/EMOCA_outputs/EMOCA/test200/inputs.png
+data/outputs/EMOCA_outputs/EMOCA/test200/geometry_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test200/geometry_detail.png
+data/outputs/EMOCA_outputs/EMOCA/test200/out_im_coarse.png
+data/outputs/EMOCA_outputs/EMOCA/test200/out_im_detail.png
+
+🔗 EXTERNAL REPOSITORIES:
+=========================
+External subdirs:
+total 24
+drwxr-xr-x  6 rodeo_aims_ac_za rodeo_aims_ac_za 4096 May 30 13:02 .
+drwxr-xr-x 21 rodeo_aims_ac_za rodeo_aims_ac_za 4096 Jun 12 10:09 ..
+drwxr-xr-x 15 rodeo_aims_ac_za rodeo_aims_ac_za 4096 May 30 10:41 SMPLest-X
+drwxr-xr-x 10 rodeo_aims_ac_za rodeo_aims_ac_za 4096 May 30 18:04 WiLoR
+-rw-r--r--  1 rodeo_aims_ac_za rodeo_aims_ac_za    0 May 30 12:55 __init__.py
+drwxr-xr-x  2 rodeo_aims_ac_za rodeo_aims_ac_za 4096 May 30 13:02 __pycache__
+drwxr-xr-x  9 rodeo_aims_ac_za rodeo_aims_ac_za 4096 Jun  1 08:16 emoca
+
+External Python files:
+external/WiLoR/download_videos.py
+external/WiLoR/wilor/datasets/vitdet_dataset.py
+external/WiLoR/wilor/datasets/utils.py
+external/WiLoR/wilor/configs/__init__.py
+external/WiLoR/wilor/models/discriminator.py
+external/WiLoR/wilor/models/wilor.py
+external/WiLoR/wilor/models/losses.py
+external/WiLoR/wilor/models/backbones/vit.py
+external/WiLoR/wilor/models/backbones/__init__.py
+external/WiLoR/wilor/models/heads/refinement_net.py
+
+🤖 PRETRAINED MODELS:
+====================
+pretrained_models/mano_mean_params.npz
+pretrained_models/yolov8x.pt
+pretrained_models/smplest_x/__pycache__/config_base.cpython-310.pyc
+pretrained_models/smplest_x/.cache/huggingface/.gitignore
+pretrained_models/smplest_x/.cache/huggingface/download/smplest_x_h.pth.tar.lock
+pretrained_models/smplest_x/.cache/huggingface/download/config_base.py.metadata
+pretrained_models/smplest_x/.cache/huggingface/download/smplest_x_h.pth.tar.metadata
+pretrained_models/smplest_x/.cache/huggingface/download/config_base.py.lock
+pretrained_models/smplest_x/smplest_x_h.pth.tar
+pretrained_models/smplest_x/config_base.py
+
+🏃 PIPELINE RESULTS ANALYSIS:
+=============================
+Pipeline result directories:
+pipeline_results_persistence
+
+LATEST PIPELINE RUN STRUCTURE:
+=============================
+Directory: pipeline_results_persistence/run_20250612_090004
+
+Complete file tree:
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/camera.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/codes.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/detail.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/expression.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/geometry_coarse.png
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/geometry_detail.png
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/inputs.png
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/lighting.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/out_im_coarse.png
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/out_im_detail.png
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/pose.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/shape.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/shape_summary.json
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200/texture.json
+pipeline_results_persistence/run_20250612_090004/pipeline.log
+pipeline_results_persistence/run_20250612_090004/pipeline_summary.json
+pipeline_results_persistence/run_20250612_090004/smplestx_results/inference_output_20250612_090004/person_0/camera_metadata.json
+pipeline_results_persistence/run_20250612_090004/smplestx_results/inference_output_20250612_090004/person_0/smplx_params_person_0.json
+pipeline_results_persistence/run_20250612_090004/smplestx_results/inference_output_20250612_090004/rendered_test2.jpg
+pipeline_results_persistence/run_20250612_090004/wilor_results/test2.jpg
+pipeline_results_persistence/run_20250612_090004/wilor_results/test2_parameters.json
+
+Directory structure:
+pipeline_results_persistence/run_20250612_090004
+pipeline_results_persistence/run_20250612_090004/emoca_results
+pipeline_results_persistence/run_20250612_090004/emoca_results/test200
+pipeline_results_persistence/run_20250612_090004/smplestx_results
+pipeline_results_persistence/run_20250612_090004/smplestx_results/inference_output_20250612_090004
+pipeline_results_persistence/run_20250612_090004/smplestx_results/inference_output_20250612_090004/person_0
+pipeline_results_persistence/run_20250612_090004/wilor_results
+
+📈 EVALUATION RESULTS ANALYSIS:
+===============================
+Evaluation result directories:
+evaluation_results
+
+LATEST EVALUATION STRUCTURE:
+===========================
+Directory: evaluation_results
+
+Files in evaluation:
+evaluation_results/ehf_compatible_opt_20250612_074752/compatible_evaluation_results.json
+evaluation_results/ehf_persistence_fixed_20250612_085008/fixed_persistence_evaluation_results.json
+evaluation_results/ehf_evaluation_20250612_045130/gallery/04/1_input.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/04/4_smplestx_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/04/gallery_info.txt
+evaluation_results/ehf_evaluation_20250612_045130/gallery/04/comparison_stack.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/04/2_emoca_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/04/6_fusion_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/03/1_input.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/03/4_smplestx_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/03/gallery_info.txt
+evaluation_results/ehf_evaluation_20250612_045130/gallery/03/comparison_stack.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/03/2_emoca_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/03/6_fusion_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/02/1_input.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/02/4_smplestx_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/02/gallery_info.txt
+evaluation_results/ehf_evaluation_20250612_045130/gallery/02/comparison_stack.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/02/2_emoca_overlay.png
+evaluation_results/ehf_evaluation_20250612_045130/gallery/02/6_fusion_overlay.png
+
+Subdirectories:
+evaluation_results
+evaluation_results/ehf_compatible_opt_20250612_074752
+evaluation_results/ehf_compatible_opt_20250612_074752/gallery
+evaluation_results/ehf_compatible_opt_20250612_074752/gallery/02
+evaluation_results/ehf_compatible_opt_20250612_074752/gallery/01
+evaluation_results/ehf_compatible_opt_20250612_074752/shared_temp
+evaluation_results/ehf_compatible_opt_20250612_074752/logs
+evaluation_results/ehf_persistence_fixed_20250612_085008
+evaluation_results/ehf_persistence_fixed_20250612_085008/gallery
+evaluation_results/ehf_persistence_fixed_20250612_085008/gallery/02
+
+🚀 SERVICE AND STARTUP FILES:
+=============================
+Startup scripts:
+-rw-r--r-- 1 rodeo_aims_ac_za rodeo_aims_ac_za 11915 Jun 12 05:47 main.py
+-rw-r--r-- 1 rodeo_aims_ac_za rodeo_aims_ac_za 18032 Jun 12 06:50 main_persistence.py
+-rwxr-xr-x 1 rodeo_aims_ac_za rodeo_aims_ac_za  6672 Jun 12 06:51 quick_start.sh
+-rw-r--r-- 1 rodeo_aims_ac_za rodeo_aims_ac_za 15518 Jun 12 07:13 service_manager.py
+
+🐍 PYTHON ENVIRONMENT:
+=====================
+Python path: /opt/conda/envs/unified_pose_env/bin/python
+Python version: Python 3.10.17
+Current working directory: /home/rodeo_aims_ac_za/3d_whole_body_pipeline
+
+📝 GIT STATUS:
+=============
+Branch: master
+Recent commits:
+98494b6 optimization
+cb0d133 Initial  ommit
+1c555b1 successful hand integration into the pipeline
+
+Modified files:
+ M external/SMPLest-X
+ M external/WiLoR
+ M external/emoca
+ M fusion/direct_parameter_fusion.py
+?? analysis_tools/persistence_coordinate_analyzer.py
+?? codebase_structure.txt
+?? evaluation/fixed_persistence_ehf_evaluator.py
+?? evaluation/persistence_ehf_evaluator.py
+?? evaluation_results/ehf_compatible_opt_20250612_074752/
+?? evaluation_results/ehf_persistence_20250612_081810/
+
+🔍 KEY FILE PATTERNS:
+====================
+Parameter files:
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/wilor_results/01_img_parameters.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/smplestx_results/inference_output_20250612_055000_01_img/person_0/smplx_params_person_0.json
+./debug_results/debug_20250612_054051/temp_01/run_20250612_054054/wilor_results/01_img_parameters.json
+./debug_results/debug_20250612_055246/temp_01/run_20250612_055257/wilor_results/01_img_parameters.json
+./debug_results/debug_20250612_055246/temp_01/run_20250612_055257/smplestx_results/inference_output_20250612_055534_01_img/person_0/smplx_params_person_0.json
+./pipeline_results_persistence/run_20250612_084752/wilor_results/test2_parameters.json
+./pipeline_results_persistence/run_20250612_084752/smplestx_results/inference_output_20250612_084752/person_0/smplx_params_person_0.json
+./pipeline_results_persistence/run_20250612_082955/wilor_results/test2_parameters.json
+./pipeline_results_persistence/run_20250612_082955/smplestx_results/inference_output_20250612_082955/person_0/smplx_params_person_0.json
+./pipeline_results_persistence/run_20250612_085844/wilor_results/test2_parameters.json
+
+Config files:
+./pretrained_models/smplest_x/__pycache__/config_base.cpython-310.pyc
+./pretrained_models/smplest_x/.cache/huggingface/download/config_base.py.metadata
+./pretrained_models/smplest_x/.cache/huggingface/download/config_base.py.lock
+./pretrained_models/smplest_x/config_base.py
+./.git/config
+./external/WiLoR/pretrained_models/model_config.yaml
+./external/WiLoR/pretrained_models/dataset_config.yaml
+./external/WiLoR/.git/config
+./external/SMPLest-X/configs/__pycache__/config_smplest_x_h.cpython-310.pyc
+./external/SMPLest-X/configs/__pycache__/config_smplest_x_h.cpython-38.pyc
+
+Model files:
+./pretrained_models/smplest_x/.cache/huggingface/download/smplest_x_h.pth.tar.lock
+./pretrained_models/smplest_x/.cache/huggingface/download/smplest_x_h.pth.tar.metadata
+./pretrained_models/smplest_x/smplest_x_h.pth.tar
+./human_models/human_model_files/smplx/SMPLX_NEUTRAL.pkl
+./human_models/human_model_files/smplx/MANO_SMPLX_vertex_ids.pkl
+./human_models/human_model_files/smplx/SMPLX_to_J14.pkl
+./human_models/human_model_files/smplx/MANO_LEFT.pkl
+./human_models/human_model_files/smplx/MANO_RIGHT.pkl
+./human_models/human_model_files/smpl/SMPL_NEUTRAL.pkl
+./human_models/human_model_files/smpl/SMPL_MALE.pkl
+
+JSON result files:
+./services/.service_pids.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/wilor_results/01_img_parameters.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/emoca_results/EMOCA_v2_lr_mse_20/01_img00/shape_summary.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/emoca_results/EMOCA_v2_lr_mse_20/01_img00/codes.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/pipeline_summary.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/smplestx_results/inference_output_20250612_055000_01_img/person_0/smplx_shapes_person_0.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/smplestx_results/inference_output_20250612_055000_01_img/person_0/camera_metadata.json
+./debug_results/debug_20250612_054729/temp_01/run_20250612_054731/smplestx_results/inference_output_20250612_055000_01_img/person_0/smplx_params_person_0.json
+./debug_results/debug_20250612_054051/temp_01/run_20250612_054054/wilor_results/01_img_parameters.json
+./debug_results/debug_20250612_054051/temp_01/run_20250612_054054/emoca_results/test/codes.json
+./debug_results/debug_20250612_054051/temp_01/run_20250612_054054/pipeline_summary.json
+./debug_results/debug_20250612_055246/temp_01/run_20250612_055257/wilor_results/01_img_parameters.json
+./debug_results/debug_20250612_055246/temp_01/run_20250612_055257/emoca_results/EMOCA_v2_lr_mse_20/01_img00/shape_summary.json
+./debug_results/debug_20250612_055246/temp_01/run_20250612_055257/emoca_results/EMOCA_v2_lr_mse_20/01_img00/codes.json
+./debug_results/debug_20250612_055246/temp_01/run_20250612_055257/pipeline_summary.json
+
+Mesh files:
+./pipeline_results_persistence/run_20250612_084546/fusion_results/enhanced_mesh.npy
+./pipeline_results_persistence/run_20250612_084546/fusion_results/fused_final.obj
+./pipeline_results_persistence/run_20250612_084546/fusion_results/original_final.obj
+./pipeline_results_persistence/run_20250612_083133/fusion_results/fused_final.obj
+./pipeline_results_persistence/run_20250612_083133/fusion_results/original_final.obj
+./human_models/human_model_files/smplx/SMPL-X__FLAME_vertex_ids.npy
+./evaluation_results/ehf_evaluation_20250612_045130/temp_pipeline/04/run_20250612_050139/fusion_results/enhanced_mesh.npy
+./evaluation_results/ehf_evaluation_20250612_045130/temp_pipeline/03/run_20250612_045822/fusion_results/enhanced_mesh.npy
+./evaluation_results/ehf_evaluation_20250612_045130/temp_pipeline/02/run_20250612_045505/fusion_results/enhanced_mesh.npy
+./evaluation_results/ehf_evaluation_20250612_045130/temp_pipeline/05/run_20250612_050456/fusion_results/enhanced_mesh.npy
+
+📊 FILE TYPE SUMMARY:
+====================
+Python files: 1097
+JSON files: 343
+Image files: 1197
+Model files: 26
+Mesh files: 287
+
+💾 DISK USAGE:
+=============
+Total project size: 74G
+
+Largest directories:
+40G	data/
+9.0G	external/
+7.9G	pretrained_models/
+1.6G	human_models/
+131M	adapters/
+104M	evaluation_results/
+15M	pipeline_results_persistence/
+4.6M	debug_results/
+144K	analysis_tools/
+116K	services/
+
+✅ CODEBASE STRUCTURE ANALYSIS COMPLETE
+=======================================
+
+To save this output to a file, run:
+bash this_script.sh > codebase_structure.txt 2>&1

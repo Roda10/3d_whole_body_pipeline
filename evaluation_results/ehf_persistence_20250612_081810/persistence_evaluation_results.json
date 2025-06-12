@@ -1,0 +1,34 @@
+{
+  "total_frames": 2,
+  "total_time_seconds": 62.23029375076294,
+  "average_time_per_frame": 31.11514687538147,
+  "baseline_average": {
+    "PVE": 34619.58235640034
+  },
+  "fusion_average": {
+    "PVE": 34619.58235640034
+  },
+  "per_frame_results": [
+    {
+      "frame_id": "01",
+      "baseline_metrics": {
+        "PVE": 39933.758372480166
+      },
+      "fusion_metrics": {
+        "PVE": 39933.758372480166
+      }
+    },
+    {
+      "frame_id": "02",
+      "baseline_metrics": {
+        "PVE": 29305.4063403205
+      },
+      "fusion_metrics": {
+        "PVE": 29305.4063403205
+      }
+    }
+  ],
+  "improvements": {
+    "PVE_improvement_%": 0.0
+  }
+}

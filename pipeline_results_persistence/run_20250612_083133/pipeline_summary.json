@@ -1,0 +1,28 @@
+{
+  "timestamp": "20250612_083133",
+  "input_image": "data/full_images/test2.jpg",
+  "output_directory": "pipeline_results_persistence/run_20250612_083133",
+  "execution_mode": "persistence_services",
+  "successful_adapters": [
+    "wilor",
+    "smplestx",
+    "emoca"
+  ],
+  "failed_adapters": [],
+  "total_adapters": 3,
+  "success_rate": 1.0,
+  "detailed_results": {
+    "wilor": {
+      "success": true,
+      "message": "Success: Successfully processed 2 hand(s) (HTTP: 0.8s, Model: 0.8s) [service]"
+    },
+    "smplestx": {
+      "success": true,
+      "message": "Success: Successfully processed 1 person(s) (HTTP: 0.9s, Model: 0.9s) [service]"
+    },
+    "emoca": {
+      "success": true,
+      "message": "Success: Successfully processed 1 face(s) (HTTP: 6.3s, Model: 1.4s) [service]"
+    }
+  }
+}

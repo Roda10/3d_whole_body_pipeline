@@ -1,0 +1,46 @@
+{
+  "total_frames": 2,
+  "total_time_seconds": 35.82489490509033,
+  "average_time_per_frame": 17.912447452545166,
+  "baseline_average": {
+    "PVE": 34619.58235640034
+  },
+  "fusion_average": {
+    "PVE": 34619.58235640034
+  },
+  "fusion_status_summary": {
+    "success": 0,
+    "failed_or_identical": 2,
+    "error": 0
+  },
+  "central_gallery_path": "evaluation_results/ehf_persistence_fixed_20250612_082512/gallery",
+  "per_frame_results": [
+    {
+      "frame_id": "01",
+      "baseline_metrics": {
+        "PVE": 39933.758372480166
+      },
+      "fusion_metrics": {
+        "PVE": 39933.758372480166
+      },
+      "fusion_status": "failed_or_identical",
+      "gallery_path": "evaluation_results/ehf_persistence_fixed_20250612_082512/gallery/01",
+      "mesh_difference_magnitude": 0.0
+    },
+    {
+      "frame_id": "02",
+      "baseline_metrics": {
+        "PVE": 29305.4063403205
+      },
+      "fusion_metrics": {
+        "PVE": 29305.4063403205
+      },
+      "fusion_status": "failed_or_identical",
+      "gallery_path": "evaluation_results/ehf_persistence_fixed_20250612_082512/gallery/02",
+      "mesh_difference_magnitude": 0.0
+    }
+  ],
+  "improvements": {
+    "PVE_improvement_%": 0.0
+  }
+}
