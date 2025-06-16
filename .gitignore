@@ -9,6 +9,7 @@
 *.json
 *.pdf
 *.png
+*.obj
 
 # Ignore Python cache
 __pycache__/
