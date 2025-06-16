@@ -4,7 +4,7 @@
 # ===========================================
 
 # === Input image from argument (with fallback) ===
-INPUT_IMAGE=${1:-"data/EHF/01_img.jpg"}
+INPUT_IMAGE=${1:-"data/EHF/05_img.jpg"}
 BASE_OUTPUT_DIR="reference_pipeline"
 
 echo "🚀 Running unified pipeline for image: $INPUT_IMAGE"

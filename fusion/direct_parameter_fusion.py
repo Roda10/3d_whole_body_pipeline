@@ -208,32 +208,83 @@ class EnhancedParameterFusion:
                     print(f"   ✅ Processed RIGHT hand.")
         return left_hand_pose_param, right_hand_pose_param
 
+    # def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:
+    #     print("\n🔧 Creating fused parameters (CORRECTED)...")
+    #     fused = {
+    #         'betas': np.array(smplx_params['betas']),
+    #         'body_pose': np.array(smplx_params['body_pose']),
+    #         'root_pose': np.array(smplx_params['root_pose']),
+    #         'translation': np.array(smplx_params['translation']),
+    #         'jaw_pose': np.array(smplx_params['jaw_pose'])
+    #     }
+    #     left_hand, right_hand = self.extract_wilor_hand_poses(wilor_params)
+    #     fused['left_hand_pose'] = left_hand
+    #     fused['right_hand_pose'] = right_hand
+    #     print("\n   ✅ Hands: FULL WiLoR replacement (no mixing)")
+    #     fused['expression'] = self.map_emoca_expression(emoca_params)
+    #     left_diff = np.linalg.norm(left_hand - np.array(smplx_params['left_hand_pose']))
+    #     right_diff = np.linalg.norm(right_hand - np.array(smplx_params['right_hand_pose']))
+    #     print(f"\n   📊 Changes from original:")
+    #     print(f"      Left hand: {left_diff:.3f}")
+    #     print(f"      Right hand: {right_diff:.3f}")
+    #     return fused
+
+    # def map_emoca_expression(self, emoca_params: Dict) -> np.ndarray:
+    #     print("\n🎭 Mapping EMOCA expression...")
+    #     emoca_exp = np.array(emoca_params['expcode'])
+    #     mapped_exp = emoca_exp[:10] * self.expression_scale
+    #     return mapped_exp
+
+
     def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:
-        print("\n🔧 Creating fused parameters (CORRECTED)...")
+        """
+        CORRECTED FUSION: Now integrates EMOCA's jaw pose as well.
+        """
+        print("\n🔧 Creating fused parameters (with full face fusion)...")
+        
+        # Start with SMPLest-X base
         fused = {
             'betas': np.array(smplx_params['betas']),
             'body_pose': np.array(smplx_params['body_pose']),
             'root_pose': np.array(smplx_params['root_pose']),
             'translation': np.array(smplx_params['translation']),
-            'jaw_pose': np.array(smplx_params['jaw_pose'])
         }
+        
+        # --- HAND FUSION (No change here) ---
         left_hand, right_hand = self.extract_wilor_hand_poses(wilor_params)
         fused['left_hand_pose'] = left_hand
         fused['right_hand_pose'] = right_hand
-        print("\n   ✅ Hands: FULL WiLoR replacement (no mixing)")
-        fused['expression'] = self.map_emoca_expression(emoca_params)
-        left_diff = np.linalg.norm(left_hand - np.array(smplx_params['left_hand_pose']))
-        right_diff = np.linalg.norm(right_hand - np.array(smplx_params['right_hand_pose']))
-        print(f"\n   📊 Changes from original:")
-        print(f"      Left hand: {left_diff:.3f}")
-        print(f"      Right hand: {right_diff:.3f}")
+        
+        # --- FACE FUSION (UPDATED) ---
+        # Get BOTH expression and jaw pose from our new function
+        fused_expression, fused_jaw_pose = self.map_emoca_expression(emoca_params)
+        fused['expression'] = fused_expression
+        fused['jaw_pose'] = fused_jaw_pose
+        
+        print("\n   ✅ Face: FULL EMOCA replacement (expression + jaw pose)")
         return fused
 
-    def map_emoca_expression(self, emoca_params: Dict) -> np.ndarray:
-        print("\n🎭 Mapping EMOCA expression...")
+
+    # ==============================================================================
+    #  Replace your old map_emoca_expression function with this one
+    # ==============================================================================
+    def map_emoca_expression(self, emoca_params: Dict) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        CORRECTED: Extracts both full expression AND jaw pose from EMOCA's output.
+        This follows the supervisor's guidance to use all available parameters.
+        """
+        print("\n🎭 Mapping full EMOCA face parameters...")
         emoca_exp = np.array(emoca_params['expcode'])
-        mapped_exp = emoca_exp[:10] * self.expression_scale
-        return mapped_exp
+        # We can still apply a gentle scaling to avoid overly exaggerated expressions
+        mapped_exp = emoca_exp[:10] * self.expression_scale 
+        print(f" ✅ Extracted {len(mapped_exp)} expression parameters.")
+
+        # 2. Extract Jaw Pose from 'posecode'
+        emoca_pose = np.array(emoca_params['posecode'])
+        mapped_jaw = emoca_pose[3:] # Take the last 3 values for the jaw
+        print(f" ✅ Extracted {len(mapped_jaw)} jaw parameters.")
+        return mapped_exp, mapped_jaw
+
 
     def create_individual_parameter_sets(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict, fused_params: Dict) -> Dict:
         """Create individual parameter sets for each model's contribution"""
@@ -244,7 +295,7 @@ class EnhancedParameterFusion:
         
         # EMOCA contribution: SMPLest-X base + EMOCA expression
         emoca_contribution = smplx_params.copy()
-        emoca_contribution['expression'] = self.map_emoca_expression(emoca_params)
+        emoca_contribution['expression'], emoca_contribution['jaw_pose'] = self.map_emoca_expression(emoca_params)
         
         # WiLoR contribution: SMPLest-X base + WiLoR hands
         wilor_contribution = smplx_params.copy()
