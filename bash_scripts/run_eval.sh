@@ -18,7 +18,7 @@ PID_FILE="evaluation.pid"
 # The log file where all output will be stored
 LOG_FILE="final_evaluation.log"
 # Arguments for the python script
-SCRIPT_ARGS="--max_frames 2"
+SCRIPT_ARGS="--max_frames 1"
 
 # --- Function to start the process ---
 start() {

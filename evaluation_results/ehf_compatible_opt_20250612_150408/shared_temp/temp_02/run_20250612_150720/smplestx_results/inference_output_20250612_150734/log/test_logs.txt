@@ -1,4 +1,0 @@
-[92m06-12 15:07:38[0m Using 1 GPU(s).
-[92m06-12 15:07:38[0m Inference on single image [data/EHF/02_img.jpg] with [/home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar].
-[92m06-12 15:07:38[0m Load checkpoint from /home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar
-[92m06-12 15:07:38[0m Creating graph...
