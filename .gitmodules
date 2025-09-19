@@ -3,7 +3,9 @@
 	url = https://github.com/rolpotamias/WiLoR.git
 [submodule "external/body/SMPLest-X"]
 	path = external/body/SMPLest-X
-	url = https://github.com/SMPLCap/SMPLest-X.git
+	url = git@github.com:SMPLCap/SMPLest-X.git
 [submodule "external/face/emoca"]
 	path = external/face/emoca
-	url = https://github.com/radekd91/emoca.git
+	url = git@github.com:radekd91/emoca.git
+[submodule "external/hands/WiLoR"]
+	url = git@github.com:rolpotamias/WiLoR.git
