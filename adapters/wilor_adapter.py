@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scripts.wilor_output_extractor import WiLoRParameterExtractor, save_wilor_parameters_json
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'WiLoR'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'hands' ,'WiLoR'))
 
 from wilor.models import WiLoR, load_wilor
 from wilor.utils import recursive_to
@@ -33,8 +33,8 @@ def main():
     args = parser.parse_args()
 
     # Download and load checkpoints
-    model, model_cfg = load_wilor(checkpoint_path = '../external/WiLoR/pretrained_models/wilor_final.ckpt' , cfg_path= '../external/WiLoR/pretrained_models/model_config.yaml')
-    detector = YOLO('../external/WiLoR/pretrained_models/detector.pt')
+    model, model_cfg = load_wilor(checkpoint_path = '../external/hands/WiLoR/pretrained_models/wilor_final.ckpt' , cfg_path= '../external/hands/WiLoR/pretrained_models/model_config.yaml')
+    detector = YOLO('../external/hands/WiLoR/pretrained_models/detector.pt')
     # Setup the renderer
     renderer = Renderer(model_cfg, faces=model.mano.faces)
     renderer_side = Renderer(model_cfg, faces=model.mano.faces)
