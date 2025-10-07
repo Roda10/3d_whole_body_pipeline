@@ -10,7 +10,10 @@
 *.pdf
 *.png
 *.obj
-
+*jpg
+*.jpeg
+*.txt
+*.json
 # Ignore Python cache
 __pycache__/
 *.py[cod]
