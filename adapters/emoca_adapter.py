@@ -21,7 +21,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'emoca'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'face', 'emoca'))
 
 from gdl_apps.EMOCA.utils.load import load_model
 from gdl.datasets.ImageTestDataset import TestData

@@ -1,3 +1,4 @@
+# Set headless rendering options for pyglet and PyOpenGL
 import os
 import sys
 import os.path as osp
@@ -11,8 +12,10 @@ import cv2
 import datetime
 from pathlib import Path
 
+
 # Add SMPLest-X to path for imports
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'SMPLest-X'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'body', 'SMPLest-X'))
+
 
 from human_models.human_models import SMPLX
 from ultralytics import YOLO
@@ -21,6 +24,7 @@ from main.config import Config
 from utils.data_utils import load_img, process_bbox, generate_patch_image
 from utils.visualization_utils import render_mesh
 from utils.inference_utils import non_max_suppression
+
 
 def numpy_to_serializable(obj):
     """Convert numpy arrays to lists for JSON serialization"""
@@ -43,7 +47,7 @@ def parse_args():
     parser.add_argument('--cfg_path', type=str, required=False, help='Path to the configuration file')
     parser.add_argument('--input_image', type=str, required=True, help='Path to the single input image file')
     parser.add_argument('--output_dir', type=str, default='./results', help='Directory to save output images')
-    # -----------------------------------------------
+    # ------------------------------------------------
 
     args = parser.parse_args()
     return args
