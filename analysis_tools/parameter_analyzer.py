@@ -194,49 +194,185 @@ class ParameterStructureAnalyzer:
             'files_found': []
         }
         
-        # Look for EMOCA code files
-        code_files = list(self.results_dir.glob('emoca_results/*/*/*.json'))
+        # Search for emoca_params.json (custom format with variable depth)
+        emoca_param_files = list(self.results_dir.glob('emoca_results/*/*/emoca_params.json'))
         
-        for code_file in code_files:
-            if code_file.name in ['shape.json', 'exp.json', 'pose.json', 'tex.json', 'detail.json', 'codes.json']:
-                analysis['files_found'].append(str(code_file.relative_to(self.results_dir)))
-                
-                structure = self.analyze_file_structure(code_file)
-                
-                # Map file names to parameter names
-                file_to_param = {
-                    'shape.json': 'shapecode',
-                    'exp.json': 'expcode', 
-                    'pose.json': 'posecode',
-                    'tex.json': 'texcode',
-                    'detail.json': 'detailcode'
-                }
-                
-                if code_file.name in file_to_param:
-                    param_name = file_to_param[code_file.name]
-                    
-                    # For single-parameter files, the structure is just the array
-                    for key, value in structure.items():
-                        analysis['outputs'][param_name] = {
-                            'structure': value,
-                            'meaning': self.parameter_definitions['emoca'].get(param_name, 'Unknown parameter'),
-                            'source_file': code_file.name
-                        }
-                        break  # Take first (and usually only) key
-                
-                elif code_file.name == 'codes.json':
-                    # Combined codes file
-                    for param_path, param_info in structure.items():
-                        param_name = param_path.split('.')[-1] if '.' in param_path else param_path
-                        
-                        if param_name in self.parameter_definitions['emoca']:
-                            analysis['outputs'][param_name] = {
-                                'structure': param_info,
-                                'meaning': self.parameter_definitions['emoca'][param_name],
-                                'source_file': 'codes.json'
-                            }
+        for param_file in emoca_param_files:
+            analysis['files_found'].append(str(param_file.relative_to(self.results_dir)))
+            self._parse_emoca_params_json(param_file, analysis)
+            break  # Analyze first file only
+        
+        # Search for codes.json (original EMOCA format)
+        codes_files = list(self.results_dir.glob('emoca_results/*/*/codes.json'))
+        
+        for codes_file in codes_files:
+            if str(codes_file.relative_to(self.results_dir)) not in analysis['files_found']:
+                analysis['files_found'].append(str(codes_file.relative_to(self.results_dir)))
+            self._parse_codes_json(codes_file, analysis)
+            break  # Analyze first file only
         
         return analysis
+    
+    def _parse_emoca_params_json(self, file_path: Path, analysis: Dict):
+        """Parse custom emoca_params.json format"""
+        try:
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+            
+            # Navigate to flame_codes nested structure
+            if 'faces' in data and len(data['faces']) > 0:
+                face_data = data['faces'][0]
+                
+                # Parse FLAME codes
+                if 'flame_codes' in face_data:
+                    flame_codes = face_data['flame_codes']
+                    
+                    code_mapping = {
+                        'shape': 'shapecode',
+                        'expression': 'expcode',
+                        'texture': 'texcode',
+                        'pose': 'posecode',
+                        'detail': 'detailcode',
+                        'light': 'lightcode'
+                    }
+                    
+                    for flame_key, param_name in code_mapping.items():
+                        if flame_key in flame_codes:
+                            value = flame_codes[flame_key]
+                            array = np.array(value)
+                            
+                            analysis['outputs'][param_name] = {
+                                'structure': {
+                                    'type': 'numeric_array',
+                                    'shape': list(array.shape),
+                                    'sample_values': array.flatten()[:3].tolist(),
+                                    'value_range': [float(array.min()), float(array.max())]
+                                },
+                                'meaning': self.parameter_definitions['emoca'].get(param_name, f'FLAME {flame_key} parameter'),
+                                'source_file': 'emoca_params.json',
+                                'examples_found': 1
+                            }
+                
+                # Parse camera parameters
+                if 'camera' in face_data:
+                    camera = np.array(face_data['camera'])
+                    analysis['outputs']['camera'] = {
+                        'structure': {
+                            'type': 'numeric_array',
+                            'shape': list(camera.shape),
+                            'sample_values': camera.tolist()
+                        },
+                        'meaning': 'Camera parameters (scale, translation)',
+                        'source_file': 'emoca_params.json',
+                        'examples_found': 1
+                    }
+                
+                # Parse 3D geometry
+                geometry_mapping = {
+                    'vertices_3d': 'FLAME mesh vertices in 3D space',
+                    'trans_vertices_3d': 'Transformed mesh vertices in camera space',
+                    'landmarks_2d': '2D facial landmarks (68 points)',
+                    'landmarks_3d': '3D facial landmarks (68 points)'
+                }
+                
+                for geom_key, meaning in geometry_mapping.items():
+                    if geom_key in face_data:
+                        geom_array = np.array(face_data[geom_key])
+                        analysis['outputs'][geom_key] = {
+                            'structure': {
+                                'type': 'multidimensional_array',
+                                'shape': list(geom_array.shape),
+                                'sample_values': geom_array.flatten()[:6].tolist(),
+                                'value_range': [float(geom_array.min()), float(geom_array.max())]
+                            },
+                            'meaning': meaning,
+                            'source_file': 'emoca_params.json',
+                            'examples_found': 1
+                        }
+        
+        except Exception as e:
+            print(f"Error parsing {file_path}: {e}")
+    
+    def _parse_codes_json(self, file_path: Path, analysis: Dict):
+        """Parse original codes.json format and merge with existing analysis"""
+        try:
+            structure = self.analyze_file_structure(file_path)
+            
+            for param_path, param_info in structure.items():
+                if param_path.startswith('error'):
+                    continue
+                
+                param_name = param_path.split('.')[-1] if '.' in param_path else param_path
+                
+                # Only add if not already present from emoca_params.json
+                if param_name not in analysis['outputs']:
+                    if param_name in self.parameter_definitions['emoca']:
+                        analysis['outputs'][param_name] = {
+                            'structure': param_info,
+                            'meaning': self.parameter_definitions['emoca'][param_name],
+                            'source_file': 'codes.json',
+                            'examples_found': 1
+                        }
+                else:
+                    # Merge: indicate it's found in both files
+                    analysis['outputs'][param_name]['source_file'] = 'emoca_params.json, codes.json'
+                    analysis['outputs'][param_name]['examples_found'] += 1
+        
+        except Exception as e:
+            print(f"Error parsing {file_path}: {e}")
+    
+    # def analyze_emoca_outputs(self) -> Dict:
+    #     """Analyze EMOCA output structure"""
+    #     analysis = {
+    #         'model_name': 'EMOCA',
+    #         'description': 'Facial expression and identity modeling',
+    #         'outputs': {},
+    #         'files_found': []
+    #     }
+        
+    #     # Look for EMOCA code files
+    #     code_files = list(self.results_dir.glob('emoca_results/*/*.json'))
+        
+    #     for code_file in code_files:
+    #         if code_file.name in ['shape.json', 'exp.json', 'pose.json', 'tex.json', 'detail.json', 'codes.json']:
+    #             analysis['files_found'].append(str(code_file.relative_to(self.results_dir)))
+                
+    #             structure = self.analyze_file_structure(code_file)
+                
+    #             # Map file names to parameter names
+    #             file_to_param = {
+    #                 'shape.json': 'shapecode',
+    #                 'exp.json': 'expcode', 
+    #                 'pose.json': 'posecode',
+    #                 'tex.json': 'texcode',
+    #                 'detail.json': 'detailcode'
+    #             }
+                
+    #             if code_file.name in file_to_param:
+    #                 param_name = file_to_param[code_file.name]
+                    
+    #                 # For single-parameter files, the structure is just the array
+    #                 for key, value in structure.items():
+    #                     analysis['outputs'][param_name] = {
+    #                         'structure': value,
+    #                         'meaning': self.parameter_definitions['emoca'].get(param_name, 'Unknown parameter'),
+    #                         'source_file': code_file.name
+    #                     }
+    #                     break  # Take first (and usually only) key
+                
+    #             elif code_file.name == 'codes.json':
+    #                 # Combined codes file
+    #                 for param_path, param_info in structure.items():
+    #                     param_name = param_path.split('.')[-1] if '.' in param_path else param_path
+                        
+    #                     if param_name in self.parameter_definitions['emoca']:
+    #                         analysis['outputs'][param_name] = {
+    #                             'structure': param_info,
+    #                             'meaning': self.parameter_definitions['emoca'][param_name],
+    #                             'source_file': 'codes.json'
+    #                         }
+        
+    #     return analysis
     
     def create_human_readable_summary(self, all_analyses: Dict) -> Dict:
         """Create a human-readable summary for outsiders"""
