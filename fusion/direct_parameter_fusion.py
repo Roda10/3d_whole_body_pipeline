@@ -19,7 +19,8 @@ import traceback
 import pickle
 
 # Add paths for SMPL-X model access
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'SMPLest-X'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'body', 'SMPLest-X'))
+
 from human_models.human_models import SMPLX
 from utils.visualization_utils import render_mesh
 from main.config import Config
@@ -156,8 +157,8 @@ class EnhancedParameterFusion:
     def load_mano_mean_poses(self):
         print("loading mano mean poses")
         mano_model_dirs = [
-            '/home/rodeo_aims_ac_za/3d_whole_body_pipeline/external/WiLoR/mano_data',
-            'pretrained_models/mano',
+            '/home/rodeo_aims_ac_za/3d_whole_body_pipeline/external/hands/WiLoR/mano_data',
+            'adapters/mano',
             'mano/models'
         ]
         for directory in mano_model_dirs:
@@ -265,9 +266,6 @@ class EnhancedParameterFusion:
         return fused
 
 
-    # ==============================================================================
-    #  Replace your old map_emoca_expression function with this one
-    # ==============================================================================
     def map_emoca_expression(self, emoca_params: Dict) -> Tuple[np.ndarray, np.ndarray]:
         """
         CORRECTED: Extracts both full expression AND jaw pose from EMOCA's output.

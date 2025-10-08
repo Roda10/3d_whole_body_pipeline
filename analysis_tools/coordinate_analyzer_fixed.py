@@ -98,6 +98,40 @@ class ComprehensiveCoordinateAnalyzer:
             
         return wilor_data
     
+    # def load_emoca_data(self) -> Dict:
+    #     """Load EMOCA data for parameter space analysis"""
+    #     print("📥 Loading EMOCA data...")
+
+    #     emoca_data = {}
+
+    #     # Search for EMOCA .npy files
+    #     search_patterns = [
+    #         'emoca_results/*/test*/detail.npy',
+    #         'emoca_results/*/test*/exp.npy',
+    #         'emoca_results/*/test*/geometry_coarse.png',  # Image file pattern (if needed)
+    #         'emoca_results/*/test*/pose.npy',
+    #         'emoca_results/*/test*/shape.npy',
+    #         'emoca_results/*/test*/tex.npy'
+    #     ]
+
+    #     for pattern in search_patterns:
+    #         for npy_file in self.results_dir.glob(pattern):
+    #             image_name = npy_file.parent.name
+
+    #             # Load the .npy files
+    #             emoca_data[image_name] = {
+    #                 'detailcode': np.load(npy_file.parent / 'detail.npy'),  # Example file for detailcode
+    #                 'expcode': np.load(npy_file.parent / 'exp.npy'),        # Example file for expcode
+    #                 'posecode': np.load(npy_file.parent / 'pose.npy'),      # Example file for posecode
+    #                 'shapecode': np.load(npy_file.parent / 'shape.npy'),    # Example file for shapecode
+    #                 'texcode': np.load(npy_file.parent / 'tex.npy'),        # Example file for texcode
+    #             }
+
+    #             print(f"   ✅ Loaded {image_name}: {len(emoca_data[image_name])} parameter sets")
+    #             break
+
+    #     return emoca_data
+        
     def load_emoca_data(self) -> Dict:
         """Load EMOCA data for parameter space analysis"""
         print("📥 Loading EMOCA data...")

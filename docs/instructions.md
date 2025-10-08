@@ -2,21 +2,21 @@
 # For smplest_adapter [running from adapter/]
 
 python smplestx_adapter.py \
-    --cfg_path ../external/SMPLest-X/configs/config_smplest_x_h.py \
+    --cfg_path ../external/body/SMPLest-X/configs/config_smplest_x_h.py \
     --input_image ../data/full_images/test8.jpg \
     --output_dir ./my_multi_person_results \
     --multi_person
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-python smplestx_adapter.py  --cfg_path ../external/SMPLest-X/configs/config_smplest_x_h.py     --input_image ../data/full_images/test8.jpg     --output_dir ../data/outputs/smplest_x
+python smplestx_adapter.py  --cfg_path ../external/face/SMPLest-X/configs/config_smplest_x_h.py     --input_image ../data/full_images/test8.jpg     --output_dir ../data/outputs/smplest_x
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # For wilor adapter [running from adapter/]
 
 python  wilor_adapter.py --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor/
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# For Emoca adapter
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# For Emoca adapter [running from adapter/]
 
 python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA
 python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA_v2_mp
