@@ -20,17 +20,41 @@ import datetime
 from tqdm import tqdm
 import tempfile
 import psutil
+from importlib import import_module
 
-# Add project paths
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'SMPLest-X'))
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(script_dir)
+smplestx_path = os.path.join(project_root, 'external', 'body', 'SMPLest-X')
+
+sys.path.insert(0, smplestx_path)
+sys.path.insert(0, project_root)
 
 try:
-    from main.config import Config
-    from human_models.human_models import SMPL, SMPLX
-except ImportError as e:
+    # Import using importlib with explicit paths
+    import importlib.util
+    
+    # Load config module
+    config_path = os.path.join(smplestx_path, 'main', 'config.py')
+    spec = importlib.util.spec_from_file_location("smplestx_config", config_path)
+    config_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(config_module)
+    Config = config_module.Config
+    
+    # Load human_models module  
+    hm_path = os.path.join(smplestx_path, 'human_models', 'human_models.py')
+    spec = importlib.util.spec_from_file_location("smplestx_human_models", hm_path)
+    hm_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(hm_module)
+    SMPL = hm_module.SMPL
+    SMPLX = hm_module.SMPLX
+    
+    print("✓ Imports successful")
+except Exception as e:
     print(f"Error importing SMPLest-X modules: {e}")
+    import traceback
+    traceback.print_exc()
     sys.exit(1)
+
 
 class MeshMetricsCalculator:
     """Mesh-based metrics: Vertex-to-Vertex (V2V) and Procrustes Analysis V2V (PA-V2V)"""
