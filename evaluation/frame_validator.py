@@ -140,6 +140,91 @@ def analyze_camera_coverage(keypoints: Dict, image_size: Tuple[int, int] = (1920
         'spatial_density': heatmap.tolist()
     }
 
+def analyze_drift(results_dir: Path, frame_ids: List[str]) -> Dict:
+    """
+    Analyze drift across a sequence of frames
+    
+    Args:
+        results_dir: Path to evaluation results directory
+        frame_ids: List of frame IDs to analyze
+        
+    Returns:
+        Dict containing drift analysis results
+    """
+    drift_analysis = {
+        'frame_to_frame': [],
+        'cumulative': [],
+        'global_stats': {}
+    }
+    
+    prev_frame = None
+    base_frame = None
+    
+    # Load results for each frame
+    for frame_id in frame_ids:
+        result_file = results_dir / f"frame_{frame_id}_result.json"
+        if not result_file.exists():
+            continue
+            
+        with open(result_file, 'r') as f:
+            frame_result = json.load(f)
+            
+        if 'mesh_vertices' not in frame_result:
+            continue
+            
+        current_vertices = np.array(frame_result['mesh_vertices'])
+        
+        # Set first valid frame as base for global drift measurement
+        if base_frame is None:
+            base_frame = {
+                'id': frame_id,
+                'vertices': current_vertices
+            }
+        
+        # Calculate frame-to-frame drift if we have a previous frame
+        if prev_frame is not None:
+            f2f_drift = {
+                'frame_pair': (prev_frame['id'], frame_id),
+                'translation': float(np.mean(np.linalg.norm(
+                    current_vertices.mean(0) - prev_frame['vertices'].mean(0)
+                ))),
+                'vertex_displacement': float(np.mean(np.linalg.norm(
+                    current_vertices - prev_frame['vertices'], axis=1
+                )))
+            }
+            drift_analysis['frame_to_frame'].append(f2f_drift)
+        
+        # Calculate cumulative drift from base frame
+        cumulative_drift = {
+            'frame_id': frame_id,
+            'translation': float(np.mean(np.linalg.norm(
+                current_vertices.mean(0) - base_frame['vertices'].mean(0)
+            ))),
+            'vertex_displacement': float(np.mean(np.linalg.norm(
+                current_vertices - base_frame['vertices'], axis=1
+            )))
+        }
+        drift_analysis['cumulative'].append(cumulative_drift)
+        
+        # Update previous frame
+        prev_frame = {
+            'id': frame_id,
+            'vertices': current_vertices
+        }
+    
+    # Calculate global statistics
+    if drift_analysis['frame_to_frame']:
+        f2f_trans = [d['translation'] for d in drift_analysis['frame_to_frame']]
+        f2f_disp = [d['vertex_displacement'] for d in drift_analysis['frame_to_frame']]
+        drift_analysis['global_stats'] = {
+            'mean_frame_to_frame_translation': float(np.mean(f2f_trans)),
+            'max_frame_to_frame_translation': float(np.max(f2f_trans)),
+            'mean_frame_to_frame_displacement': float(np.mean(f2f_disp)),
+            'max_frame_to_frame_displacement': float(np.max(f2f_disp))
+        }
+    
+    return drift_analysis
+
 def validate_frame(ehf_path: str, frame_id: str) -> Dict:
     """
     Perform combined validation of camera parameters and keypoints
@@ -204,46 +289,76 @@ if __name__ == "__main__":
     import json
     from pprint import pprint
     
-    parser = argparse.ArgumentParser(description="Validate frame data")
+    parser = argparse.ArgumentParser(description="Validate frame data and analyze drift")
     parser.add_argument("--ehf_path", type=str, default="data/EHF", help="Path to EHF dataset")
-    parser.add_argument("--frame_id", type=str, required=True, help="Frame ID to analyze")
+    parser.add_argument("--results_dir", type=str, help="Path to evaluation results")
+    parser.add_argument("--frame_id", type=str, help="Single frame ID to analyze")
+    parser.add_argument("--frames", type=str, nargs="+", help="Multiple frame IDs to analyze")
     parser.add_argument("--save", action="store_true", help="Save results to JSON file")
     
     args = parser.parse_args()
     
-    results = validate_frame(args.ehf_path, args.frame_id)
+    if args.results_dir and args.frames:
+        # Analyze drift across frames
+        drift_results = analyze_drift(Path(args.results_dir), args.frames)
+        
+        print("\n📊 Drift Analysis Results:")
+        stats = drift_results['global_stats']
+        print("\nGlobal Statistics:")
+        print(f"Mean Frame-to-Frame Translation: {stats['mean_frame_to_frame_translation']*1000:.2f}mm")
+        print(f"Max Frame-to-Frame Translation: {stats['max_frame_to_frame_translation']*1000:.2f}mm")
+        print(f"Mean Vertex Displacement: {stats['mean_frame_to_frame_displacement']*1000:.2f}mm")
+        print(f"Max Vertex Displacement: {stats['max_frame_to_frame_displacement']*1000:.2f}mm")
+        
+        print("\nCumulative Drift:")
+        for drift in drift_results['cumulative']:
+            print(f"Frame {drift['frame_id']}: {drift['translation']*1000:.2f}mm translation, "
+                  f"{drift['vertex_displacement']*1000:.2f}mm mean displacement")
+        
+        if args.save:
+            output_path = Path(args.results_dir) / "drift_analysis.json"
+            with open(output_path, 'w') as f:
+                json.dump(drift_results, f, indent=2)
+            print(f"\nDrift analysis saved to {output_path}")
     
-    print("\n📊 Frame Validation Results:")
-    print(f"Status: {results['status']}")
+    elif args.frame_id:
+        # Single frame validation
+        results = validate_frame(args.ehf_path, args.frame_id)
+        
+        print("\n📊 Frame Validation Results:")
+        print(f"Status: {results['status']}")
+        
+        if results['warnings']:
+            print("\n⚠️ Warnings:")
+            for warning in results['warnings']:
+                print(f"- {warning}")
+        
+        if results['camera_params']:
+            print("\n📷 Camera Parameters:")
+            cam = results['camera_params']
+            print(f"Format: {cam['format']}")
+            print(f"Focal Length: {cam['intrinsics']['focal_length']}")
+            print(f"Principal Point: {cam['intrinsics']['principal_point']}")
+        
+        if results['keypoints']:
+            print("\n🔑 Keypoint Detection:")
+            for part, count in results['keypoints']['counts'].items():
+                conf = results['keypoints']['mean_confidence'][part]
+                print(f"{part}: {count} points (mean conf: {conf:.3f})")
+        
+        if results['coverage_analysis']:
+            print("\n📏 Coverage Analysis:")
+            cov = results['coverage_analysis']
+            print(f"X Coverage: {cov['x_coverage']*100:.1f}%")
+            print(f"Y Coverage: {cov['y_coverage']*100:.1f}%")
+            print(f"Total Points: {cov['num_points']}")
+            print(f"Mean Confidence: {cov['mean_confidence']:.3f}")
+        
+        if args.save:
+            output_path = Path(args.results_dir or '.') / f"validation_results_{args.frame_id}.json"
+            with open(output_path, 'w') as f:
+                json.dump(results, f, indent=2)
+            print(f"\nResults saved to {output_path}")
     
-    if results['warnings']:
-        print("\n⚠️ Warnings:")
-        for warning in results['warnings']:
-            print(f"- {warning}")
-    
-    if results['camera_params']:
-        print("\n📷 Camera Parameters:")
-        cam = results['camera_params']
-        print(f"Format: {cam['format']}")
-        print(f"Focal Length: {cam['intrinsics']['focal_length']}")
-        print(f"Principal Point: {cam['intrinsics']['principal_point']}")
-    
-    if results['keypoints']:
-        print("\n🔑 Keypoint Detection:")
-        for part, count in results['keypoints']['counts'].items():
-            conf = results['keypoints']['mean_confidence'][part]
-            print(f"{part}: {count} points (mean conf: {conf:.3f})")
-    
-    if results['coverage_analysis']:
-        print("\n📏 Coverage Analysis:")
-        cov = results['coverage_analysis']
-        print(f"X Coverage: {cov['x_coverage']*100:.1f}%")
-        print(f"Y Coverage: {cov['y_coverage']*100:.1f}%")
-        print(f"Total Points: {cov['num_points']}")
-        print(f"Mean Confidence: {cov['mean_confidence']:.3f}")
-    
-    if args.save:
-        output_path = Path(f"validation_results_{args.frame_id}.json")
-        with open(output_path, 'w') as f:
-            json.dump(results, f, indent=2)
-        print(f"\nResults saved to {output_path}")
+    else:
+        parser.print_help()

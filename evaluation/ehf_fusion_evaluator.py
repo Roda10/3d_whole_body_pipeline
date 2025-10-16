@@ -631,9 +631,12 @@ class CompatibleOptimizedEHFEvaluator:
             main_pct = (np.mean(self.timing_stats['main_pipeline']) / total_avg) * 100
             print(f"   Main Pipeline % of Total: {main_pct:.1f}%")
 
-    def run_compatible_evaluation(self, max_frames: Optional[int] = None) -> Dict:
+    def run_compatible_evaluation(self, max_frames: Optional[int] = None, frame_ids: Optional[List[str]] = None) -> Dict:
         """YOUR EXACT WORKING EVALUATION LOOP"""
-        frames_to_eval = self.frames[:max_frames] if max_frames else self.frames
+        if frame_ids is not None:
+            frames_to_eval = frame_ids
+        else:
+            frames_to_eval = self.frames[:max_frames] if max_frames else self.frames
 
         if self.verbose_output:
             print(f"🚀 Starting compatible optimized evaluation...")
@@ -690,7 +693,9 @@ class CompatibleOptimizedEHFEvaluator:
                     'baseline_metrics': baseline_metrics,
                     'fusion_metrics': fusion_metrics,
                     'fusion_status': fusion_status,
+                    'mesh_vertices': fusion_result['mesh'].tolist() if fusion_result is not None and 'mesh' in fusion_result else None
                 }
+                
                 if self.verbose_output:
                     result['gallery_path'] = str(self.central_gallery / frame_id)
                     result['visualization_count'] = len(list((self.central_gallery / frame_id).glob("*")))
@@ -821,6 +826,7 @@ def main():
     parser.add_argument('--ehf_path', type=str, default='data/EHF', help='EHF dataset path')
     parser.add_argument('--config', type=str, default='pretrained_models/smplest_x/config_base.py', help='Config path')
     parser.add_argument('--max_frames', type=int, default=10, help='Max frames (0 for all)')
+    parser.add_argument('--frame_id', type=str, help='Single frame ID to evaluate')
     parser.add_argument('--verbose_output', action='store_true', help='Enable verbose console and JSON output')
 
     args = parser.parse_args()
@@ -834,11 +840,16 @@ def main():
     else:
         print("🚀 Starting COMPATIBLE EHF Evaluation (concise output)")
 
-
     start_time = pytime.time()
-
     evaluator = CompatibleOptimizedEHFEvaluator(args.ehf_path, args.config, verbose_output=args.verbose_output)
-    results = evaluator.run_compatible_evaluation(max_frames)
+
+    if args.frame_id:
+        # Single frame evaluation
+        frames_to_eval = [args.frame_id]
+        results = evaluator.run_compatible_evaluation(max_frames=1, frame_ids=frames_to_eval)
+    else:
+        # Normal evaluation with max_frames
+        results = evaluator.run_compatible_evaluation(max_frames)
 
     total_time = pytime.time() - start_time
     evaluated_frames = results['metadata'].get('evaluated_frames_count', 0)
