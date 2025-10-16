@@ -29,9 +29,17 @@ class EnhancedParameterFusion:
     
     # --- NO CHANGES TO ANY OF THESE METHODS ---
     def __init__(self, results_dir: str):
-        self.results_dir = Path(results_dir); self.fusion_dir = self.results_dir / 'fusion_results'; self.fusion_dir.mkdir(exist_ok=True)
-        self.load_coordinate_analysis(); self.setup_smplx_model(); self.setup_rendering_config()
-        self.hand_blend_weight = 0.8; self.expression_scale = 0.3
+        self.results_dir = Path(results_dir)
+        self.fusion_dir = self.results_dir / 'fusion_results'
+        self.fusion_dir.mkdir(exist_ok=True)
+        self.load_coordinate_analysis()
+        self.setup_smplx_model()
+        self.setup_rendering_config()
+        self.hand_blend_weight = 0.8
+        self.expression_scale = 0.3
+        
+        # Initialize temporal stabilizer
+        self.stabilizer = TemporalStabilizer(window_size=5, smoothing_factor=0.8)
         
     def load_coordinate_analysis(self):
         print("📥 Loading coordinate analysis..."); coord_file = self.results_dir / 'coordinate_analysis_summary.json'
@@ -197,9 +205,9 @@ class EnhancedParameterFusion:
 
     def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:
         """
-        CORRECTED: Use full replacement, not hierarchical composition
+        Create fused parameters with temporal stabilization to reduce drift
         """
-        print("\n🔧 Creating fused parameters (CORRECTED)...")
+        print("\n🔧 Creating fused parameters with temporal stabilization...")
         
         # Start with SMPLest-X base
         fused = {
@@ -210,24 +218,29 @@ class EnhancedParameterFusion:
             'jaw_pose': np.array(smplx_params['jaw_pose'])
         }
         
-        # FULL REPLACEMENT - Don't mix wrist/fingers!
+        # Extract hand poses
         left_hand, right_hand = self.extract_wilor_hand_poses(wilor_params)
         fused['left_hand_pose'] = left_hand
         fused['right_hand_pose'] = right_hand
         
-        print("\n   ✅ Hands: FULL WiLoR replacement (no mixing)")
-        
-        # Expression
+        # Expression parameters
         fused['expression'] = self.map_emoca_expression(emoca_params)
         
-        # Check differences
-        left_diff = np.linalg.norm(left_hand - np.array(smplx_params['left_hand_pose']))
-        right_diff = np.linalg.norm(right_hand - np.array(smplx_params['right_hand_pose']))
-        print(f"\n   📊 Changes from original:")
+        # Apply temporal stabilization
+        print("\n   🔄 Applying temporal stabilization...")
+        stabilized_params = self.stabilizer.stabilize_pose(fused)
+        
+        # Record differences for monitoring
+        left_diff = np.linalg.norm(stabilized_params['left_hand_pose'] - np.array(smplx_params['left_hand_pose']))
+        right_diff = np.linalg.norm(stabilized_params['right_hand_pose'] - np.array(smplx_params['right_hand_pose']))
+        body_diff = np.linalg.norm(stabilized_params['body_pose'] - fused['body_pose'])
+        
+        print(f"\n   📊 Changes after stabilization:")
         print(f"      Left hand: {left_diff:.3f}")
         print(f"      Right hand: {right_diff:.3f}")
+        print(f"      Body pose: {body_diff:.3f}")
         
-        return fused
+        return stabilized_params
 
     def map_emoca_expression(self, emoca_params: Dict) -> np.ndarray:
         if not emoca_params or 'expcode' not in emoca_params: print("   ⚠️  No EMOCA expression, using neutral"); return np.zeros(10)

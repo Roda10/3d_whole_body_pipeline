@@ -1,127 +1,118 @@
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# For smplest_adapter [running from adapter/]
+# 3D Whole Body Pipeline Instructions
 
+## 1. Running the Complete Pipeline
+
+### Option A: Using the Main Pipeline Script (Recommended)
+This runs all three models (SMPLest-X, WiLoR, and EMOCA) in a unified way:
+```bash
+python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+```
+
+### Option B: Using Individual Adapters
+If you need to run adapters separately (from the `adapters/` directory):
+
+1. SMPLest-X Adapter:
+```bash
 python smplestx_adapter.py \
     --cfg_path ../external/body/SMPLest-X/configs/config_smplest_x_h.py \
-    --input_image ../data/full_images/test8.jpg \
-    --output_dir ./my_multi_person_results \
+    --input_image ../data/full_images/test2.jpg \
+    --output_dir ./smplestx_results \
     --multi_person
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+```
 
-python smplestx_adapter.py  --cfg_path ../external/face/SMPLest-X/configs/config_smplest_x_h.py     --input_image ../data/full_images/test8.jpg     --output_dir ../data/outputs/smplest_x
+2. WiLoR Adapter:
+```bash
+python wilor_adapter.py \
+    --img_folder ../data/full_images/ \
+    --out_folder ../data/outputs/wilor/
+```
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# For wilor adapter [running from adapter/]
+3. EMOCA Adapter:
+```bash
+python emoca_adapter.py \
+    --input_folder ../data/full_images/ \
+    --output_folder ../data/outputs/EMOCA_outputs \
+    --model_name EMOCA
+```
 
-python  wilor_adapter.py --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor/
+## 2. Running the Evaluation
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# For Emoca adapter [running from adapter/]
+### Option A: Using the Evaluation Script (with Progress Tracking)
+```bash
+# Start evaluation
+./bash_scripts/run_eval.sh start
 
-python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA
-python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA_v2_mp
-python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA_v2_lr_cos_1.5
-python emoca_adapter.py --input_folder ../data/full_images/ --output_folder ../data/outputs/EMOCA_outputs --model_name EMOCA_v2_lr_mse_20
+# Check status
+./bash_scripts/run_eval.sh status
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# View logs in real-time
+./bash_scripts/run_eval.sh logs
 
-To run the three models all in once
-python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+# Stop evaluation if needed
+./bash_scripts/run_eval.sh stop
+```
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### Option B: Direct Evaluation Commands
+```bash
+# Quick test (10 frames)
+python evaluation/ehf_fusion_evaluator.py --verbose_output
 
-python parameter_fusion.py --results_dir pipeline_results/run_20250603_052032
-python targeted_coordinate_analyzer.py --results_dir pipeline_results/run_20250603_100109
+# Custom number of frames
+python evaluation/ehf_fusion_evaluator.py --max_frames 5 --verbose_output
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Full evaluation (all frames)
+python evaluation/ehf_fusion_evaluator.py --max_frames 0 --verbose_output
+```
 
-# 1. Run the unified pipeline (all three models)
-python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
+## Output Locations
 
-# 2. Run coordinate analysis (calculates transformations between models)
-python analysis_tools/targeted_coordinate_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
+### Pipeline Results
+- Main output: `pipeline_results/run_TIMESTAMP/`
+  - SMPLest-X results: `smplestx_results/`
+  - WiLoR results: `wilor_results/`
+  - EMOCA results: `emoca_results/`
+  - Pipeline log: `pipeline.log`
+  - Summary: `pipeline_summary.json`
 
-# 3. Run basic fusion demo (coordinate-level combination)
-python analysis_tools/basic_fusion_demo.py --results_dir pipeline_results/run_TIMESTAMP
+### Evaluation Results
+- Main output: `evaluation_results/ehf_compatible_opt_TIMESTAMP/`
+  - Comparison results: `evaluation_comparison_results.json`
+  - Visual comparisons: `gallery/`
+  - Evaluation logs: `logs/`
+  - Runtime logs: `final_evaluation.log`
 
-# 4. Run mesh blending fusion (geometric attachment points)
-python analysis_tools/mesh_blend_fusion.py --results_dir pipeline_results/run_TIMESTAMP
+## Required Data Structure
+```
+data/
+├── full_images/          # Your input images
+├── EHF/                  # EHF dataset for evaluation
+└── outputs/              # Additional output directory
 
-# 5. Run fixed mesh visualizer (using real SMPL-X mesh)
-python analysis_tools/fixed_mesh_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
+pretrained_models/
+└── smplest_x/           # SMPLest-X model files
+    └── config_base.py
 
-# 6. Run parameter fusion (direct parameter replacement)
-python analysis_tools/parameter_fusion.py --results_dir pipeline_results/run_TIMESTAMP
+human_models/
+└── human_model_files/   # Required model files
+```
 
-# 7. Run fused mesh renderer (regenerate mesh with fused parameters)
-python analysis_tools/fused_mesh_renderer.py --results_dir pipeline_results/run_TIMESTAMP
+## Advanced Usage (Debug & Analysis Tools)
 
-# Discovery tool (explore what files are actually produced)
-python analysis_tools/file_discovery.py --results_dir pipeline_results/run_TIMESTAMP
+These tools are available for debugging and detailed analysis if needed:
 
-# Mesh rendering visualizer (proper 3D visualization)
-python analysis_tools/mesh_rendering_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
+### Parameter Analysis
+```bash
+python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/coordinate_analyzer_fixed.py --results_dir pipeline_results/run_TIMESTAMP
+```
 
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+### Visualization Tools
+```bash
+python fusion/fusion_visualizer.py --results_dir pipeline_results/run_TIMESTAMP
+```
 
-# parameter analyzer 
-
-python main.py --input_image data/full_images/test2.jpg --output_dir pipeline_results
-python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_20250606_
-python analysis_tools/coordinate_analyzer_fixed.py pipeline_results/run_20250606_
-python fusion/direct_parameter_fusion.py --results_dir pipeline_results/run_20250606_
-python fusion/fusion_visualizer.py --results_dir pipeline_results/run_20250606_
-
-
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-python fusion/faithful_dpf.py --results_dir pipeline_results/run_20250606_
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-And if there is anything, you need apart from all the github files I have already uploaded in the project knowledge, let me know, don't just assume any crucial thing. I am not after results, but I need to know plainly what is going on at each stage. Clarity is the key for me. I need to know What I am doing, Why I am doing what I am doing, and how I am doing it. If it's fine for you, you can proceed  
-
-'human_models/human_model_files/'
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-bash run_all_pipeline.sh data/full_images/test2.jpg
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-python debug/coordinate_system_analyzer.py --run_dir ./pipeline_results/run_20250607_204752
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# From adapters/ directory
-python adapters/wilor_adapter_v2.py --img_folder ../data/full_images/ --out_folder ../data/outputs/wilor_enhanced/ --debug_extraction
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# Basic test run (10 frames)
-python evaluation/ehf_fusion_evaluator.py
-python evaluation/fast_ehf_fusion_evaluator.py
-
-# Custom EHF path and frame limit
-python evaluation/ehf_fusion_evaluator.py --ehf_path data/EHF --max_frames 5
-python evaluation/fast_ehf_fusion_evaluator.py --max_frames 5 --workers 4
-
-# Full evaluation (all 100 frames)
-python evaluation/ehf_fusion_evaluator.py --max_frames 100
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-python split_frames.py 
-
-nohup ./run_gpu0.sh > gpu0_output.log 2>&1 &
-nohup ./run_gpu1.sh > gpu1_output.log 2>&1 &
-
-watch -n 1 nvidia-smi
-tail -f gpu0_output.log
-tail -f gpu1_output.log
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-python debug/debug_hand_fusion_complete.py --results_dir reference_pipeline/run_20250610_154649
-
-python debug/check_joints_ordering.py --results_dir pipeline_results/run_20250610_154649
-
-python debug/visualize_hand_parameters.py --results_dir pipeline_results/run_20250610_154649
-
-python analysis_tools/validate_hand_transformations.py --results_dir reference_pipeline/run_20250610_154649
-
-python debug/test_fusion_approaches.py --results_dir reference_pipeline/run_20250610_154649/
-
-python debug/hand_diagnostics.py --results_dir reference_pipeline/run_20250606_
+### Hand-specific Analysis
+```bash
+python analysis_tools/validate_hand_transformations.py --results_dir pipeline_results/run_TIMESTAMP
+python debug/check_joints_ordering.py --results_dir pipeline_results/run_TIMESTAMP
+```

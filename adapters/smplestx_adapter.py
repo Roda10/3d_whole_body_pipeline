@@ -1,4 +1,3 @@
-# Set headless rendering options for pyglet and PyOpenGL
 import os
 import sys
 import os.path as osp
