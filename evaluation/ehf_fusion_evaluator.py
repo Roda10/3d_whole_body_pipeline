@@ -56,14 +56,32 @@ except Exception as e:
     sys.exit(1)
 
 
+# Import new evaluation utilities
+from evaluation.camera_utils import CameraParameters
+from evaluation.enhanced_metrics import EnhancedMetricsCalculator
+
+# Original implementation commented out for reference
+"""
 class MeshMetricsCalculator:
-    """Mesh-based metrics: Vertex-to-Vertex (V2V) and Procrustes Analysis V2V (PA-V2V)"""
+    '''Mesh-based metrics: Vertex-to-Vertex (V2V) and Procrustes Analysis V2V (PA-V2V)'''
 
     def __init__(self, verbose: bool = False):
         self.verbose = verbose
         if self.verbose:
             print(f"✅ Mesh metrics calculator initialized")
             print(f"   Using metrics: V2V (Vertex-to-Vertex) and PA-V2V (Procrustes Analysis V2V)")
+
+    def procrustes_align(self, source_points: np.ndarray, target_points: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+"""
+
+class MeshMetricsCalculator(EnhancedMetricsCalculator):
+    """Enhanced metrics calculator with backward compatibility"""
+    
+    def __init__(self, verbose: bool = False):
+        super().__init__(dataset_type='EHF', unit='meters', verbose=verbose)
+        if self.verbose:
+            print(f"✅ Enhanced mesh metrics calculator initialized")
+            print(f"   Using enhanced metrics suite with proper unit handling")
 
     def procrustes_align(self, source_points: np.ndarray, target_points: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """

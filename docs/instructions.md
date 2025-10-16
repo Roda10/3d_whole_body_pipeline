@@ -1,4 +1,5 @@
 # 3D Whole Body Pipeline Instructions
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
 ## 1. Running the Complete Pipeline
 
