@@ -1,3 +1,4 @@
+````markdown
 # Robust Full Body 3D Human Pose Estimation
 
 [![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/)
@@ -20,13 +21,29 @@ The result is a unified mesh that preserves the sub-millimeter accuracy of exper
 
 ## 🏗️ Architecture
 
-![Pipeline Architecture](PUT_YOUR_IMAGE_PATH_HERE.png)
+![Pipeline Architecture](docs/images/pipeline_architecture.png)
 
 The pipeline operates in four stages:
 1.  **Global Estimation:** Inferring base body parameters using SMPLest-X.
 2.  **Expert Extraction:** Regressing high-fidelity parameters for hands (WiLoR) and face (EMOCA).
 3.  **Parameter Transformation:** Aligning expert coordinate systems (e.g., specific mirroring for left-hand MANO parameters) to the SMPL-X standard.
 4.  **Fusion:** Synthesizing the final mesh.
+
+## 🖼️ Qualitative Results
+
+Our method demonstrates significant improvements in capturing fine-grained anatomical details compared to the baseline.
+
+### 1. Expressive Facial Reconstruction
+Standard body models often produce neutral expressions even when the subject is emotional. By integrating EMOCA, our pipeline faithfully recovers open-mouth laughter and subtle cheek dynamics.
+
+![Laughing Comparison](docs/images/laughing_comparison.png)
+*(From left to right: Input Image, SMPLest-X Baseline, **Ours (Fusion)**)*
+
+### 2. Complex Hand Articulation
+Baseline methods frequently "collapse" fingers in complex gestures. Our fusion approach leverages WiLoR to correctly articulate individual digits, such as the separation of the thumb and pinky in hook-style poses.
+
+![Hand Gesture Comparison](docs/images/hand_comparison.png)
+*(Comparison of finger alignment and articulation)*
 
 ## 📂 Repository Structure
 
@@ -53,10 +70,9 @@ conda activate fusion_body
 
 # Install dependencies
 pip install -r requirements.txt
-
+````
 
 > **Note:** You will need to download the official SMPL-X models (Neutral, Male, Female) from the [SMPL-X Project Page](https://smpl-x.is.tue.mpg.de/) and place them in the `pretrained_models` directory.
-```
 
 ## 🚀 Usage
 
@@ -87,4 +103,3 @@ This research was conducted at the **African Institute for Mathematical Sciences
 
 ```
 ```
-
