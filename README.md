@@ -1,4 +1,3 @@
-````markdown
 # Robust Full Body 3D Human Pose Estimation
 
 [![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/)
@@ -101,5 +100,4 @@ If you find this work useful for your research, please cite the thesis:
 
 This research was conducted at the **African Institute for Mathematical Sciences (AIMS), South Africa**, and supervised by Dr. Rolandos Alexandros Potamias and Dr. Jiankang Deng. We utilize code from the open-source community, specifically the implementations of SMPL-X, WiLoR, and EMOCA.
 
-```
-```
+
