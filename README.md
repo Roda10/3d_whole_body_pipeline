@@ -20,7 +20,7 @@ The result is a unified mesh that preserves the sub-millimeter accuracy of exper
 
 ## 🏗️ Architecture
 
-![Pipeline Architecture](docs/images/pipeline_architecture.png)
+![Pipeline Architecture](docs/pipeline_architecture.png)
 
 The pipeline operates in four stages:
 1.  **Global Estimation:** Inferring base body parameters using SMPLest-X.
@@ -35,13 +35,13 @@ Our method demonstrates significant improvements in capturing fine-grained anato
 ### 1. Expressive Facial Reconstruction
 Standard body models often produce neutral expressions even when the subject is emotional. By integrating EMOCA, our pipeline faithfully recovers open-mouth laughter and subtle cheek dynamics.
 
-![Laughing Comparison](docs/images/laughing_comparison.png)
+![Laughing Comparison](docs/laughing_comparison.png)
 *(From left to right: Input Image, SMPLest-X Baseline, **Ours (Fusion)**)*
 
 ### 2. Complex Hand Articulation
 Baseline methods frequently misinterpret finger orientation in subtle poses. As seen below, the baseline (middle) renders fingers as stiff and unnaturally splayed. Our fusion approach (right) leverages WiLoR to correctly recover the natural downward reach and precise finger spacing, matching the input faithfully.
 
-![Hand Gesture Comparison](docs/images/hand_comparison.png)
+![Hand Gesture Comparison](docs/hand_comparison.png)
 *(Comparison of finger alignment and articulation)*
 
 ## 📂 Repository Structure
@@ -99,6 +99,7 @@ If you find this work useful for your research, please cite the thesis:
 ## 🙏 Acknowledgements
 
 This research was conducted at the **African Institute for Mathematical Sciences (AIMS), South Africa**, and supervised by Dr. Rolandos Alexandros Potamias and Dr. Jiankang Deng. We utilize code from the open-source community, specifically the implementations of SMPL-X, WiLoR, and EMOCA.
+
 
 
 
