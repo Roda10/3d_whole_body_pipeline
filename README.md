@@ -3,12 +3,12 @@
 [![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-1.12.1-ee4c2c.svg)](https://pytorch.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Thesis](https://img.shields.io/badge/PDF-Thesis-red.svg)]([(https://drive.google.com/file/d/1ie_sMKMxkpYcWUKtagHiUPQcNsE5KhLF/view?usp=sharing)])
+[![Thesis](https://img.shields.io/badge/PDF-Thesis-red.svg)](https://drive.google.com/file/d/1ie_sMKMxkpYcWUKtagHiUPQcNsE5KhLF/view?usp=sharing)
 
 > **Official Implementation** of the Master's Thesis: *Robust Full Body 3D Human Pose Estimation* (AIMS South Africa, 2025).
 
 ## 📝 Abstract
-[**📄 Read the full Master's Thesis here**]([https://drive.google.com/file/d/1ie_sMKMxkpYcWUKtagHiUPQcNsE5KhLF/view?usp=sharing])
+[**📄 Read the full Master's Thesis here**](https://drive.google.com/file/d/1ie_sMKMxkpYcWUKtagHiUPQcNsE5KhLF/view?usp=sharing)
 
 Despite the presence of expert models for specific body parts (e.g., hands and faces), existing unified approaches often fail to deliver consistent, high-fidelity 3D representations of the entire human body.
 
@@ -162,4 +162,5 @@ If you find this work useful for your research, please cite the thesis:
 ## 🙏 Acknowledgements
 
 This research was conducted at the **African Institute for Mathematical Sciences (AIMS), South Africa**, and supervised by Dr. Rolandos Alexandros Potamias and Dr. Jiankang Deng. We utilize code from the open-source community, specifically the implementations of SMPL-X, WiLoR, and EMOCA.
+
 
