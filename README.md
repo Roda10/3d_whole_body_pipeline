@@ -43,7 +43,7 @@ Standard body models often produce neutral expressions even when the subject is 
 ### 2. Complex Hand Articulation
 Baseline methods frequently misinterpret finger orientation in subtle poses. As seen below, the baseline (middle) renders fingers as stiff and unnaturally splayed. Our fusion approach (right) leverages WiLoR to correctly recover the natural downward reach and precise finger spacing, matching the input faithfully.
 
-![Hand Gesture Comparison](docs/hand_comparison.jpg)
+![Hand Gesture Comparison](docs/hand_comparison.png)
 *(Comparison of finger alignment: Input vs. Baseline vs. Ours)*
 
 ## 📂 Repository Structure
@@ -162,5 +162,6 @@ If you find this work useful for your research, please cite the thesis:
 ## 🙏 Acknowledgements
 
 This research was conducted at the **African Institute for Mathematical Sciences (AIMS), South Africa**, and supervised by Dr. Rolandos Alexandros Potamias and Dr. Jiankang Deng. We utilize code from the open-source community, specifically the implementations of SMPL-X, WiLoR, and EMOCA.
+
 
 
