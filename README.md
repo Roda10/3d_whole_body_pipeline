@@ -42,7 +42,7 @@ The pipeline operates in four stages:
 
 This codebase was developed and tested on **Python 3.10** and **PyTorch 1.12.1**.
 
-
+```bash
 # Clone the repository
 git clone --recursive [https://github.com/Roda10/3d_whole_body_pipeline.git](https://github.com/Roda10/3d_whole_body_pipeline.git)
 cd 3d_whole_body_pipeline
@@ -56,6 +56,7 @@ pip install -r requirements.txt
 
 
 > **Note:** You will need to download the official SMPL-X models (Neutral, Male, Female) from the [SMPL-X Project Page](https://smpl-x.is.tue.mpg.de/) and place them in the `pretrained_models` directory.
+```
 
 ## 🚀 Usage
 
@@ -86,3 +87,4 @@ This research was conducted at the **African Institute for Mathematical Sciences
 
 ```
 ```
+
