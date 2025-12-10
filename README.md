@@ -3,11 +3,11 @@
 [![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-1.12.1-ee4c2c.svg)](https://pytorch.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-
+[![Thesis](https://img.shields.io/badge/PDF-Thesis-red.svg)]([YOUR_GOOGLE_DRIVE_LINK_HERE](https://drive.google.com/file/d/1ie_sMKMxkpYcWUKtagHiUPQcNsE5KhLF/view?usp=sharing))
 > **Official Implementation** of the Master's Thesis: *Robust Full Body 3D Human Pose Estimation* (AIMS South Africa, 2025).
 
 ## 📝 Abstract
-
+[**📄 Read the full Master's Thesis here**]([YOUR_GOOGLE_DRIVE_LINK_HERE](https://drive.google.com/file/d/1ie_sMKMxkpYcWUKtagHiUPQcNsE5KhLF/view?usp=sharing))
 Despite the presence of expert models for specific body parts (e.g., hands and faces), existing unified approaches often fail to deliver consistent, high-fidelity 3D representations of the entire human body.
 
 This repository implements a **Composition-of-Experts Framework**. Instead of training a monolithic network, this pipeline strategically fuses state-of-the-art specialized models within the unified SMPL-X parameter space:
@@ -39,7 +39,7 @@ Standard body models often produce neutral expressions even when the subject is 
 *(From left to right: Input Image, SMPLest-X Baseline, **Ours (Fusion)**)*
 
 ### 2. Complex Hand Articulation
-Baseline methods frequently "collapse" fingers in complex gestures. Our fusion approach leverages WiLoR to correctly articulate individual digits, such as the separation of the thumb and pinky in hook-style poses.
+Baseline methods frequently misinterpret finger orientation in subtle poses. As seen below, the baseline (middle) renders fingers as stiff and unnaturally splayed. Our fusion approach (right) leverages WiLoR to correctly recover the natural downward reach and precise finger spacing, matching the input faithfully.
 
 ![Hand Gesture Comparison](docs/images/hand_comparison.png)
 *(Comparison of finger alignment and articulation)*
@@ -99,5 +99,6 @@ If you find this work useful for your research, please cite the thesis:
 ## 🙏 Acknowledgements
 
 This research was conducted at the **African Institute for Mathematical Sciences (AIMS), South Africa**, and supervised by Dr. Rolandos Alexandros Potamias and Dr. Jiankang Deng. We utilize code from the open-source community, specifically the implementations of SMPL-X, WiLoR, and EMOCA.
+
 
 
