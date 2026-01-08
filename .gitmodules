@@ -3,7 +3,7 @@
 	url = git@github.com:SMPLCap/SMPLest-X.git
 [submodule "external/face/emoca"]
 	path = external/face/emoca
-	url = git@github.com:radekd91/emoca.git
+	url = git@github.com:Roda10/emoca.git
 [submodule "external/hands/WiLoR"]
 	url = https://github.com/rolpotamias/WiLoR.git
 	path = external/hands/WiLoR
