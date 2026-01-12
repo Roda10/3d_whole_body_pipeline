@@ -1,6 +1,6 @@
 [submodule "external/body/SMPLest-X"]
 	path = external/body/SMPLest-X
-	url = git@github.com:SMPLCap/SMPLest-X.git
+	url = git@github.com:Roda10/SMPLest-X.git
 [submodule "external/face/emoca"]
 	path = external/face/emoca
 	url = git@github.com:Roda10/emoca.git
