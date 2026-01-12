@@ -98,98 +98,42 @@ class ComprehensiveCoordinateAnalyzer:
             
         return wilor_data
     
-    # def load_emoca_data(self) -> Dict:
-    #     """Load EMOCA data for parameter space analysis"""
-    #     print("📥 Loading EMOCA data...")
-
-    #     emoca_data = {}
-
-    #     # Search for EMOCA .npy files
-    #     search_patterns = [
-    #         'emoca_results/*/test*/detail.npy',
-    #         'emoca_results/*/test*/exp.npy',
-    #         'emoca_results/*/test*/geometry_coarse.png',  # Image file pattern (if needed)
-    #         'emoca_results/*/test*/pose.npy',
-    #         'emoca_results/*/test*/shape.npy',
-    #         'emoca_results/*/test*/tex.npy'
-    #     ]
-
-    #     for pattern in search_patterns:
-    #         for npy_file in self.results_dir.glob(pattern):
-    #             image_name = npy_file.parent.name
-
-    #             # Load the .npy files
-    #             emoca_data[image_name] = {
-    #                 'detailcode': np.load(npy_file.parent / 'detail.npy'),  # Example file for detailcode
-    #                 'expcode': np.load(npy_file.parent / 'exp.npy'),        # Example file for expcode
-    #                 'posecode': np.load(npy_file.parent / 'pose.npy'),      # Example file for posecode
-    #                 'shapecode': np.load(npy_file.parent / 'shape.npy'),    # Example file for shapecode
-    #                 'texcode': np.load(npy_file.parent / 'tex.npy'),        # Example file for texcode
-    #             }
-
-    #             print(f"   ✅ Loaded {image_name}: {len(emoca_data[image_name])} parameter sets")
-    #             break
-
-    #     return emoca_data
-        
     def load_emoca_data(self) -> Dict:
         """Load EMOCA data for parameter space analysis"""
         print("📥 Loading EMOCA data...")
         
         emoca_data = {}
         
-        # Search for EMOCA codes
         search_patterns = [
+            'emoca_results/*/*/emoca_params.json',
+            'emoca_results/EMOCA*/*/codes.json',
             'emoca_results/*/codes.json',
-            'emoca_results/*/*/codes.json',
-            'emoca_results/EMOCA_*/test*/codes.json'
         ]
         
         for pattern in search_patterns:
-            for codes_file in self.results_dir.glob(pattern):
-                image_name = codes_file.parent.name
+            for params_file in self.results_dir.glob(pattern):
+                image_name = params_file.parent.name
                 
-                with open(codes_file, 'r') as f:
-                    codes = json.load(f)
+                with open(params_file, 'r') as f:
+                    params = json.load(f)
                 
-                emoca_data[image_name] = {
-                    'shapecode': np.array(codes['shapecode']),     # (100,)
-                    'expcode': np.array(codes['expcode']),         # (50,)
-                    'texcode': np.array(codes['texcode']),         # (50,)
-                    'posecode': np.array(codes['posecode']),       # (6,)
-                    'detailcode': np.array(codes['detailcode'])    # (128,)
-                }
-                
-                print(f"   ✅ Loaded {image_name}: {len(codes)} parameter sets")
-                break
-                
-        # Try individual files if combined not found
-        if not emoca_data:
-            for emoca_subdir in self.results_dir.glob('emoca_results/EMOCA_*/test*/'):
-                image_name = emoca_subdir.name
-                
-                code_files = {
-                    'shapecode': emoca_subdir / 'shape.json',
-                    'expcode': emoca_subdir / 'exp.json',
-                    'texcode': emoca_subdir / 'tex.json',
-                    'posecode': emoca_subdir / 'pose.json',
-                    'detailcode': emoca_subdir / 'detail.json'
-                }
-                
-                codes = {}
-                files_found = 0
-                
-                for code_type, file_path in code_files.items():
-                    if file_path.exists():
-                        with open(file_path, 'r') as f:
-                            codes[code_type] = np.array(json.load(f))
-                            files_found += 1
-                
-                if files_found >= 3:
-                    emoca_data[image_name] = codes
-                    print(f"   ✅ Loaded {image_name}: {files_found} code files")
+                # Handle new emoca_params.json structure
+                if 'faces' in params and len(params['faces']) > 0:
+                    face = params['faces'][0]
+                    flame_codes = face.get('flame_codes', {})
+                    
+                    # Keys are 'shape', 'exp', 'pose', 'tex' NOT shapecode, expcode, etc
+                    emoca_data[image_name] = {
+                        'shapecode': np.array(flame_codes.get('shape', [])),
+                        'expcode': np.array(flame_codes.get('expression', [])),
+                        'texcode': np.array(flame_codes.get('texture', [])),
+                        'posecode': np.array(flame_codes.get('pose', [])),
+                        'detailcode': np.array(flame_codes.get('detail', []))
+                    }
+                    
+                    print(f"   ✅ Loaded {image_name}: {len(emoca_data[image_name]['expcode'])} exp dims")
                     break
-        
+                    
         return emoca_data
     
     def analyze_smplestx_coordinate_system(self, smplestx_data: Dict) -> Dict:

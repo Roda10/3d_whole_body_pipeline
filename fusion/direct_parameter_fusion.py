@@ -135,9 +135,9 @@ class EnhancedParameterFusion:
 
     def _load_emoca_params(self) -> Dict:
         search_patterns = [
-            'emoca_results/EMOCA*/test*/codes.json',
+            'emoca_results/*/*/emoca_params.json',
+            'emoca_results/EMOCA*/*/codes.json',
             'emoca_results/*/codes.json',
-            'emoca_results/*/*/codes.json'
         ]
         for pattern in search_patterns:
             for codes_file in self.results_dir.glob(pattern):
@@ -272,13 +272,15 @@ class EnhancedParameterFusion:
         This follows the supervisor's guidance to use all available parameters.
         """
         print("\n🎭 Mapping full EMOCA face parameters...")
-        emoca_exp = np.array(emoca_params['expcode'])
+        flame = emoca_params["faces"][0]["flame_codes"]
+
+        emoca_exp = np.array(flame['expression']) 
         # We can still apply a gentle scaling to avoid overly exaggerated expressions
         mapped_exp = emoca_exp[:10] * self.expression_scale 
         print(f" ✅ Extracted {len(mapped_exp)} expression parameters.")
 
         # 2. Extract Jaw Pose from 'posecode'
-        emoca_pose = np.array(emoca_params['posecode'])
+        emoca_pose = np.array(flame['pose'])
         mapped_jaw = emoca_pose[3:] # Take the last 3 values for the jaw
         print(f" ✅ Extracted {len(mapped_jaw)} jaw parameters.")
         return mapped_exp, mapped_jaw

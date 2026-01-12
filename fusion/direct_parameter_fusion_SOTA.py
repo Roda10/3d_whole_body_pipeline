@@ -19,7 +19,7 @@ import traceback
 import pickle
 
 # Add paths for SMPL-X model access
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'SMPLest-X'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'external', 'body', 'SMPLest-X'))
 from human_models.human_models import SMPLX
 from utils.visualization_utils import render_mesh
 from main.config import Config

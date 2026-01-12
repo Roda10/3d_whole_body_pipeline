@@ -10,6 +10,7 @@ import json
 import cv2
 import datetime
 from pathlib import Path
+
 os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 
