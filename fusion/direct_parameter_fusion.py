@@ -209,33 +209,6 @@ class EnhancedParameterFusion:
                     print(f"   ✅ Processed RIGHT hand.")
         return left_hand_pose_param, right_hand_pose_param
 
-    # def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:
-    #     print("\n🔧 Creating fused parameters (CORRECTED)...")
-    #     fused = {
-    #         'betas': np.array(smplx_params['betas']),
-    #         'body_pose': np.array(smplx_params['body_pose']),
-    #         'root_pose': np.array(smplx_params['root_pose']),
-    #         'translation': np.array(smplx_params['translation']),
-    #         'jaw_pose': np.array(smplx_params['jaw_pose'])
-    #     }
-    #     left_hand, right_hand = self.extract_wilor_hand_poses(wilor_params)
-    #     fused['left_hand_pose'] = left_hand
-    #     fused['right_hand_pose'] = right_hand
-    #     print("\n   ✅ Hands: FULL WiLoR replacement (no mixing)")
-    #     fused['expression'] = self.map_emoca_expression(emoca_params)
-    #     left_diff = np.linalg.norm(left_hand - np.array(smplx_params['left_hand_pose']))
-    #     right_diff = np.linalg.norm(right_hand - np.array(smplx_params['right_hand_pose']))
-    #     print(f"\n   📊 Changes from original:")
-    #     print(f"      Left hand: {left_diff:.3f}")
-    #     print(f"      Right hand: {right_diff:.3f}")
-    #     return fused
-
-    # def map_emoca_expression(self, emoca_params: Dict) -> np.ndarray:
-    #     print("\n🎭 Mapping EMOCA expression...")
-    #     emoca_exp = np.array(emoca_params['expcode'])
-    #     mapped_exp = emoca_exp[:10] * self.expression_scale
-    #     return mapped_exp
-
 
     def create_fused_parameters(self, smplx_params: Dict, wilor_params: Dict, emoca_params: Dict) -> Dict:
         """
