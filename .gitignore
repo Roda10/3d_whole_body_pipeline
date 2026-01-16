@@ -12,7 +12,7 @@
 *.obj
 *jpg
 *.jpeg
-*.txt
+# *.txt
 *.json
 .md
 
