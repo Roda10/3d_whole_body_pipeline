@@ -1,0 +1,23 @@
+name: /home/rodeo_aims_ac_za/.local/share/mamba/envs/unified_3d
+channels:
+  - defaults
+dependencies:
+  - python=3.11
+  - pytorch
+  - pytorch-cuda=11.8
+  - numpy=1.26
+  - scipy=1.13
+  - pandas
+  - matplotlib
+  - seaborn
+  - scikit-image
+  - opencv
+  - cmake
+  - cython
+  - torchaudio
+  - requests
+  - certifi
+  - idna
+  - charset-normalizer
+  - torchvision
+prefix: /home/rodeo_aims_ac_za/.local/share/mamba/envs/unified_3d
