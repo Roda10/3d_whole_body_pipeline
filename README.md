@@ -162,7 +162,3 @@ If you find this work useful for your research, please cite the thesis:
 ## 🙏 Acknowledgements
 
 This research was conducted at the **African Institute for Mathematical Sciences (AIMS), South Africa**, and supervised by Dr. Rolandos Alexandros Potamias and Dr. Jiankang Deng. We utilize code from the open-source community, specifically the implementations of SMPL-X, WiLoR, and EMOCA.
-
-
-
-

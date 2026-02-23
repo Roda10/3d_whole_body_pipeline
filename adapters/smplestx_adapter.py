@@ -38,6 +38,14 @@ def numpy_to_serializable(obj):
     else:
         return obj
 
+def json_default(obj):
+    if isinstance(obj, (np.float32, np.float64)):
+        return float(obj)
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--num_gpus', type=int, dest='num_gpus', default=1, help='Number of GPUs to use')
@@ -63,7 +71,7 @@ def main():
     config_path = args.cfg_path
     cfg = Config.load_config(config_path)
     
-    checkpoint_path = '/home/rodeo_aims_ac_za/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar'
+    checkpoint_path = '/home/partner/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar'
 
     # --- Output folder logic ---
     output_folder = Path(args.output_dir) / f'inference_output_{time_str}' # Create a unique subfolder for each run
@@ -249,6 +257,7 @@ def main():
             json.dump(serializable_params, f, indent=2)
         demoer.logger.info(f"Saved SMPL-X parameters for person {bbox_id} to: {params_filename}")
 
+
         # Save parameter shapes summary
         summary_filename = person_output_folder / f'smplx_shapes_person_{bbox_id}.json'
         summary = {
@@ -280,12 +289,15 @@ def main():
 
         # Save to a file inside the specific person's output folder
         meta_path = person_output_folder / "camera_metadata.json"
-        with open(meta_path, 'w') as f:
-            json.dump(camera_meta, f, indent=2)
+
+        with open(os.path.join(args.output_dir, 'camera_meta.json'), 'w') as f:
+            json.dump(camera_meta, f, indent=2, default=json_default)
+
+        # with open(meta_path, 'w') as f:
+        #     json.dump(camera_meta, f, indent=2)
         demoer.logger.info(f"✓ Camera metadata saved to {meta_path}")
         # --- END OF NEW CODE BLOCK ---
 
-        # draw the bbox on img
         # Use the original xyxy for drawing the rectangle
         vis_img = cv2.rectangle(vis_img, (int(x1), int(y1)), 
                                 (int(x2), int(y2)), (0, 255, 0), 1)

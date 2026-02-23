@@ -104,7 +104,7 @@ These tools are available for debugging and detailed analysis if needed:
 ### Parameter Analysis
 ```bash
 python analysis_tools/parameter_analyzer.py --results_dir pipeline_results/run_TIMESTAMP
-python analysis_tools/coordinate_analyzer_fixed.py --results_dir pipeline_results/run_TIMESTAMP
+python analysis_tools/coordinate_analyzer_fixed.py --results_dir pipeline_results/run_20260129_143810
 ```
 
 ### Visualization Tools

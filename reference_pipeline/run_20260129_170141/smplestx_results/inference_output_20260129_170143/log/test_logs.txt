@@ -1,0 +1,23 @@
+[92m01-29 17:01:44[0m Using 1 GPU(s).
+[92m01-29 17:01:44[0m Inference on single image [data/EHF/05_img.jpg] with [/home/partner/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar].
+[92m01-29 17:01:44[0m Load checkpoint from /home/partner/3d_whole_body_pipeline/pretrained_models/smplest_x/smplest_x_h.pth.tar
+[92m01-29 17:01:44[0m Creating graph...
+[92m01-29 17:01:50[0m [93mWRN: Attention: Strict=False is set for checkpoint loading. Please check manually.[0m
+[92m01-29 17:01:51[0m Saving outputs to: reference_pipeline/run_20260129_170141/smplestx_results/inference_output_20260129_170151_05_img
+[92m01-29 17:01:51[0m 
+=== SMPL-X Parameter Shapes for Person 0 ===
+[92m01-29 17:01:51[0m joints_3d: shape=[137, 3], size=411
+[92m01-29 17:01:51[0m joints_2d: shape=[137, 2], size=274
+[92m01-29 17:01:51[0m root_pose: shape=[3], size=3
+[92m01-29 17:01:51[0m body_pose: shape=[63], size=63
+[92m01-29 17:01:51[0m left_hand_pose: shape=[45], size=45
+[92m01-29 17:01:51[0m right_hand_pose: shape=[45], size=45
+[92m01-29 17:01:51[0m jaw_pose: shape=[3], size=3
+[92m01-29 17:01:51[0m betas: shape=[10], size=10
+[92m01-29 17:01:51[0m expression: shape=[10], size=10
+[92m01-29 17:01:51[0m translation: shape=[3], size=3
+[92m01-29 17:01:51[0m mesh: shape=[10475, 3], size=31425
+[92m01-29 17:01:51[0m Saved SMPL-X parameters for person 0 to: reference_pipeline/run_20260129_170141/smplestx_results/inference_output_20260129_170151_05_img/person_0/smplx_params_person_0.json
+[92m01-29 17:01:51[0m Saved parameter shapes summary to: reference_pipeline/run_20260129_170141/smplestx_results/inference_output_20260129_170151_05_img/person_0/smplx_shapes_person_0.json
+[92m01-29 17:01:51[0m ✓ Camera metadata saved to reference_pipeline/run_20260129_170141/smplestx_results/inference_output_20260129_170151_05_img/person_0/camera_metadata.json
+[92m01-29 17:01:51[0m Processed image saved to: reference_pipeline/run_20260129_170141/smplestx_results/inference_output_20260129_170143/rendered_05_img.jpg

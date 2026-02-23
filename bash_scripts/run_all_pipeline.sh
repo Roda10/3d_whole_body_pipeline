@@ -32,7 +32,7 @@ echo ""
 
 # === Step 5: Run parameter fusion ===
 echo "🧬 Running direct parameter fusion ..."
-python fusion/direct_parameter_fusion.py --results_dir "$LATEST_RUN"
+python fusion/direct_parameter_fusion_v1.py --results_dir "$LATEST_RUN"
 echo ""
 
 # === Step 6: Visualize fused mesh ===
